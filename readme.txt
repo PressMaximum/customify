@@ -6,8 +6,8 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: custom-background, custom-logo, custom-menu, custom-logo, featured-images, flexible-header, footer-widgets, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, one-column, two-columns, three-columns, left-sidebar, right-sidebar, e-commerce, blog
 Requires at least: 6.0
 Tested up to: 7.0
-Requires PHP: 8.0
-Stable tag: 0.4.21
+Requires PHP: 5.3
+Stable tag: 0.4.23
 
 == Description ==
 

@@ -179,8 +179,61 @@
 	}
 }
 
+// Footer widget lists read as clean, spaced links — not a divider stack.
+// The generic widget-area rule (widgets/_widgets.scss) draws a border-bottom
+// hairline under every list item, and its `:last-child { border: none }` reset
+// is ineffective here because it targets the <li> while the border lives on the
+// <a> — so even the last link keeps a trailing line. In a short, curated footer
+// column that repeated hairline reads as noise (and gets worse when a site has
+// set a non-faint Border palette color, which feeds $color_border). Drop the
+// dividers in the footer, along with the 0.6em bottom padding that only existed
+// to clear that line. Sidebar widget lists intentionally keep their dividers —
+// they aid scanning of long category/archive lists in a narrow column.
+.site-footer .widget-area {
+	.widget_pages li a,
+	.widget_categories li a,
+	.widget_archive li a,
+	.widget_meta li a,
+	.widget_nav_menu li a,
+	.widget_product_categories li a,
+	.widget_recent_entries li a,
+	.widget_rss li a {
+		padding-bottom: 0;
+		border-bottom: 0;
+	}
+
+	.widget_recent_comments li {
+		border-bottom: 0;
+	}
+
+	// Once the divider and its clearance padding are gone, the leftover 0.6em
+	// li-margin plus that padding used to stack to ~1.2em between links, which
+	// read as too tall/airy for a footer nav. Collapse it to a single ~0.875em
+	// gap so each column reads as one grouped set of links. .widget_rss is left
+	// out — its entries carry a title + date and keep their own larger rhythm.
+	.widget_pages li,
+	.widget_categories li,
+	.widget_archive li,
+	.widget_meta li,
+	.widget_nav_menu li,
+	.widget_product_categories li,
+	.widget_recent_entries li {
+		margin-bottom: 0.875em;
+	}
+}
+
 .footer-copyright {
 	font-size: 0.875em;
+}
+
+// Copyright links carry a visible underline so they are distinguishable from
+// surrounding body text without relying on color alone (WCAG SC 1.4.1 "Use of
+// Color" — Lighthouse `link-in-text-block`). The copyright block emits a plain
+// `<a>` inside a `<p>`; without this rule the link inherits body color and
+// fails contrast between link and prose text.
+.builder-footer-copyright-item a {
+	text-decoration: underline;
+	text-underline-offset: 2px;
 }
 
 // Footer grid layout.

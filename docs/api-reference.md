@@ -24,6 +24,11 @@ For storage keys (`theme_mod` / `wp_options` / `post_meta`) see [`SPEC-data-migr
 | `customify_is_post_title_display` | filter | `bool` — render the page/post title? | [`inc/template-functions.php:391`](../inc/template-functions.php) |
 | `customify_is_builder_row_display` | filter | `bool` — render builder row? (`$builder_id`, `$row_id`, `$post_id` passed) | [`inc/template-functions.php:374`](../inc/template-functions.php) |
 | `customify_builder_row_display_get_post_id` | filter | `int` — post ID used for builder row display logic | [`inc/template-functions.php:365`](../inc/template-functions.php) |
+| `customify/content_area_spacing/archive_post_types` | filter | `array` — content CPT archives owned by the spacing UI/resolver | [`inc/content-area-spacing.php`](../inc/content-area-spacing.php) |
+| `customify/content_area_spacing/context` | filter | `array` — request context (`key`, `post_type`, `post_id`, `singular`, `setting`) | [`inc/content-area-spacing.php`](../inc/content-area-spacing.php) |
+| `customify/content_area_spacing/mode` | filter | `(string $mode, array $context, string $setting)` — non-legacy resolved mode | [`inc/content-area-spacing.php`](../inc/content-area-spacing.php) |
+| `customify/content_area_spacing/components` | filter | `(array $components, string $mode, array $context)` — top/bottom booleans | [`inc/content-area-spacing.php`](../inc/content-area-spacing.php) |
+| `customify/content_area_spacing/body_classes` | filter | `(array $classes, array $components, array $context)` | [`inc/content-area-spacing.php`](../inc/content-area-spacing.php) |
 
 Example — override layout for a specific page:
 
@@ -50,6 +55,7 @@ add_filter( 'customify_get_layout', function ( $layout ) {
 | `customify/customize/register_completed` | action | `(Customify_Customizer $customizer)` — fires after all registration | [`inc/customizer/class-customizer.php:1195`](../inc/customizer/class-customizer.php) |
 | `customify/customizer/panel_groups` | filter | `array` — panel grouping for UI organization | [`inc/customizer/class-customizer.php:1261`](../inc/customizer/class-customizer.php) |
 | `customify/get_styling_config` | filter | `array` — styling field config | [`inc/customizer/class-customizer.php:791`](../inc/customizer/class-customizer.php) |
+| `customify/buttons_forms/button_selector` | filter | `string $selector` — the global Button Styling scope (comma-separated selector list) | [`inc/customizer/configs/buttons-forms.php`](../inc/customizer/configs/buttons-forms.php) `customify_get_button_styling_selectors()` |
 
 ### 2.2 Auto-CSS pipeline
 
@@ -59,6 +65,18 @@ add_filter( 'customify_get_layout', function ( $layout ) {
 | `customify/auto-css` | filter | `string $css` — final assembled CSS before `wp_add_inline_style` | [`inc/customizer/class-customizer-auto-css.php`](../inc/customizer/class-customizer-auto-css.php) `render_css()` |
 | `customify/styling/<field>` | filter | `string $css` — append CSS template to a specific field (e.g. `customify/styling/primary-color`) | dynamic — emitted per-field by auto-CSS |
 | `customify/typography/field_uses_vars` | filter | `(bool $uses_vars, array $field)` — **per-field route.** Default is `true` only for the 8 foundation roles in `TYPO_VAR_MAP` (`global_typography_base_p`, `global_typography_base_heading`, `global_typography_heading_h1`…`h6`); leaf-global roles (site title, tagline, widget title) and per-component fields default `false`. Return `false` to force a foundation field through selector-scoped emit, or `true` to opt a non-foundation field into tokens (also requires an SCSS consumer at the matching selector — see [`SPEC-typography.md §6.4`](SPEC-typography.md)). | [`inc/customizer/class-customizer-auto-css.php`](../inc/customizer/class-customizer-auto-css.php) `typography_field_uses_vars()` |
+
+Example — bring a page builder's button class into the global Button Styling
+scope. The scope is an allowlist by design: bare `<button>` elements are only
+matched when they are a submit/reset control, are unclassed, or sit in a form
+with no `type` attribute, so component chrome (galleries, lightboxes, steppers,
+icon toggles) is never repainted. Anything else opts in explicitly:
+
+```php
+add_filter( 'customify/buttons_forms/button_selector', function ( $selector ) {
+    return $selector . ', .elementor-button';
+} );
+```
 
 Example — extend the primary color CSS targets without forking the config file:
 
@@ -130,7 +148,7 @@ add_filter( 'customify/styling/primary-color', function ( $css ) {
 
 | Hook | Type | Payload | File |
 |---|---|---|---|
-| `customify/render_header/is-transparent` | filter | `bool $is_tran` — final override before result is cached | [`inc/customizer/configs/header/transparent.php`](../inc/customizer/configs/header/transparent.php) |
+| `customify/render_header/is-transparent` | filter | `bool $is_tran` — filters the inherited result before the final per-page metabox override and caching | [`inc/customizer/configs/header/transparent.php`](../inc/customizer/configs/header/transparent.php) |
 
 Note: the result is cached on first call. Register the filter as early as possible (`after_setup_theme`, `init`) — late hooks won't run.
 
@@ -147,6 +165,7 @@ Note: the result is cached on first call. Register the filter as early as possib
 | `customify/wc-product/before-media` | action | — | same `:438` |
 | `customify/wc-product/after-media` | action | — | same |
 | `customify_after_loop_product_media` | action | — | same `:442` |
+| `customify/wc_cart/render_dropdown` | filter | `(bool $render_dropdown, Customify_Builder_Item_WC_Cart $item)` — print the header cart item's inline mini-cart dropdown? Default `true`. Customify Pro's Cart Drawer returns `false` to suppress the inline dropdown when it takes the item over with an off-canvas drawer. | [`inc/compatibility/woocommerce/config/header/cart.php`](../inc/compatibility/woocommerce/config/header/cart.php) `render()` |
 
 ---
 
@@ -198,6 +217,7 @@ Template tags are PHP functions you call from theme template files. Most live in
 | `customify_get_layout()` | Resolves to one of the 4 layout values |
 | `Customify()->get_setting( $key, $device = null )` | Read a Customizer setting (device-aware) |
 | `Customify()->customizer->get_field_setting( $name )` | Read the config definition for a field |
+| `customify_is_header_transparent_module_enabled()` | Whether the native or Pro Transparent Header implementation is enabled |
 | `Customify()->is_woocommerce_active()` | Boolean — WC plugin active |
 | `Customify()->is_using_post()` | Boolean — current request is a singular post-like context |
 | `Customify()->get_current_post_id()` | Best-guess current post ID across is_singular / blog page / etc. |

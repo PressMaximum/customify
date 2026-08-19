@@ -493,10 +493,14 @@ class Customify
 			// Metabox settings.
 			'/inc/template-class.php',
 			// Template element classes.
+			'/inc/content-area-spacing.php',
+			// Context-aware content area vertical spacing.
 			'/inc/colors-palette.php',
 			// Colors palette CSS var emitter for the new top-level Colors section.
 			'/inc/color-palette-switcher.php',
 			// Palettes UI (presets + custom palettes) at the top of the Colors section.
+			'/inc/color-palette-link.php',
+			// PROTOTYPE: palette swatch row inside a component color picker.
 			'/inc/style-guide.php',
 			// Customizer Style Guide: live specimen page in the preview + header toggle.
 			'/inc/extras.php',
@@ -518,6 +522,8 @@ class Customify
 			'/inc/blog/class-posts-layout.php',
 			// Blog posts layout.
 			'/inc/blog/functions-posts-layout.php',
+			// Search results framework (mixed content cards, type tabs, counts).
+			'/inc/search/functions-search.php',
 			// Block editor enhancements (block styles, patterns category).
 			'/inc/admin/block-styles.php',
 			// Block editor Page Settings panel (also registers meta for REST API).

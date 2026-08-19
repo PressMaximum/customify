@@ -142,6 +142,20 @@ class Customify_Builder_Item_Search_Icon {
 			),
 
 			array(
+				'name'            => $this->section . '_search_scope',
+				'type'            => 'select',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'title'           => __( 'Search scope', 'customify' ),
+				'description'     => __( 'Limit this search form to a single content type.', 'customify' ),
+				'default'         => '',
+				// Built at Customizer registration time, well after `init`, so
+				// every custom post type is already registered.
+				'choices'         => function_exists( 'customify_search_get_scope_choices' ) ? customify_search_get_scope_choices() : array( '' => __( 'Everything', 'customify' ) ),
+			),
+
+			array(
 				'name'        => $this->section . '_form_styling',
 				'type'        => 'styling',
 				'section'     => $this->section,
@@ -343,6 +357,12 @@ class Customify_Builder_Item_Search_Icon {
 		</a>
 		<div class="header-search-modal-wrapper">
 			<form class="header-search-modal header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+				<?php
+				// Scope the form to a single content type when configured.
+				if ( function_exists( 'customify_search_scope_hidden_input' ) ) {
+					customify_search_scope_hidden_input( $this->id );
+				}
+				?>
 				<label>
 					<span class="screen-reader-text"><?php echo _x( 'Search for:', 'label', 'customify' ); ?></span>
 					<input type="search" class="search-field" placeholder="<?php echo esc_attr( $placeholder ); ?>" value="<?php echo get_search_query(); ?>" name="s" title="<?php echo esc_attr_x( 'Search for:', 'label', 'customify' ); ?>" />

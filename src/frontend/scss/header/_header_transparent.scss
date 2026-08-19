@@ -2,7 +2,9 @@
 
 // Position the header absolutely so page content flows beneath it.
 .is-header-transparent {
-	&.has-page-cover, &.home {
+	&.has-page-cover,
+	&.home,
+	&.is-header-transparent-forced {
 		#masthead {
 			position: absolute;
 			top: 0;
@@ -30,7 +32,7 @@
 }
 
 // Default logo: shown normally; hidden when header is transparent and a tran-logo exists.
-.site-img-logo-tran {
+.site-branding img.site-img-logo-tran {
 	display: none;
 }
 

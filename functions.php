@@ -82,6 +82,9 @@ unset( $customify_autoload );
 // Include the main Customify class.
 require_once get_template_directory() . '/inc/class-customify.php';
 
+// Performance optimizations (async Font Awesome CSS, fetchpriority on main stylesheet).
+require_once get_template_directory() . '/inc/perf-optimizations.php';
+
 /**
  * Main instance of Customify.
  *

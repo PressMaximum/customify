@@ -49,6 +49,15 @@ Three things matter most:
 | `{post_type}_sidebar_layout` | string | `content` | Per-CPT **single** sidebar layout (`is_singular()`). Dynamic — one key per content post type; `default` choice inherits the global `sidebar_layout` |
 | `{post_type}_archive_sidebar_layout` | string | `content` | Per-CPT **archive** sidebar layout (`is_post_type_archive()`). Dynamic — only registered for types with `has_archive`; excludes WC `product` (shop owned by WC). Defaults to no-sidebar like the per-CPT single; the `Default` choice (value `default`) inherits `posts_archives_sidebar_layout` |
 | `container_width` | int + unit (slider) | `1200px` | Site container max-width; MUST sync to `--wp--style--global--wide-size` |
+| `site_content_padding` | responsive CSS ruler | SCSS fallback | Existing top/bottom spacing magnitude for `#main` and both sidebars; ID and output unchanged when moved to the Content Area Spacing section |
+| `page_content_area_spacing` | string | `inherit` | Pages: `inherit` / `both` / `top` / `bottom` / `disabled` |
+| `posts_content_area_spacing` | string | `inherit` | Blog-post singles |
+| `posts_archives_content_area_spacing` | string | `inherit` | Blog home, built-in archives, and shared/unresolved taxonomies |
+| `shop_content_area_spacing` | string | `inherit` | WooCommerce Shop and product taxonomy archives; assigned Shop Page legacy disable meta wins |
+| `search_content_area_spacing` | string | `inherit` | Search results |
+| `404_content_area_spacing` | string | `inherit` | 404 requests |
+| `{post_type}_content_area_spacing` | string | `inherit` | Per-CPT single; generated from `customify_get_content_post_types()` |
+| `{post_type}_archive_content_area_spacing` | string | `inherit` | Per-CPT archive when the type has a real archive owned by Customify |
 
 ### 2.2 Builder layouts
 
@@ -173,6 +182,7 @@ Per-post overrides. All Customify-managed meta keys use the `_customify_` prefix
 | `_customify_disable_header` | bool | `1` / `''` | [`inc/template-functions.php:312`](../inc/template-functions.php) |
 | `_customify_disable_{builder_id}` | bool | `1` / `''` | [`inc/template-functions.php:368`](../inc/template-functions.php) — `builder_id` is `header` / `footer` |
 | `_customify_disable_page_title` | bool | `1` / `''` | [`inc/template-functions.php:385`](../inc/template-functions.php) |
+| `_customify_disable_content_vertical_padding` | bool | `1` / `''` | Legacy singular override; remains highest precedence in [`inc/content-area-spacing.php`](../inc/content-area-spacing.php) |
 
 ### 4.2 Page header / cover overrides
 
@@ -383,7 +393,7 @@ Customify's `image` control stores `{ id, mime, url }` object — NOT a plain at
 
 ### Issue #4 — Composite control sub-key drift
 
-The `styling` composite control's enabled sub-fields change between feature contexts (e.g. `header_transparent_styling` disables `padding`, `margin`, `text_color`, etc.). Saved values from a context that had sub-fields A+B+C should not break when re-read in a context that only allows A+B. Sanitize accepts wider shape than emits.
+The `styling` composite control's enabled sub-fields change between feature contexts (e.g. `header_transparent_styling` disables `padding`, `margin`, `link_color`, etc.). Saved values from a context that had sub-fields A+B+C should not break when re-read in a context that only allows A+B. Sanitize accepts wider shape than emits.
 
 ### Issue #5 — Customizer `get_setting()` returns registered default, not `null`
 

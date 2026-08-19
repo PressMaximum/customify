@@ -98,10 +98,18 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 			$color_mode = 'dark-mode';
 		}
 
-		$selector           = '.header--row.' . str_replace( '_', '-', $section );
-		$skin_selector      = '.header--row.' . str_replace( '_', '-', $section );
-		$skin_selector      = '.header--row:not(.header--transparent).' . str_replace( '_', '-', $section );
-		$skin_mode_selector = '.header--row-inner.' . str_replace( '_', '-', $section ) . '-inner';
+		$selector             = '.header--row.' . str_replace( '_', '-', $section );
+		$transparent_selector = "{$selector}.header--transparent";
+		$styling_selector     = implode(
+			', ',
+			array(
+				"{$selector}:not(.header--transparent) .header--row-inner",
+				"{$transparent_selector} .customify-container",
+				"{$transparent_selector}.layout-full-contained",
+				"{$transparent_selector}.layout-fullwidth",
+			)
+		);
+		$skin_mode_selector   = '.header--row-inner.' . str_replace( '_', '-', $section ) . '-inner';
 
 		$fn           = 'customify_customize_render_header';
 		$selector_all = '#masthead';
@@ -201,7 +209,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'description'      => sprintf( __( 'Advanced styling for %s', 'customify' ), $section_name ),
 				'live_title_field' => 'title',
 				'selector'         => array(
-					'normal' => "{$skin_selector} .header--row-inner",
+					'normal' => $styling_selector,
 				),
 				'css_format'       => 'styling',
 				'fields'           => array(

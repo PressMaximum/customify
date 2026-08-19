@@ -327,6 +327,46 @@
 					}, 350);
 					return;
 				}
+			} else {
+				// No instantiated control matched. This is the common case for a
+				// widget partial (e.g. widget[nav_menu-2]): WP creates widget form
+				// controls lazily, and the footer/header sidebar section that holds
+				// them is force-hidden — so control.each above finds nothing and
+				// the pencil would silently no-op (the widget-title edit shortcut
+				// "does nothing" while the sibling nav_menu_instance shortcut still
+				// opens the Menus panel). Derive the containing sidebar section from
+				// the widget→sidebar map and open it via the builder, then scroll to
+				// that section's widgets-area control.
+				var widgetMatch = /^widget_(.+)\[(\d+)\]$/.exec(settingId);
+				if (widgetMatch) {
+					var widgetId = widgetMatch[1] + "-" + widgetMatch[2];
+					var sidebarId;
+					parentWin.wp.customize.each(function(setting) {
+						if (sidebarId) return;
+						var sidebarMatch = /^sidebars_widgets\[(.+)\]$/.exec(setting.id);
+						if (
+							sidebarMatch &&
+							Array.isArray(setting.get()) &&
+							setting.get().indexOf(widgetId) !== -1
+						) {
+							sidebarId = sidebarMatch[1];
+						}
+					});
+					var sbSectionId = sidebarId ? "sidebar-widgets-" + sidebarId : null;
+					var sbSection   = sbSectionId && parentWin.wp.customize.section(sbSectionId);
+					if (sbSection && sbSection._customifyForceHide) {
+						parentWin.customifyBuilderOpenSection(sbSectionId);
+						setTimeout(function() {
+							var wc = parentWin.wp.customize.control(
+								"sidebars_widgets[" + sidebarId + "]"
+							);
+							if (wc && typeof wc.focus === "function") {
+								wc.focus();
+							}
+						}, 350);
+						return;
+					}
+				}
 			}
 		}
 

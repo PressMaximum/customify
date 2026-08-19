@@ -11,6 +11,25 @@
     box-shadow: none;
     color: currentColor;
     transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
+
+    // The global button reset in base/_forms.scss now only covers content and
+    // form buttons (see its "canonical theme button surface" note). The
+    // hamburger is a classed `type="button"` icon control, so it sits outside
+    // that scope on purpose — but it used to inherit the reset's box model
+    // from there. Carry it explicitly, otherwise the UA button styling returns
+    // (outset border, block display, no min-height) and the trigger loses its
+    // centring. Values are copied verbatim from that reset; keep in lockstep.
+    border: none;
+    border-radius: 3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    max-width: 100%;
+    min-height: 2.6em;
+    line-height: 2.5em;
+    font-weight: 500;
+
     &[type="button"] {
         padding: 0px;
     }

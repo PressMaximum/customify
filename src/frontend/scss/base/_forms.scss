@@ -28,14 +28,6 @@ button {
     font-family: inherit;
 }
 
-// The broad button rule further down sets `display: inline-flex`; its
-// specificity (0,1,1) outranks the UA/normalize `[hidden] { display: none }`
-// (0,1,0), so a `<button hidden>` — or any element a theme display rule
-// targets — stays visible despite the valid HTML `hidden` attribute. Force
-// `[hidden]` to win so plugins/markup can rely on it.
-[hidden] {
-    display: none !important;
-}
 
 input[type="text"],
 input[type="email"],
@@ -135,31 +127,71 @@ select {
     }
 }
 
-// `[class*="wp-block-"]` in the :not() lists peels off ANY element whose
-// class contains a `wp-block-*` token — that's how WP default blocks
-// (Search submit, File download, Embed "Try again", Latest Posts CTA,
-// etc.) render their internal chrome buttons. Editor canvas + frontend
-// both stop applying the broad theme button styling to those, while the
-// intentionally-styled content buttons (`.wp-block-button__link`,
-// `.wp-element-button`, `.wc-block-cart__submit .wp-element-button`)
-// stay listed explicitly so they still pick up the theme look.
-// The single-class exclusions kept below (`.components-button`,
-// `.customize-partial-edit-shortcut-button`, `.lightbox-trigger`,
-// `.ed_button`, `.menu-mobile-toggle`) are not `wp-block-` prefixed,
-// so they still need their own slot.
-.button:not(
-    [class*="wp-block-"],
-    .menu-mobile-toggle,
-    .components-button,
-    .customize-partial-edit-shortcut-button
-),
-button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
-input[type="button"]:not(.ed_button, [class*="wp-block-"]),
-input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-.wc-block-cart__submit .wp-element-button,
-.wp-block-button__link,
-.wp-element-button:not(.components-button),
-input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
+// ==========================================================================
+// Canonical "theme button surface" — the scope of the default button skin.
+//
+// ROOT CAUSE THIS REPLACES: the previous list matched the BARE `button`
+// element and subtracted "everything that is not a button" with a denylist of
+// individual class names. A denylist cannot enumerate third-party chrome, so
+// every icon control a plugin renders as `<button class="…">` inherited the
+// full CTA skin — Blocksify's product-gallery thumbnails / thumb arrows
+// (`.bsy-gallery__thumb`, `.bsy-gallery__thumb-nav`), lightGallery's
+// `.lg-prev` / `.lg-next` / `.lg-close` / `.lg-zoom-in` / `.lg-fullscreen` /
+// `.lg-autoplay-button` / `.lg-share`, PhotoSwipe's `.pswp__button`, and the
+// next plugin's controls after those.
+//
+// THE RULE NOW — a button is in scope when it OPTS IN by contract, or when it
+// is structurally a content/form control:
+//
+//   • Opt-in classes: `.button`, `.wp-block-button__link`,
+//     `.wp-element-button`, plus the `input` button types.
+//   • The bare `button` ELEMENT only when it is an explicit `[type="submit"]`
+//     / `[type="reset"]`, an UNCLASSED `<button>` (author-written content
+//     markup), or a `<button>` inside a `<form>` with no `type` attribute at
+//     all — which per the HTML spec IS a submit button.
+//
+// Component chrome is, without exception, a CLASSED `type="button"` element,
+// so it is now out of scope structurally — no per-library carve-out, no future
+// whack-a-mole. `.menu-mobile-toggle`, `.input-pm-act`,
+// `.wc-block-components-quantity-selector__button`, `.show-password-input` and
+// `.customize-partial-edit-shortcut-button` all fall out on their own; the
+// ones still named below are kept as documentation + belt-and-braces.
+//
+// SPECIFICITY: exclusions go through `:where()` (zero specificity) wherever
+// the historical score has to be preserved, so this rule keeps exactly the
+// weights it shipped with — `.button` (0,2,0), bare `button` (0,1,1),
+// `input[…]` (0,2,0). That matters: the header / widget context rules
+// (header/_search.scss, widgets/_widgets.scss) override this bundled default
+// at (0,2,0) and must keep winning. Adding or removing an exclusion can never
+// change these numbers again.
+//
+// `.search-submit` is deliberately still IN scope here (it is a `type="submit"`
+// control): that is what 30k sites already render on the 404 / no-results
+// search form, and the two contexts where the theme overlays it on the field
+// do override this default successfully. The Customizer's Button Styling scope
+// (inc/customizer/configs/buttons-forms.php) excludes it instead — late inline
+// CSS at high specificity is not overridable by those context rules. Keep the
+// two files in lockstep otherwise.
+// ==========================================================================
+$btn-chrome:
+    '[class*="wp-block-"], [class*="wc-block-"], .components-button, ' +
+    '.customize-partial-edit-shortcut-button, .ed_button, .lightbox-trigger, ' +
+    '.menu-mobile-toggle';
+
+$btn-bare-gate: '[type="submit"], [type="reset"], :not([class])';
+
+$btn-scope:
+    '.button:not(#{$btn-chrome}), ' +
+    'button:is(#{$btn-bare-gate}):where(:not(#{$btn-chrome})), ' +
+    'form button:not([type]):where(:not(#{$btn-chrome})), ' +
+    'input[type="button"]:not(#{$btn-chrome}), ' +
+    'input[type="reset"]:not(#{$btn-chrome}), ' +
+    'input[type="submit"]:not(#{$btn-chrome}), ' +
+    '.wp-block-button__link, ' +
+    '.wp-element-button:not(.components-button)';
+
+#{$btn-scope},
+.wc-block-cart__submit .wp-element-button {
     border: none;
     cursor: pointer;
     padding: 0px 1.3em;
@@ -224,17 +256,8 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
     }
 }
 
-// Same `[class*="wp-block-"]` carve-out as above so WP default-block
-// chrome doesn't inherit the primary-color background fill.
-.button:not([class*="wp-block-"]),
-button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
-input[type="button"]:not(.ed_button, [class*="wp-block-"]),
-.button:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-.wp-block-button__link,
-.wp-element-button:not(.components-button),
-input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
+// Brand fill — same scope as the reset above, so the two can never drift.
+#{$btn-scope} {
     color: var(--customify-btn-on-primary, #ffffff);
     background: $color_primary;
     &:focus {
@@ -242,10 +265,12 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
     }
 }
 
-.button[disabled]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-button[disabled]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-button.disabled:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-.button.disabled:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
+// Disabled state — same intent gate, so a disabled gallery arrow or lightbox
+// control is dimmed by its own component CSS, not by ours.
+.button[disabled]:not(#{$btn-chrome}),
+.button.disabled:not(#{$btn-chrome}),
+button[disabled]:is(#{$btn-bare-gate}):where(:not(#{$btn-chrome})),
+button.disabled:is(#{$btn-bare-gate}):where(:not(#{$btn-chrome})) {
     opacity: 0.5;
 }
 

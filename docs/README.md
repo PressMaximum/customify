@@ -72,6 +72,7 @@ The big picture — request flow + which subsystem owns which path. Deep-dive ea
 | Concern | SPEC |
 |---|---|
 | Singleton, layout, element classes, template hierarchy | [`SPEC-bootstrap.md`](SPEC-bootstrap.md) |
+| Context-aware content area vertical spacing | [`SPEC-content-area-spacing.md`](SPEC-content-area-spacing.md) |
 | webpack entries, asset.php sidecar, CSS handle | [`SPEC-asset-pipeline.md`](SPEC-asset-pipeline.md) |
 | Customizer config + auto-CSS + JS contexts | [`SPEC-customizer.md`](SPEC-customizer.md) |
 | 6-slot color palette + `:root` token pipeline | [`SPEC-customizer-colors.md`](SPEC-customizer-colors.md) |
@@ -93,6 +94,7 @@ Each SPEC owns one subsystem end-to-end: storage shape, render pipeline, design 
 | File | Subsystem |
 |---|---|
 | [`SPEC-bootstrap.md`](SPEC-bootstrap.md) | Singleton bootstrap, layout system, element classes, template hierarchy |
+| [`SPEC-content-area-spacing.md`](SPEC-content-area-spacing.md) | Global spacing magnitude, request contexts, CPT/taxonomy inheritance |
 | [`SPEC-asset-pipeline.md`](SPEC-asset-pipeline.md) | webpack, `index.asset.php` pattern, CSS handle, `src/` vs `build/` vs `assets/` |
 | [`SPEC-customizer.md`](SPEC-customizer.md) | Customizer architecture, config-driven registration, auto-CSS, fonts, controls |
 | [`SPEC-customizer-colors.md`](SPEC-customizer-colors.md) | 6-slot palette, `:root` token pipeline, `theme.json` sync, picker UI |

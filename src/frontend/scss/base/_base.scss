@@ -687,7 +687,15 @@ article.comment {
 --------------------------------------------------------------*/
 
 // Direction Nav
+// Used by the theme AND by Customify Pro's WooCommerce Booster (Quick View +
+// Product Gallery Slider render `<button type="button" class="slick-next
+// nav-btn …">`). Those are classed `type="button"` icon controls, so they sit
+// outside the global button scope in base/_forms.scss on purpose — which also
+// means they no longer inherit its `border: none`. Declare it here, next to
+// the rest of the component's own look, or the UA `outset` button border comes
+// back on the arrows.
 .nav-btn {
+    border: none;
     margin: auto;
     width: 24px;
     height: 24px;

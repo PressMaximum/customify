@@ -1,3 +1,34 @@
+= 0.4.23 =
+* NEW: Search scope setting for search header builder items.
+* NEW: Color pickers can now follow palette tokens so fields update when the palette changes.
+* NEW: Shop archive content spacing control.
+* NEW: Per-page transparent header override.
+* IMPROVED: Global Button Styling no longer leaks into plugin UI controls.
+* IMPROVED: Polished Customizer form controls and search results chrome.
+* FIXED: Core blocks spacing issues (Gallery, Columns, Buttons, Query Loop, etc.).
+* FIXED: Core Comments blocks styling and related discussion elements.
+* FIXED: Various WooCommerce fixes — My Account layout, password toggle, quantity steppers, shop spacing, cart in widget REST.
+
+= 0.4.22 =
+* NEW: Native off-canvas cart drawer for the WooCommerce header cart item.
+* NEW: Contextual Content Area Spacing — per-context top/bottom content padding (blog, archives, singles, CPTs, WooCommerce) under Layouts, inherit-first defaults.
+* NEW: Customizer fonts loaded into the block editor canvas for typography parity.
+* IMPROVED: Transparent Header text-color controls for Top/Main/Bottom rows, overriding row item colors while preserving Sticky Header priority.
+* IMPROVED: Font Awesome CSS loads async, main stylesheet gains fetchpriority, plus small accessibility fixes.
+* IMPROVED: Block vertical rhythm driven by --wp--style--block-gap; root blockGap disabled so element margins own spacing.
+* IMPROVED: Requires PHP lowered to 5.3 so PHP 7.x sites can install.
+* FIXED: Color palette lost when switching palette presets in the Customizer.
+* FIXED: Header Top/Main/Bottom Advanced Styling now live-previews on transparent rows and remains inherited when Transparent Styling values are empty.
+* FIXED: Widget Title typography, including letter spacing, now applies consistently across all widget areas.
+* FIXED: WooCommerce block quantity stepper and variation table styling; block-owned quantity controls no longer skinned by the theme.
+* FIXED: WooCommerce block Product Gallery spacing/margins and standard Add to Cart quantity-field height.
+* FIXED: Header cart dropdown/drawer not reacting to WooCommerce block cart add/remove events.
+* FIXED: WooCommerce blocks theme compatibility inside the general builder.
+* FIXED: Sidebar layout not applying on CPT taxonomy archives.
+* FIXED: Footer widget menus — noisy per-item dividers removed, widget-list gap tuned.
+* FIXED: Customizer widget edit-shortcut now opens force-hidden footer/header widget areas.
+* FIXED: alignleft/alignright images float again instead of stretching full width.
+
 = 0.4.21 =
 * NEW: Buttons & Form Fields Customizer section with modernized default style, teal brand color, and refreshed social icons.
 * NEW: Typography presets — font-pair quick picks with native tooltips.

@@ -1,0 +1,475 @@
+/*--------------------------------------------------------------
+## Comments — Core Comments blocks
+--------------------------------------------------------------*/
+//
+// `base/_comments.scss` styles the CLASSIC comment markup that
+// `comments.php` + the `customify_comment()` walker emit. That markup
+// (`.comment-list`, `article.comment`, `.comment-wrap`) never appears when a
+// page renders comments through blocks — a block template, a Full Site
+// Editing template, or a page-builder template that drops `core/comments`
+// into the layout. Those paths emit an entirely different DOM
+// (`.wp-block-comment-template`, `.wp-block-comment-author-name`, …), which
+// until now the theme did not style at all.
+//
+// What Core actually ships for these blocks is close to nothing: `box-sizing`,
+// a `list-style: none` reset, and `padding-left: 2rem` on the nested reply
+// list. Everything else — hierarchy, rhythm, meta contrast, the reply
+// affordance, the form — is the theme's job.
+//
+// Two constraints shape every rule below:
+//
+//   1. `theme.json` does NOT opt into `settings.spacing.blockGap`, so WordPress
+//      emits no `gap` for flex layouts and no `margin-block-start` for flow
+//      layouts anywhere on the site. A Core Comments composition therefore
+//      collapses to zero spacing: the author name touches the date, the
+//      avatar touches the text. The theme has to supply that rhythm. Enabling
+//      blockGap globally instead would re-flow every existing layout on every
+//      site running this theme, which is not a trade this file makes.
+//
+//   2. The user's Global Styles and per-block attributes must keep winning.
+//      Anything a block support can set (gap, spacing, color, typography) is
+//      declared through `:where()` (specificity 0) or reads the corresponding
+//      `--wp--style--*` variable first, so a saved value always takes over.
+//      Colors resolve through the `--customify-*` palette tokens, never a
+//      literal hex, so the Customizer palette drives them like the rest of
+//      the theme.
+//
+// This partial is imported by BOTH `frontend/scss/style.scss` and
+// `backend/admin/scss/editor.scss` — the blocks render with the same class
+// names in the editor canvas, so a single source keeps editor/frontend parity.
+
+// `.comments-area` is included so the classic `.comment-list` walker
+// (`base/_comments.scss`) resolves the same tokens as the Comments blocks —
+// one set of values drives the thread indent, guide color and avatar size
+// across both markup paths. The block wrappers still declare the tokens
+// too so a page rendering ONLY the block (no classic walker present) keeps
+// working on its own.
+.wp-block-comments,
+.wp-block-post-comments-form,
+.comments-area {
+	// Gutter between an avatar and the comment body, and between the items of
+	// any flex row inside a comment (author / date / edit link).
+	--customify-comment-gap: 1rem;
+	// Vertical rhythm inside one comment: meta row → content → reply link.
+	--customify-comment-rhythm: 0.5rem;
+	// Space between sibling threads at the top level.
+	--customify-comment-thread-gap: 2.25rem;
+	// Space between sibling replies inside one thread.
+	--customify-comment-reply-gap: 1.5rem;
+	// Indent of each nesting level, and the hairline that traces it.
+	--customify-comment-indent: 2.5rem;
+	--customify-comment-guide: #{$color_border};
+	// Rendered size of the Avatar block. The thread line is drawn down the
+	// avatar's centre line, so this is what positions it — KEEP IN LOCKSTEP
+	// with the `size` attribute used by `core/avatar` in the template (48).
+	// A composition with no avatar still reads fine: the line simply runs down
+	// a 24px-wide gutter to the left of the reply.
+	//
+	// `--customify-comment-indent` must stay comfortably LARGER than half this
+	// value, or the line lands on top of the reply's own avatar instead of
+	// beside it.
+	--customify-comment-avatar-size: 48px;
+}
+
+/* Heading -------------------------------------------------------------- */
+
+.wp-block-comments-title {
+	margin-bottom: var(--customify-comment-thread-gap);
+}
+
+/* The thread ----------------------------------------------------------- */
+
+.wp-block-comment-template {
+	// `base/_base.scss` styles content lists with `ul, ol { margin: 0 0 ms(2)
+	// ms(4) }` and adds another `ms(4)` for `li > ol`. Those are the right
+	// rules for prose, but the comment thread IS a list of lists, so they
+	// stack ~42px of margin onto every nesting level on top of the indent set
+	// below — by depth 3 on a 390px screen the reply column collapses to about
+	// 136px, roughly twenty characters per line. The classic markup never hit
+	// this because `base/_comments.scss` zeroes `.comment-list` and
+	// `.comment-list ul`; this is the block-markup equivalent.
+	margin: 0;
+
+	// Only the rhythm between top-level threads is missing from Core.
+	> li + li {
+		margin-top: var(--customify-comment-thread-gap);
+		padding-top: var(--customify-comment-thread-gap);
+		// A single hairline between top-level threads is enough to separate
+		// them. Deliberately NOT a card: no background, border box or shadow
+		// per comment, which would turn a long discussion into a stack of
+		// heavy panels and fight the reading column.
+		border-top: 1px solid var(--customify-comment-guide);
+	}
+
+	// Replies. Core nests them in a bare `<ol>` that is a direct child of the
+	// comment's own `<li>`. `li.comment >` (rather than plain `li >`) keeps
+	// this off a list a COMMENTER wrote inside their comment: `comment_class()`
+	// puts `comment` on every comment item, and nothing inside
+	// `.wp-block-comment-content` carries it. Pingback/trackback items get
+	// `pingback`/`trackback` instead and are not threaded, so they are
+	// unaffected either way.
+	li.comment > ol {
+		margin-top: var(--customify-comment-reply-gap);
+		// `base/_base.scss` `li > ul, li > ol { margin-left: ms(4) }` adds ~42px
+		// here on top of the indent below, at EVERY level. Zeroed so the indent
+		// is exactly what this file declares and nothing else. The reply's
+		// own `padding-left` (see the `> li` rule below) gives the indent
+		// instead — same shape as classic's `.comment-list .children li.comment
+		// { padding-left: 30px|85px }`.
+		margin-left: 0;
+		margin-bottom: 0;
+		padding-left: 0;
+
+		> li + li {
+			margin-top: var(--customify-comment-reply-gap);
+		}
+
+		// Thread line + elbow — SAME pattern as classic `.comment-list .children
+		// li.comment` in `base/_comments.scss`, so a page using block markup
+		// and a page using the walker render an identical thread visual.
+		//
+		// Classic paints `border-left` on the child LI and a horizontal
+		// `::after` elbow reaching to the avatar. We mirror it on the block
+		// LI here — `padding-left` widens the reply row to make room for the
+		// border, `::before` draws the elbow (::after is already reserved by
+		// other rules that might latch onto the LI).
+		> li {
+			position: relative;
+			padding-left: var(--customify-comment-indent);
+			border-left: 1px solid var(--customify-comment-guide);
+
+			// Horizontal elbow — from the border-left out to where the reply's
+			// avatar begins, level with the avatar's vertical centre. Same
+			// visual role as classic's `::after { top: ms(2); left: 0;
+			// width: ms(2); height: 1px }`.
+			&::before {
+				content: "";
+				position: absolute;
+				top: calc(var(--customify-comment-avatar-size) / 2);
+				left: 0;
+				width: calc(var(--customify-comment-indent) / 2);
+				height: 1px;
+				background: var(--customify-comment-guide);
+			}
+		}
+
+	}
+
+	// NOTE: the classic `.comment-list` walker (`base/_comments.scss`) draws
+	// the thread line only on the nested reply itself — one continuous line
+	// down the reply column, starting at the first reply. No bridge segment
+	// spans the parent's own body. Comments-block markup mirrors that here:
+	// the reply guide above is enough, and a bridge rule on the parent's
+	// first-child (previously drawn via `li.comment:has(> ol) > :first-child`)
+	// was overlapping the parent's content when that content is tall (rich
+	// text, lists, tables), leaving a stray vertical line running through the
+	// reading column. Deliberately omitted to keep the two paths in sync.
+}
+
+// Flex rows inside the comments area (the avatar row, the author/date meta
+// row, the pagination row). With blockGap off these render at `gap: normal`,
+// i.e. the author name touches the date and the text touches the avatar.
+//
+// Note this canNOT be written as `var(--wp--style--block-gap, <fallback>)`:
+// when a theme.json sets `styles.spacing.blockGap: false`, WordPress still
+// emits the custom property — with an EMPTY value. An empty-but-declared
+// custom property makes the whole declaration invalid at computed-value time
+// rather than falling back, so the fallback would never be reached and the
+// gap would silently stay 0.
+//
+// The whole selector sits inside `:where()` (specificity 0) instead, so on a
+// site that does enable blockGap — globally or on one of these blocks —
+// Core's own `.wp-container-*{gap:…}` rule outranks this default regardless
+// of stylesheet order, and the user's value wins.
+:where(.wp-block-comments .is-layout-flex) {
+	column-gap: var(--customify-comment-gap);
+	row-gap: 0.25rem;
+}
+
+/* Avatar --------------------------------------------------------------- */
+
+.wp-block-comments .wp-block-avatar {
+	// Never let the avatar shrink out of shape when the body column is long;
+	// Core's `.is-layout-flex > :is(*, div){margin:0}` is more specific than a
+	// bare class, hence the two-class selector.
+	flex: 0 0 auto;
+	line-height: 0;
+
+	img {
+		// A user-set radius on the Avatar block serializes inline and wins.
+		border-radius: 50%;
+		display: block;
+		height: auto;
+		max-width: 100%;
+	}
+}
+
+/* Meta: author, date, edit link ---------------------------------------- */
+
+.wp-block-comment-author-name {
+	font-weight: 600;
+	line-height: 1.3;
+	color: $color_heading;
+
+	a {
+		color: inherit;
+		text-decoration: none;
+
+		&:hover,
+		&:focus-visible {
+			text-decoration: underline;
+		}
+	}
+}
+
+.wp-block-comment-date,
+.wp-block-comment-edit-link {
+	// The date renders as a permalink, so without this it picks up the site
+	// link color and competes with the author name for the eye. Muted meta
+	// keeps the name first in the hierarchy while the timestamp stays
+	// available; `--customify-text-muted` is the same token the classic
+	// comment meta uses, so both markups read alike.
+	font-size: 0.8125em;
+	line-height: 1.4;
+	color: $color_meta;
+
+	a {
+		color: inherit;
+		text-decoration: none;
+
+		&:hover,
+		&:focus-visible {
+			color: $color_link_hover;
+			text-decoration: underline;
+		}
+	}
+}
+
+/* Content -------------------------------------------------------------- */
+
+.wp-block-comment-content {
+	margin-top: var(--customify-comment-rhythm);
+	// A pasted URL or a long unbroken token is the usual cause of horizontal
+	// overflow in a narrow nested reply.
+	overflow-wrap: break-word;
+
+	> :first-child {
+		margin-top: 0;
+	}
+
+	> :last-child {
+		margin-bottom: 0;
+	}
+
+	// Core's `.wp-block-comment-template ol{list-style:none;padding-left:2rem}`
+	// is written for the reply list but also matches a list a commenter wrote
+	// inside their comment, stripping its markers. Restore them.
+	ul,
+	ol {
+		margin: 1em 0;
+		padding-left: 1.5em;
+	}
+
+	ul {
+		list-style: disc;
+	}
+
+	ol {
+		list-style: decimal;
+	}
+
+	li + li {
+		margin-top: 0.35em;
+	}
+
+	// Embedded media should never push the reading column wider than the
+	// thread that contains it.
+	img,
+	video,
+	iframe,
+	embed,
+	object {
+		max-width: 100%;
+		height: auto;
+	}
+
+	blockquote {
+		margin: 1em 0;
+		padding-left: 1em;
+		border-left: 2px solid var(--customify-comment-guide);
+	}
+}
+
+// Vertical rhythm INSIDE one Comments-block comment.
+//
+// `_base.scss` sets `p { margin-bottom: ms(1) }` (~22.6px) for article body,
+// and every other block-level element inside comment content sits on a
+// different rhythm — ul/ol at 1em (from the rule above), .table-wrapper at 0,
+// bare <table> at ms(3). A rich comment mixing prose + lists + a table ends
+// up with three visible gap sizes stacked on top of each other, and the table
+// touches the paragraph above it.
+//
+// Normalise to 1em for every direct block-level child, but ONLY inside the
+// Comments-template list-item chain — `.wp-block-comment-template .comment
+// .wp-block-comment-content > *`. Three anchors, no false positives:
+//
+//   • `.wp-block-comment-template` is the OL Core emits for the comments
+//     block itself — never appears on a widget list or an article body.
+//   • `.comment` is the per-item class WP walker gives each LI — narrows to
+//     the Comments block DOM even when a page nests another template inside.
+//   • Direct-child (`>`) — only touches the top level of a comment's own
+//     content wrapper, so a nested list inside the comment keeps its own
+//     margins from the `ul, ol { margin: 1em 0 }` rule above.
+//
+// Article body, widgets, sidebars, and any orphan `.wp-block-comment-content`
+// outside a Comments Template all keep their existing rhythm untouched.
+.wp-block-comment-template .comment .wp-block-comment-content {
+	> p,
+	> ul,
+	> ol,
+	> blockquote,
+	> pre,
+	> figure,
+	> .table-wrapper,
+	> table {
+		margin-top: 0;
+		margin-bottom: 1em;
+	}
+}
+
+.comment-awaiting-moderation {
+	color: $color_meta;
+	font-style: italic;
+}
+
+/* Reply link ----------------------------------------------------------- */
+
+.wp-block-comment-reply-link {
+	margin-top: var(--customify-comment-rhythm);
+	font-size: 0.8125em;
+
+	a {
+		display: inline-block;
+		font-weight: 600;
+		letter-spacing: 0.02em;
+		text-decoration: none;
+		color: $color_link;
+		// An underline that only appears on hover/focus keeps the resting
+		// thread quiet while still marking Reply as the one action in a
+		// comment. `currentColor` means the mark follows the link token.
+		border-bottom: 1px solid transparent;
+		transition: color 0.15s ease, border-color 0.15s ease;
+
+		&:hover {
+			color: $color_link_hover;
+			border-bottom-color: currentColor;
+		}
+
+		&:focus-visible {
+			color: $color_link_hover;
+			outline: 2px solid currentColor;
+			outline-offset: 3px;
+			border-radius: 1px;
+		}
+	}
+}
+
+/* Pagination ----------------------------------------------------------- */
+
+.wp-block-comments-pagination {
+	margin-top: var(--customify-comment-thread-gap);
+	font-size: 0.9375em;
+
+	.page-numbers {
+		text-decoration: none;
+
+		&:hover,
+		&:focus-visible {
+			text-decoration: underline;
+		}
+	}
+
+	.current {
+		font-weight: 600;
+		color: $color_heading;
+	}
+}
+
+/* Comment form --------------------------------------------------------- */
+
+.wp-block-post-comments-form {
+	margin-top: var(--customify-comment-thread-gap);
+
+	.comment-reply-title {
+		margin-bottom: 0.5rem;
+	}
+
+	.comment-notes,
+	.logged-in-as {
+		font-size: 0.875em;
+		color: $color_meta;
+	}
+
+	// Mirrors the label treatment `base/_comments.scss` gives the classic
+	// form, so a site that switches a template from classic to blocks does not
+	// see its comment form change character.
+	.comment-form-comment,
+	.comment-form-author,
+	.comment-form-email,
+	.comment-form-url {
+		label {
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			font-size: 0.85em;
+		}
+	}
+
+	.required {
+		color: $color_secondary;
+	}
+
+	// Core sets `display:flex; gap:.25em` here. The checkbox needs to align to
+	// the first line of a label that wraps onto two or three lines at 390px
+	// rather than to the middle of the wrapped block, and it must not shrink
+	// away when the label is long.
+	.comment-form-cookies-consent {
+		align-items: flex-start;
+		gap: 0.5em;
+
+		input[type="checkbox"] {
+			flex: 0 0 auto;
+			margin-top: 0.25em;
+		}
+
+		label {
+			font-size: 0.875em;
+			line-height: 1.5;
+		}
+	}
+
+	.form-submit {
+		margin-bottom: 0;
+	}
+}
+
+/* Narrow viewports ----------------------------------------------------- */
+
+@include mq(max-sm) {
+	.wp-block-comments {
+		// Core's flat 2rem per level costs 6rem by depth 3, which on a 390px
+		// screen leaves a reply column too narrow to read. The thread line
+		// carries the hierarchy instead, so the indent can come down — but only
+		// to the point where the line still clears the reply's avatar
+		// (avatar/2 = 24px + breathing room), not below it.
+		--customify-comment-indent: 2.25rem;
+		--customify-comment-gap: 0.875rem;
+		--customify-comment-thread-gap: 1.75rem;
+		--customify-comment-reply-gap: 1.25rem;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wp-block-comment-reply-link a {
+		transition: none;
+	}
+}

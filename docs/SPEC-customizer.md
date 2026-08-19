@@ -789,6 +789,7 @@ These are enforced by [`../AGENTS.md`](../AGENTS.md) — restated here for compl
 - **English-only in source.** All docblocks, inline notes, and `.md` files in the codebase are English.
 - **Edit `src/`, not `build/`.** SCSS/JS sources live in `src/`; build outputs in `build/` are artifacts. See [`SPEC-asset-pipeline.md`](SPEC-asset-pipeline.md).
 - **CSS handle must match.** `wp_add_inline_style( 'customify-style', ... )` — never `'customify'` or any other typo.
+- **Control chrome resolves scale tokens, never literals.** `.customize-control` declares `--customify-control-h` / `--customify-control-radius` / `--customify-control-border` in `src/backend/customizer/scss/customizer.scss`; every field, select, select2 box and color-picker row resolves them. A panel that needs a different rhythm re-declares the tokens on its own root (the typography modal drops to `28px` / `2px` because it stacks ~12 fields) rather than hardcoding heights. Hardcoding is what produced the original mismatch: one styling modal carried a 32px rounded colour row, twelve 39px square number boxes and a 40px square select.
 
 ---
 

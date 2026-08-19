@@ -139,20 +139,20 @@ p.demo_store,
     }
 
     // Block cart/checkout quantity stepper (Cart/Checkout blocks). The +/- are
-    // bare <button>s carrying a `wc-block-…` class (NOT `wp-block-…`), so the
-    // global theme button rule's `:not([class*="wp-block-"])` carve-out does
-    // NOT exclude them — its hover state leaks in and sets
-    // `color: --customify-on-primary` (white) + a `currentColor`-based
-    // state-layer `background-image` gradient. That turns the ＋/－ glyph white
-    // (invisible) and paints a gray fill behind it. Neutralize like .input-pm-act
-    // so the glyph stays visible and the stepper stays flat (no hover fill),
-    // matching the single-product stepper.
+    // bare <button>s carrying a `wc-block-…` class. They are now outside the
+    // global button scope twice over — that scope excludes `[class*="wc-block-"]`
+    // AND only reaches the bare element when it is a submit/reset control, an
+    // unclassed <button>, or a typeless <button> in a form, while these are
+    // classed `type="button"` (see the "canonical theme button surface" note in
+    // base/_forms.scss). Historically they were NOT excluded: the theme's hover
+    // state-layer leaked in, set `color: --customify-on-primary` (white) and a
+    // `currentColor` gradient, turning the ＋/－ glyph invisible over a gray fill.
     //
-    // Specificity note: the theme's state-layer rule is
-    // `button:not(…):not(.menu-mobile-toggle, .search-submit):hover` = (0,3,1),
-    // so the extra `.wc-block-components-quantity-selector` ancestor below is
-    // REQUIRED to reach (0,4,0) and actually drop the gradient — a single-class
-    // override (0,3,0) loses to it and the gray fill survives.
+    // Kept as a defensive neutralizer — it also flattens WooCommerce's own
+    // hover/focus treatment so the stepper matches the single-product one, and
+    // it still kills the Cart-block focus ring below. The
+    // `.wc-block-components-quantity-selector` ancestor keeps it at (0,4,0),
+    // above cart.css's own (0,3,0) rules.
     .wc-block-components-quantity-selector .wc-block-components-quantity-selector__button {
         &:hover,
         &:focus,
@@ -167,6 +167,27 @@ p.demo_store,
             outline: none;
             box-shadow: none;
         }
+    }
+
+    // Customify gives number fields a fixed height, while the Add To Cart
+    // stepper adds vertical padding to its quantity input. Keep the input from
+    // setting the grid row height so the stepper follows the adjacent button.
+    .wc-block-add-to-cart-form.wc-block-add-to-cart-form--stepper
+    .wc-block-components-quantity-selector
+    input[type="number"].input-text.qty.text {
+        box-sizing: border-box;
+        height: 100%;
+        padding-block: 0;
+    }
+
+    // The standard WooCommerce Add to Cart Form stretches the quantity wrapper
+    // to the adjacent button, but its number input keeps a font-relative height.
+    // Fill the wrapper without changing the theme's field skin.
+    .wc-block-add-to-cart-form
+    .quantity:not(.wc-block-components-quantity-selector)
+    input[type="number"].input-text.qty.text {
+        box-sizing: border-box;
+        height: 100%;
     }
 
     .blockUI.blockOverlay {
@@ -618,5 +639,3 @@ td.product-quantity {
     margin: 0.5em 0 0;
     display: block;
 }
-
-

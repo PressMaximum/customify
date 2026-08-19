@@ -6,6 +6,7 @@
 // == Site base ==
 @import "base/base";
 @import "base/comments";
+@import "base/comment-blocks";
 @import "base/skins";
 @import "base/blocks";
 // == Site header ==
@@ -13,6 +14,7 @@
 // == Site structure ==
 @import "layouts/layouts";
 @import "layouts/blogs";
+@import "layouts/search-results";
 @import "layouts/pages";
 // == Widgets ==
 @import "widgets/widgets";

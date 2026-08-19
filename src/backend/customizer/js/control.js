@@ -1993,16 +1993,39 @@ import { attachPopoverChrome } from './popover-chrome';
 			$(".customify-input-color", $el).each(function () {
 				var colorInput = $(this);
 				var df = colorInput.data("default") || "";
-				var current_val = $(
-					".customify-input--color",
-					colorInput
-				).val();
+				var hidden = $(".customify-input--color", colorInput);
+				var panel = $(".customify--color-panel", colorInput);
+
+				// Palette link — Iris cannot parse `var(--customify-x, #hex)`.
+				// Left alone, wpColorPicker() reads that string, treats the
+				// field as empty and fires its `clear` callback, which wipes
+				// the hidden input the control reads (a later getValue() would
+				// then push '' over the saved token) and shows the raw var() as
+				// an invalid entry. Seed the VISIBLE input with the resolved hex
+				// so Iris initialises on a real colour, then restore the token
+				// on the hidden input below. Nothing is written to the setting,
+				// so rendering a linked control never dirties the Customizer.
+				var linkedToken = customifyPaletteLink.tokenFor(hidden.val());
+				var linkedValue = linkedToken ? hidden.val() : null;
+				if (linkedToken && linkedToken.preview) {
+					panel.val(linkedToken.preview);
+				}
+
+				// wpColorPicker() fires its `change` callback during init. The
+				// callback writes the picker's hex into the hidden input and,
+				// when that hex differs from `current_val`, pushes it to the
+				// setting — which would silently rewrite a linked field to its
+				// fallback hex every time the control re-renders (e.g.
+				// refreshFromSetting after an external set). Seeding
+				// `current_val` with the resolved hex makes that init callback
+				// a no-op; the restore below then puts the token back.
+				var current_val =
+					linkedToken && linkedToken.preview
+						? linkedToken.preview
+						: hidden.val();
 				// data-alpha="true"
-				$(".customify--color-panel", colorInput).attr(
-					"data-alpha",
-					"true"
-				);
-				$(".customify--color-panel", colorInput).wpColorPicker({
+				panel.attr("data-alpha", "true");
+				panel.wpColorPicker({
 					defaultColor: df,
 					change: function (event, ui) {
 						var new_color = ui.color.toString();
@@ -2021,7 +2044,348 @@ import { attachPopoverChrome } from './popover-chrome';
 						);
 					}
 				});
+
+				if (linkedValue !== null) {
+					hidden.val(linkedValue);
+				}
+
+				customifyPaletteLink.attach(colorInput);
 			});
+		}
+	};
+
+	//-------------------------------------------------------------------------
+	// Palette link — pick a theme palette token from inside any color picker.
+	//
+	// The picked value is the token reference itself
+	// (`var(--customify-primary, #235787)`), so the field FOLLOWS the palette
+	// instead of freezing a hex; the baked fallback keeps it rendering where
+	// the token is not emitted (derived-token opt-in gate, see
+	// inc/colors-palette.php).
+	//
+	// Data comes from Customify_Control_Args.palette_link (see
+	// inc/color-palette-link.php). The row is built on first popover open, not
+	// at init: the Customizer mounts ~250 color inputs and eagerly building a
+	// 12-swatch row in each would cost thousands of nodes for nothing.
+	//
+	// Source of truth is the hidden `.customify-input--color` input — the same
+	// element the control reads in getValue(). initColor() above guarantees it
+	// still holds the token after wpColorPicker init.
+	//-------------------------------------------------------------------------
+
+	var customifyPaletteLink = {
+		config: function () {
+			var args =
+				typeof Customify_Control_Args !== "undefined"
+					? Customify_Control_Args
+					: null;
+			var cfg = args && args.palette_link ? args.palette_link : null;
+			return cfg && cfg.enabled && cfg.tokens && cfg.tokens.length
+				? cfg
+				: null;
+		},
+
+		// Customify round-trips setting values as URL-encoded JSON
+		// (getValue() -> encodeValue() -> setting.set()), so a value read back
+		// after a UI write looks like `%22var(--customify-accent,%20#ffd042)%22`
+		// while the same value is a plain string when PHP seeded it. Decode
+		// both shapes; a plain hex simply fails JSON.parse and passes through.
+		decode: function (value) {
+			if (typeof value !== "string") {
+				return "";
+			}
+			try {
+				var decoded = JSON.parse(decodeURI(value));
+				return typeof decoded === "string" ? decoded : value;
+			} catch (e) {
+				return value;
+			}
+		},
+
+		// Match on the TOKEN NAME, never the whole string: the stored value
+		// carries a fallback hex baked in at pick time, but the token list is
+		// rebuilt from live slot values on every page load — so editing the
+		// Accent slot would otherwise "unlink" every field linked to Accent.
+		nameOf: function (value) {
+			var match = /^var\(\s*(--customify-[a-z0-9-]+)/i.exec(
+				customifyPaletteLink.decode(value).trim()
+			);
+			return match ? match[1].toLowerCase() : "";
+		},
+
+		tokenFor: function (value) {
+			var cfg = customifyPaletteLink.config();
+			if (!cfg) {
+				return null;
+			}
+			var name = customifyPaletteLink.nameOf(value);
+			if (!name) {
+				return null;
+			}
+			for (var i = 0; i < cfg.tokens.length; i++) {
+				if (customifyPaletteLink.nameOf(cfg.tokens[i].value) === name) {
+					return cfg.tokens[i];
+				}
+			}
+			// Linked to a token this palette no longer offers — still report it
+			// as linked so the value is not presented as a custom hex.
+			return {
+				value: customifyPaletteLink.decode(value).trim(),
+				label: name,
+				preview: ""
+			};
+		},
+
+		// The Colors section owns the palette itself: its slot pickers define
+		// the tokens (linking one would be circular) and its override pickers
+		// feed a hex-only derivation path. They keep their own quick-pick row.
+		isEligible: function (colorInput) {
+			var cfg = customifyPaletteLink.config();
+			if (!cfg) {
+				return false;
+			}
+			var el = colorInput[0];
+			if (el.closest("#sub-accordion-section-customify_colors")) {
+				return false;
+			}
+			var li = el.closest(".customize-control");
+			if (li && li.id) {
+				var name = li.id.replace(/^customize-control-/, "");
+				if ((cfg.excluded || []).indexOf(name) > -1) {
+					return false;
+				}
+			}
+			return true;
+		},
+
+		hidden: function (colorInput) {
+			return $(".customify-input--color", colorInput);
+		},
+
+		attach: function (colorInput) {
+			if (!customifyPaletteLink.isEligible(colorInput)) {
+				return;
+			}
+
+			colorInput.addClass("has-palette-link");
+			$(".wp-picker-container", colorInput).addClass("has-palette-link");
+
+			// Build on first open — see the note above about node count.
+			$(".wp-color-result", colorInput).on("click", function () {
+				customifyPaletteLink.build(colorInput);
+			});
+
+			// wp-color-picker writes the hidden input on every Iris change;
+			// that is what flips a field back out of linked mode.
+			colorInput.on("change", ".customify-input--color", function () {
+				if (colorInput.data("cfy-palette-writing")) {
+					return;
+				}
+				customifyPaletteLink.sync(colorInput);
+			});
+
+			customifyPaletteLink.sync(colorInput);
+		},
+
+		// Write through the hidden input: control.js binds `change` on every
+		// input inside the control container and calls getValue() -> setting.set(),
+		// so this is the same path wp-color-picker's own change callback uses.
+		//
+		// `previewHex` also drives Iris so the popover matches the pick. Iris
+		// has to move FIRST: its change callback writes a hex into the hidden
+		// input, so writing the token afterwards leaves the field on the token.
+		write: function (colorInput, value, previewHex) {
+			var hidden = customifyPaletteLink.hidden(colorInput);
+			if (!hidden.length) {
+				return;
+			}
+
+			if (previewHex) {
+				colorInput.data("cfy-palette-writing", true);
+				$(".customify--color-panel", colorInput).wpColorPicker(
+					"color",
+					previewHex
+				);
+				colorInput.data("cfy-palette-writing", false);
+			}
+
+			hidden.val(value).trigger("change");
+			customifyPaletteLink.sync(colorInput);
+		},
+
+		build: function (colorInput) {
+			var cfg = customifyPaletteLink.config();
+			var holder = $(".wp-picker-holder", colorInput);
+			if (!cfg || !holder.length || $(".customify-palette-link", holder).length) {
+				return;
+			}
+
+			var root = $('<div class="customify-palette-link"></div>');
+
+			// Value row — the popover always shows the literal stored value, so
+			// a linked field reads `var(--customify-x, #hex)` and can be copied
+			// straight into custom CSS. Editable while it holds a hex,
+			// read-only while linked (swatches / Unlink drive it instead).
+			var valueRow = $('<div class="customify-palette-link__value"></div>');
+			var valueInput = $(
+				'<input type="text" class="customify-palette-link__value-input" spellcheck="false" autocomplete="off" />'
+			);
+			valueInput.on("click", function (e) {
+				e.stopPropagation();
+			});
+			valueInput.on("input", function () {
+				if (valueInput.prop("readonly")) {
+					return;
+				}
+				var v = ($.trim(valueInput.val()) || "").replace(/^(?!#)/, "#");
+				if (/^#[0-9a-fA-F]{6}$/.test(v) || /^#[0-9a-fA-F]{8}$/.test(v)) {
+					customifyPaletteLink.write(colorInput, v, v);
+				}
+			});
+
+			var copy = $(
+				'<button type="button" class="customify-palette-link__copy dashicons dashicons-admin-page"></button>'
+			).attr("title", cfg.l10n.copy);
+			copy.on("click", function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				valueInput.select();
+				try {
+					document.execCommand("copy");
+				} catch (err) {}
+			});
+
+			valueRow.append(valueInput).append(copy);
+			root.append(valueRow);
+
+			// One flat grid — brand pairs first, then the neutral axis.
+			var row = $('<div class="customify-palette-link__row"></div>');
+			$.each(cfg.tokens, function (i, token) {
+				var swatch = $(
+					'<button type="button" class="customify-palette-link__swatch"></button>'
+				)
+					.css("background-color", token.preview)
+					.attr("data-value", token.value)
+					.attr("data-label", token.label)
+					.attr("title", token.label);
+				swatch.on("click", function (e) {
+					e.preventDefault();
+					e.stopPropagation();
+					customifyPaletteLink.write(
+						colorInput,
+						token.value,
+						token.preview
+					);
+				});
+				row.append(swatch);
+			});
+			root.append(row);
+			root.append('<div class="customify-palette-link__status"></div>');
+
+			holder.append(root);
+			customifyPaletteLink.sync(colorInput);
+		},
+
+		// Repaint trigger swatch, active swatch, value input and status from
+		// the current stored value. Cheap enough to run on every change.
+		sync: function (colorInput) {
+			var cfg = customifyPaletteLink.config();
+			if (!cfg) {
+				return;
+			}
+
+			var value = customifyPaletteLink.decode(
+				customifyPaletteLink.hidden(colorInput).val() || ""
+			).trim();
+			var token = customifyPaletteLink.tokenFor(value);
+
+			colorInput.toggleClass("is-palette-linked", !!token);
+
+			// The trigger chip is painted inline by color-picker-alpha.js on its
+			// own change events. Override it only while linked (the picker's
+			// own colour is the resolved hex, which is right, but Iris does not
+			// know about tokens) and only UNDO an override we actually applied
+			// — clearing unconditionally would wipe the alpha script's paint
+			// and leave the chip transparent on every ordinary hex pick.
+			var chip = $(".wp-color-result .color-alpha", colorInput);
+			if (!chip.length) {
+				chip = $(".wp-color-result", colorInput);
+			}
+			if (chip.length) {
+				if (token && token.preview) {
+					chip[0].style.setProperty(
+						"background-color",
+						token.preview,
+						"important"
+					);
+					colorInput.data("cfy-chip-override", true);
+				} else if (colorInput.data("cfy-chip-override")) {
+					chip[0].style.removeProperty("background-color");
+					colorInput.data("cfy-chip-override", false);
+					// Repaint from the picker's own value: the alpha script
+					// only paints on its own events, so dropping the override
+					// mid-flight would otherwise leave the chip blank.
+					var ownColor = $(".customify--color-panel", colorInput).val();
+					if (ownColor) {
+						chip[0].style.backgroundColor = ownColor;
+					}
+				}
+			}
+
+			var row = $(".customify-palette-link", colorInput);
+			if (!row.length) {
+				return;
+			}
+
+			var activeName = customifyPaletteLink.nameOf(value);
+			$(".customify-palette-link__swatch", row).each(function () {
+				var swatch = $(this);
+				swatch.toggleClass(
+					"is-active",
+					!!activeName &&
+						customifyPaletteLink.nameOf(swatch.attr("data-value")) ===
+							activeName
+				);
+			});
+
+			var valueInput = $(".customify-palette-link__value-input", row);
+			if (valueInput.length && !valueInput.is(":focus")) {
+				valueInput.val(value).prop("readonly", !!token);
+			}
+
+			var status = $(".customify-palette-link__status", row);
+			if (!status.length) {
+				return;
+			}
+			status.empty();
+			if (token) {
+				var dot = $('<span class="customify-palette-link__dot"></span>');
+				if (token.preview) {
+					dot.css("background-color", token.preview);
+				}
+				var unlink = $(
+					'<button type="button" class="customify-palette-link__unlink"></button>'
+				).text(cfg.l10n.unlink);
+				unlink.on("click", function (e) {
+					e.preventDefault();
+					e.stopPropagation();
+					// Hand the field back to Iris: keep the colour identical,
+					// drop the link.
+					customifyPaletteLink.write(
+						colorInput,
+						token.preview || "",
+						token.preview
+					);
+				});
+				status
+					.addClass("is-linked")
+					.append($("<span></span>").text(cfg.l10n.linked + " "))
+					.append(dot)
+					.append($("<strong></strong>").text(token.label))
+					.append(unlink);
+			} else {
+				status.removeClass("is-linked").text(cfg.l10n.custom);
+			}
 		}
 	};
 

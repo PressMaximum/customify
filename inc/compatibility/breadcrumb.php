@@ -349,6 +349,13 @@ class Customify_Breadcrumb {
 		}
 
 		if ( $list ) {
+			// Yoast SEO and Rank Math wrap their breadcrumb output in an outer
+			// <span>. When we place that inside our <ul.page-breadcrumb-list>,
+			// the tree becomes <ul><span><li>…</li></span></ul>, which fails
+			// the "lists contain only <li>" and "<li> inside <ul>" a11y audits.
+			// Strip only the outermost <span> so the <ul> contains <li> directly.
+			$list = preg_replace( '#^\s*<span\b[^>]*>(.*)</span>\s*$#si', '$1', $list );
+
 			$pos       = sanitize_text_field( Customify()->get_setting( 'breadcrumb_display_pos' ) );
 			$layout    = Customify()->get_setting_tab( 'page_header_layout' );
 			$classes   = array( 'page-breadcrumb' );

@@ -130,12 +130,25 @@ $builder_active_color: #0073aa;
 		}
 	}
 
+	// Single source of truth for the Customizer form-control scale. Composite
+	// modals used to mix three of them in one panel — colour rows at 32px with
+	// rounded corners, css_ruler number boxes at 39px square, the select at
+	// 40px square — so a styling modal read as three different form kits
+	// stacked on top of each other. Every control rule below (and the
+	// palette-link picker chrome in _control.scss) resolves these tokens.
+	--customify-control-h: 36px;
+	--customify-control-radius: 4px;
+	--customify-control-border: #dcdcde;
+
 	select.customify-modal-input,
 	input[type="number"].customify-modal-input,
 	input[type="text"].customify-modal-input,
 	.customify--field-select select,
 	.customify--field-select .select2-selection {
-		min-height: 39px;
+		min-height: var(--customify-control-h);
+		height: var(--customify-control-h);
+		border-radius: var(--customify-control-radius);
+		border-color: var(--customify-control-border);
 		display: flex;
 		align-items: center;
 	}
@@ -154,10 +167,19 @@ $builder_active_color: #0073aa;
 		}
 	}
 	
+	// select2 paints its own corner radius on the single-select box; without
+	// this the font pickers keep a 2px corner while every field beside them
+	// is on the 4px token.
+	.select2-container--default .select2-selection--single {
+		border-radius: var(--customify-control-radius);
+	}
+
 	.select2-container--default
 		.select2-selection--single
 		.select2-selection__arrow {
-		height: 37px;
+		// Fills the select minus its 1px border on each side — keep in step
+		// with --customify-control-h or the arrow detaches from the field.
+		height: calc(var(--customify-control-h) - 2px);
 		background: #fff url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%231e1e1e%22%2F%3E%3C%2Fsvg%3E) no-repeat right 8px top 55%;
     background-size: 16px 16px;
 		width: 28px;	
@@ -165,8 +187,11 @@ $builder_active_color: #0073aa;
 }
 
 .wp-customizer {
+	// Rendered in a body-level select2 dropdown, outside `.customize-control`,
+	// so the token is not inherited here — keep the literal in step with
+	// --customify-control-h.
 	.select2-search__field {
-		min-height: 39px;
+		min-height: 36px;
 	}
 	ul.select2-results__options {
 		.select2-results__option {
