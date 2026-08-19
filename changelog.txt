@@ -1,6 +1,5 @@
 = 0.4.23 =
-* NEW: Redesigned Search Results page with type-aware cards, tabs and on-page search form.
-* NEW: Search Results can be fully replaced by Blocksify Dynamic Templates.
+* NEW: Search scope setting for search header builder items.
 * NEW: Color pickers can now follow palette tokens so fields update when the palette changes.
 * NEW: Shop archive content spacing control.
 * NEW: Per-page transparent header override.
