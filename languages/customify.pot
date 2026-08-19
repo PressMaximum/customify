@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.4.22\n"
+"Project-Id-Version: Customify 0.4.23\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2026-07-28 16:31:05+00:00\n"
+"POT-Creation-Date: 2026-08-19 12:35:03+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -663,7 +663,7 @@ msgstr ""
 msgid "Footer Sidebar %d"
 msgstr ""
 
-#: inc/class-metabox-fields.php:442
+#: inc/class-metabox-fields.php:442 inc/class-metabox.php:164
 #: inc/compatibility/woocommerce/config/single-product.php:196
 #: inc/customizer/class-customizer.php:632
 #: inc/customizer/class-customizer.php:643
@@ -743,7 +743,7 @@ msgstr ""
 msgid "Page Title Layout"
 msgstr ""
 
-#: inc/class-metabox.php:88 inc/class-metabox.php:105 inc/class-metabox.php:178
+#: inc/class-metabox.php:88 inc/class-metabox.php:105 inc/class-metabox.php:187
 msgid "Inherit from customize settings"
 msgstr ""
 
@@ -761,7 +761,7 @@ msgstr ""
 msgid "Titlebar"
 msgstr ""
 
-#: inc/class-metabox.php:92 inc/class-metabox.php:179
+#: inc/class-metabox.php:92 inc/class-metabox.php:188
 #: inc/customizer/configs/page-header.php:39
 msgid "Hide"
 msgstr ""
@@ -810,34 +810,51 @@ msgstr ""
 msgid "Disable Elements"
 msgstr ""
 
-#: inc/class-metabox.php:151 inc/customizer/configs/header/transparent.php:201
+#: inc/class-metabox.php:159 inc/customizer/configs/header/transparent.php:201
 msgid "Transparent Header"
 msgstr ""
 
-#: inc/class-metabox.php:156
-msgid "Inherit from Customizer settings"
+#: inc/class-metabox.php:165 inc/customizer/configs/page-header.php:322
+#: inc/customizer/configs/page-header.php:358
+#: inc/customizer/configs/page-header.php:368
+#: inc/customizer/configs/page-header.php:444
+#: inc/customizer/configs/page-header.php:454
+msgid "Enable"
 msgstr ""
 
-#: inc/class-metabox.php:157
-msgid "Force transparent"
+#: inc/class-metabox.php:166
+#: inc/compatibility/woocommerce/config/catalog-designer.php:345
+msgid "Disable"
 msgstr ""
 
-#: inc/class-metabox.php:158
-msgid "Force opaque"
-msgstr ""
-
-#: inc/class-metabox.php:167 inc/class-metabox.php:173
+#: inc/class-metabox.php:176 inc/class-metabox.php:182
 #: inc/compatibility/breadcrumb.php:90
 msgid "Breadcrumb"
 msgstr ""
 
-#: inc/class-metabox.php:180
+#: inc/class-metabox.php:189
 #: inc/customizer/controls/class-control-repeater.php:23
 msgid "Show"
 msgstr ""
 
-#: inc/class-metabox.php:232
+#: inc/class-metabox.php:241
 msgid "Customify Settings"
+msgstr ""
+
+#: inc/color-palette-link.php:225
+msgid "Linked to"
+msgstr ""
+
+#: inc/color-palette-link.php:226
+msgid "Unlink"
+msgstr ""
+
+#: inc/color-palette-link.php:227
+msgid "Custom color"
+msgstr ""
+
+#: inc/color-palette-link.php:228
+msgid "Copy value"
 msgstr ""
 
 #: inc/color-palette-switcher.php:39
@@ -861,7 +878,7 @@ msgstr ""
 #: inc/compatibility/woocommerce/config/catalog-designer.php:304
 #: inc/customizer/configs/blogs.php:203
 #: inc/customizer/configs/header/social-icons.php:199
-#: inc/customizer/configs/search.php:30
+#: inc/customizer/configs/search.php:121
 msgid "Custom"
 msgstr ""
 
@@ -927,7 +944,7 @@ msgid "Download"
 msgstr ""
 
 #: inc/color-palette-switcher.php:223
-#: inc/compatibility/woocommerce/config/header/cart.php:699
+#: inc/compatibility/woocommerce/config/header/cart.php:700
 #: inc/customizer/controls/class-control-repeater.php:33
 #: inc/panel-builder/class-abstract-layout-frontend.php:122
 #: inc/panel-builder/class-layout-builder.php:565
@@ -1205,7 +1222,7 @@ msgid "Product short description"
 msgstr ""
 
 #: inc/compatibility/woocommerce/config/catalog-designer.php:302
-#: inc/customizer/configs/blogs.php:206 inc/customizer/configs/search.php:33
+#: inc/customizer/configs/blogs.php:206 inc/customizer/configs/search.php:124
 msgid "Full content"
 msgstr ""
 
@@ -1231,10 +1248,6 @@ msgstr ""
 
 #: inc/compatibility/woocommerce/config/catalog-designer.php:344
 msgid "Use last image of product gallery"
-msgstr ""
-
-#: inc/compatibility/woocommerce/config/catalog-designer.php:345
-msgid "Disable"
 msgstr ""
 
 #: inc/compatibility/woocommerce/config/catalog-designer.php:352
@@ -1306,7 +1319,7 @@ msgid "On Sale"
 msgstr ""
 
 #: inc/compatibility/woocommerce/config/header/cart.php:35
-#: inc/compatibility/woocommerce/config/header/cart.php:697
+#: inc/compatibility/woocommerce/config/header/cart.php:698
 msgid "Shopping Cart"
 msgstr ""
 
@@ -1333,8 +1346,8 @@ msgstr ""
 
 #: inc/compatibility/woocommerce/config/header/cart.php:118
 #: inc/customizer/configs/header/button.php:67
-#: inc/customizer/configs/header/search-box.php:131
-#: inc/customizer/configs/header/search-icon.php:245
+#: inc/customizer/configs/header/search-box.php:146
+#: inc/customizer/configs/header/search-icon.php:259
 msgid "Icon Position"
 msgstr ""
 
@@ -1390,9 +1403,9 @@ msgstr ""
 
 #: inc/compatibility/woocommerce/config/header/cart.php:240
 #: inc/customizer/configs/header/nav-icon.php:61
-#: inc/customizer/configs/header/search-box.php:103
+#: inc/customizer/configs/header/search-box.php:118
 #: inc/customizer/configs/header/search-icon.php:65
-#: inc/customizer/configs/header/search-icon.php:218
+#: inc/customizer/configs/header/search-icon.php:232
 msgid "Icon Size"
 msgstr ""
 
@@ -1490,11 +1503,11 @@ msgstr ""
 msgid "Heading Color"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:695
+#: inc/compatibility/woocommerce/config/header/cart.php:696
 msgid "Shopping cart"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:713
+#: inc/compatibility/woocommerce/config/header/cart.php:714
 msgid "Continue Shopping"
 msgstr ""
 
@@ -1721,7 +1734,7 @@ msgstr ""
 
 #: inc/customizer/class-customizer.php:633
 #: inc/customizer/class-customizer.php:675
-#: inc/customizer/configs/buttons-forms.php:200
+#: inc/customizer/configs/buttons-forms.php:381
 #: inc/customizer/configs/header/menus.php:165
 #: inc/customizer/configs/header/social-icons.php:214
 msgid "Normal"
@@ -2068,23 +2081,23 @@ msgstr ""
 msgid "Excerpt"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:204 inc/customizer/configs/search.php:31
+#: inc/customizer/configs/blogs.php:204 inc/customizer/configs/search.php:122
 msgid "Use excerpt metabox"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:205 inc/customizer/configs/search.php:32
+#: inc/customizer/configs/blogs.php:205 inc/customizer/configs/search.php:123
 msgid "Strip excerpt by more tag"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:210 inc/customizer/configs/search.php:37
+#: inc/customizer/configs/blogs.php:210 inc/customizer/configs/search.php:128
 msgid "Excerpt Type"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:220 inc/customizer/configs/search.php:47
+#: inc/customizer/configs/blogs.php:220 inc/customizer/configs/search.php:138
 msgid "Excerpt Length"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:230 inc/customizer/configs/search.php:57
+#: inc/customizer/configs/blogs.php:230 inc/customizer/configs/search.php:148
 msgid "Excerpt More"
 msgstr ""
 
@@ -2178,35 +2191,35 @@ msgstr ""
 msgid "Blog"
 msgstr ""
 
-#: inc/customizer/configs/buttons-forms.php:128
+#: inc/customizer/configs/buttons-forms.php:307
 msgid "Buttons & Form Fields"
 msgstr ""
 
-#: inc/customizer/configs/buttons-forms.php:139
+#: inc/customizer/configs/buttons-forms.php:318
 msgid "Buttons"
 msgstr ""
 
-#: inc/customizer/configs/buttons-forms.php:149
+#: inc/customizer/configs/buttons-forms.php:330
 msgid "Button Styling"
 msgstr ""
 
-#: inc/customizer/configs/buttons-forms.php:150
-msgid "All theme buttons."
+#: inc/customizer/configs/buttons-forms.php:331
+msgid "Content and form buttons, including WooCommerce."
 msgstr ""
 
-#: inc/customizer/configs/buttons-forms.php:176
+#: inc/customizer/configs/buttons-forms.php:357
 msgid "Form Fields"
 msgstr ""
 
-#: inc/customizer/configs/buttons-forms.php:187
+#: inc/customizer/configs/buttons-forms.php:368
 msgid "Field Styling"
 msgstr ""
 
-#: inc/customizer/configs/buttons-forms.php:188
+#: inc/customizer/configs/buttons-forms.php:369
 msgid "Inputs, selects & textareas. Focus tab = active state."
 msgstr ""
 
-#: inc/customizer/configs/buttons-forms.php:201
+#: inc/customizer/configs/buttons-forms.php:382
 msgid "Focus"
 msgstr ""
 
@@ -2753,48 +2766,64 @@ msgstr ""
 msgid "Search ..."
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:74
-msgid "Search Form Width"
+#: inc/customizer/configs/header/search-box.php:73
+#: inc/customizer/configs/header/search-icon.php:150
+msgid "Search scope"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:75
-msgid "Note: The width can not greater than grid width."
+#: inc/customizer/configs/header/search-box.php:74
+#: inc/customizer/configs/header/search-icon.php:151
+msgid "Limit this search form to a single content type."
+msgstr ""
+
+#: inc/customizer/configs/header/search-box.php:78
+#: inc/customizer/configs/header/search-icon.php:155
+#: inc/customizer/configs/search.php:48 inc/search/functions-search.php:141
+msgid "Everything"
 msgstr ""
 
 #: inc/customizer/configs/header/search-box.php:89
-#: inc/customizer/configs/header/search-icon.php:185
+msgid "Search Form Width"
+msgstr ""
+
+#: inc/customizer/configs/header/search-box.php:90
+msgid "Note: The width can not greater than grid width."
+msgstr ""
+
+#: inc/customizer/configs/header/search-box.php:104
+#: inc/customizer/configs/header/search-icon.php:199
 msgid "Input Height"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:141
-#: inc/customizer/configs/header/search-icon.php:204
+#: inc/customizer/configs/header/search-box.php:156
+#: inc/customizer/configs/header/search-icon.php:218
 msgid "Input Text Typography"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:142
-#: inc/customizer/configs/header/search-icon.php:205
+#: inc/customizer/configs/header/search-box.php:157
+#: inc/customizer/configs/header/search-icon.php:219
 msgid "Typography for search input"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:151
-#: inc/customizer/configs/header/search-icon.php:253
+#: inc/customizer/configs/header/search-box.php:166
+#: inc/customizer/configs/header/search-icon.php:267
 msgid "Input Styling"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:152
-#: inc/customizer/configs/header/search-box.php:203
-#: inc/customizer/configs/header/search-icon.php:254
-#: inc/customizer/configs/header/search-icon.php:291
+#: inc/customizer/configs/header/search-box.php:167
+#: inc/customizer/configs/header/search-box.php:218
+#: inc/customizer/configs/header/search-icon.php:268
+#: inc/customizer/configs/header/search-icon.php:305
 msgid "Search input styling"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:202
+#: inc/customizer/configs/header/search-box.php:217
 #: inc/customizer/configs/header/search-icon.php:90
-#: inc/customizer/configs/header/search-icon.php:290
+#: inc/customizer/configs/header/search-icon.php:304
 msgid "Icon Styling"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:298
+#: inc/customizer/configs/header/search-box.php:318
 msgid "Submit Search"
 msgstr ""
 
@@ -2814,23 +2843,23 @@ msgstr ""
 msgid "Modal Settings"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:149
+#: inc/customizer/configs/header/search-icon.php:163
 msgid "Form Styling"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:150
+#: inc/customizer/configs/header/search-icon.php:164
 msgid "Form modal styling"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:195
+#: inc/customizer/configs/header/search-icon.php:209
 msgid "Search Modal Width"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:333
+#: inc/customizer/configs/header/search-icon.php:347
 msgid "open search tool"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:350
+#: inc/customizer/configs/header/search-icon.php:370
 msgid "submit search"
 msgstr ""
 
@@ -3036,7 +3065,7 @@ msgstr ""
 msgid "Blog Archives"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:235
+#: inc/customizer/configs/layouts.php:235 inc/search/functions-search.php:403
 msgid "Search"
 msgstr ""
 
@@ -3268,14 +3297,6 @@ msgstr ""
 msgid "Enable or disable archive prefix on category, date, tag page."
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:322
-#: inc/customizer/configs/page-header.php:358
-#: inc/customizer/configs/page-header.php:368
-#: inc/customizer/configs/page-header.php:444
-#: inc/customizer/configs/page-header.php:454
-msgid "Enable"
-msgstr ""
-
 #: inc/customizer/configs/page-header.php:356
 #: inc/customizer/configs/page-header.php:442
 msgid "Show Title"
@@ -3434,6 +3455,60 @@ msgstr ""
 
 #: inc/customizer/configs/search.php:6
 msgid "Search Results"
+msgstr ""
+
+#: inc/customizer/configs/search.php:30
+msgid "1 Column"
+msgstr ""
+
+#: inc/customizer/configs/search.php:31
+msgid "2 Columns"
+msgstr ""
+
+#: inc/customizer/configs/search.php:32
+msgid "3 Columns"
+msgstr ""
+
+#: inc/customizer/configs/search.php:33
+msgid "4 Columns"
+msgstr ""
+
+#: inc/customizer/configs/search.php:37
+msgid "Columns"
+msgstr ""
+
+#: inc/customizer/configs/search.php:51
+msgid "Default results scope"
+msgstr ""
+
+#: inc/customizer/configs/search.php:52
+msgid ""
+"Land unscoped searches on this content type's results (falls back to "
+"Everything when the term has no matches there)."
+msgstr ""
+
+#: inc/customizer/configs/search.php:62
+msgid "Show search form on the results page"
+msgstr ""
+
+#: inc/customizer/configs/search.php:72
+msgid "Show featured images"
+msgstr ""
+
+#: inc/customizer/configs/search.php:82
+msgid "Show content type tabs"
+msgstr ""
+
+#: inc/customizer/configs/search.php:92
+msgid "Show result counts"
+msgstr ""
+
+#: inc/customizer/configs/search.php:102
+msgid "Show content type badge"
+msgstr ""
+
+#: inc/customizer/configs/search.php:112
+msgid "Show popular products when nothing matches"
 msgstr ""
 
 #: inc/customizer/configs/single-blog-post.php:31
@@ -3787,6 +3862,29 @@ msgid ""
 "get more builder items and other premium features</a>."
 msgstr ""
 
+#: inc/search/functions-search.php:394
+msgid "Search …"
+msgstr ""
+
+#: inc/search/functions-search.php:622
+msgid "All"
+msgstr ""
+
+#: inc/search/functions-search.php:675
+#. translators: %s: number of search results.
+msgid "%s result found"
+msgid_plural "%s results found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/search/functions-search.php:686
+msgid "Filter results by content type"
+msgstr ""
+
+#: inc/search/functions-search.php:1271
+msgid "Popular products"
+msgstr ""
+
 #: inc/style-guide-template.php:450 inc/style-guide.php:124
 msgid "Style Guide"
 msgstr ""
@@ -3926,19 +4024,19 @@ msgstr ""
 msgid "(Edit)"
 msgstr ""
 
-#: inc/template-tags.php:108
+#: inc/template-tags.php:117
 msgid "Post author"
 msgstr ""
 
-#: inc/template-tags.php:117
+#: inc/template-tags.php:126
 msgid "Edit"
 msgstr ""
 
-#: inc/template-tags.php:123
+#: inc/template-tags.php:132
 msgid "Reply"
 msgstr ""
 
-#: inc/template-tags.php:136
+#: inc/template-tags.php:145
 msgid "Your comment is awaiting moderation."
 msgstr ""
 
@@ -3957,7 +4055,7 @@ msgid ""
 "different keywords."
 msgstr ""
 
-#: template-parts/content-none.php:47
+#: template-parts/content-none.php:68
 msgid ""
 "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps "
 "searching can help."
@@ -4113,12 +4211,14 @@ msgid_plural "%1$s Comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/blog/class-posts-layout.php:456 woocommerce/loop/pagination.php:33
+#: inc/blog/class-posts-layout.php:456 inc/search/functions-search.php:1192
+#: woocommerce/loop/pagination.php:33
 msgctxt "previous set of posts"
 msgid "Previous"
 msgstr ""
 
-#: inc/blog/class-posts-layout.php:459 woocommerce/loop/pagination.php:34
+#: inc/blog/class-posts-layout.php:459 inc/search/functions-search.php:1196
+#: woocommerce/loop/pagination.php:34
 msgctxt "next set of posts"
 msgid "Next"
 msgstr ""
@@ -4129,11 +4229,12 @@ msgctxt "Customify Pro upsell"
 msgid "Learn More"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:277
-#: inc/customizer/configs/header/search-box.php:287
-#: inc/customizer/configs/header/search-icon.php:347
-#: inc/customizer/configs/header/search-icon.php:348
-#: inc/template-functions.php:903 inc/template-functions.php:904
+#: inc/customizer/configs/header/search-box.php:292
+#: inc/customizer/configs/header/search-box.php:307
+#: inc/customizer/configs/header/search-icon.php:367
+#: inc/customizer/configs/header/search-icon.php:368
+#: inc/search/functions-search.php:393 inc/template-functions.php:903
+#: inc/template-functions.php:904
 msgctxt "label"
 msgid "Search for:"
 msgstr ""
@@ -4175,7 +4276,7 @@ msgctxt "post author"
 msgid "by %s"
 msgstr ""
 
-#: inc/template-tags.php:114
+#: inc/template-tags.php:123
 msgctxt "1: date, 2: time"
 msgid "%1$s at %2$s"
 msgstr ""
