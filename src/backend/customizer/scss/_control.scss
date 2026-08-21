@@ -195,6 +195,12 @@ $text_color: #555d66;
     }
 }
 
+// Customify clones WordPress' device buttons for responsive controls. Keep
+// those compact icon-only switchers while leaving the core footer labels intact.
+.customify-devices .devices__preview-label {
+    display: none;
+}
+
 /**
 * Group Field
  */
