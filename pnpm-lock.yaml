@@ -1577,7 +1577,7 @@ packages:
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
 
   '@pressmaximum/dashboard-kit@https://codeload.github.com/PressMaximum/dashboard-kit/tar.gz/3978b4c6e71e1413f44b196bdf8cd11a584805d9':
-    resolution: {tarball: https://codeload.github.com/PressMaximum/dashboard-kit/tar.gz/3978b4c6e71e1413f44b196bdf8cd11a584805d9}
+    resolution: {gitHosted: true, tarball: https://codeload.github.com/PressMaximum/dashboard-kit/tar.gz/3978b4c6e71e1413f44b196bdf8cd11a584805d9}
     version: 0.2.0
     engines: {node: '>=20'}
     peerDependencies:
