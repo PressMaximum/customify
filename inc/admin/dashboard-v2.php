@@ -266,12 +266,13 @@ add_filter( 'admin_body_class', 'customify_dashboard_v2_admin_body_class' );
 /**
  * Whether to expose the Starter Templates tab + activation flow.
  *
- * Off by default so the tab + submenu are hidden entirely. Two switches
- * turn it on:
+ * On by default so the Starter Templates tab + submenu always show — even
+ * when the Customify Starter Sites plugin is not installed/active, the tab
+ * renders its "Activate plugin" CTA. Two switches can still force it OFF:
  *
- *   1. `define( 'CUSTOMIFY_USE_STARTER_TEMPLATES', true );` in
+ *   1. `define( 'CUSTOMIFY_USE_STARTER_TEMPLATES', false );` in
  *      wp-config.php — the dev/QA escape hatch.
- *   2. `add_filter( 'customify_use_starter_templates', '__return_true' );`
+ *   2. `add_filter( 'customify_use_starter_templates', '__return_false' );`
  *      — for programmatic control (Pro, child themes, site-specific MU
  *      plugins).
  *
@@ -279,7 +280,11 @@ add_filter( 'admin_body_class', 'customify_dashboard_v2_admin_body_class' );
  * of the constant.
  */
 function customify_dashboard_v2_use_starter_templates(): bool {
-	$enabled = defined( 'CUSTOMIFY_USE_STARTER_TEMPLATES' ) && constant( 'CUSTOMIFY_USE_STARTER_TEMPLATES' );
+	// Default ON. A defined constant (either true/false) takes precedence
+	// so a site can still explicitly turn the tab off.
+	$enabled = defined( 'CUSTOMIFY_USE_STARTER_TEMPLATES' )
+		? (bool) constant( 'CUSTOMIFY_USE_STARTER_TEMPLATES' )
+		: true;
 
 	/**
 	 * Filter whether the Starter Templates tab + activation CTA are
