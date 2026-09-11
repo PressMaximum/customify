@@ -60,7 +60,7 @@ export default function FreeVsPro() {
 						'customify',
 					),
 					ctaLabel: __( 'Upgrade to Customify Pro', 'customify' ),
-					ctaHref: boot?.urls?.proUpgrade || 'https://pressmaximum.com/customify/pro-upgrade/',
+					ctaHref: boot?.urls?.proUpgradeFreeVsPro || 'https://pressmaximum.com/customify/pro/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=free_vs_pro',
 				} }
 			/>
 		</div>

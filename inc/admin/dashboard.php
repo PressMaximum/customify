@@ -794,7 +794,7 @@ class Customify_Dashboard
 		?>
 		<div class="cd-box">
 			<div class="cd-box-top"><?php _e('Customify Pro Modules', 'customify'); ?>
-				<a class="cd-upgrade" target="_blank" href="https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules"><?php _e('Upgrade Now &rarr;', 'customify'); ?></a>
+				<a class="cd-upgrade" target="_blank" href="<?php echo esc_url( customify_get_pro_url( 'pro_modules' ) ); ?>"><?php _e('Upgrade Now &rarr;', 'customify'); ?></a>
 			</div>
 			<div class="cd-box-content cd-modules">
 				<?php foreach ($modules as $m) { ?>

@@ -33,7 +33,7 @@ Yes! Customify is a free theme, and always will be.
 = Does Customify have a pro version? =
 It does! Customify has a premium plugin which extends the available options in the theme.
 
-You can learn more about [here](https://pressmaximum.com/customify/pro-upgrade/).
+You can learn more about [here](https://pressmaximum.com/customify/pro/?utm_source=wordpress_org&utm_medium=readme&utm_campaign=faq).
 
 = Where can I find documentation? =
 Customify has extensive documentation you can find [here](https://pressmaximum.com/docs/customify/).
