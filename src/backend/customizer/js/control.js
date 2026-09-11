@@ -862,7 +862,15 @@ import { attachPopoverChrome } from './popover-chrome';
 								icon: $(
 									'input[data-name="' + _name + '"]',
 									$field
-								).val()
+								).val(),
+								// Custom SVG payload — present on the field
+								// even when unused, so a font-icon value
+								// serialises as `svg: ""` and round-trips
+								// through the sanitize_icon pass unchanged.
+								svg: $(
+									'input[data-name="' + _name + '-svg"]',
+									$field
+								).val() || ""
 							};
 						});
 					} else {
@@ -874,7 +882,11 @@ import { attachPopoverChrome } from './popover-chrome';
 							icon: $(
 								'input[data-name="' + name + '"]',
 								$field
-							).val()
+							).val(),
+							svg: $(
+								'input[data-name="' + name + '-svg"]',
+								$field
+							).val() || ""
 						};
 					}
 					break;
@@ -3069,6 +3081,20 @@ import { attachPopoverChrome } from './popover-chrome';
 					that.addIcons(icon_config, font_type);
 				});
 			}
+			// "Custom SVG" sits at the BOTTOM of the type dropdown — below
+			// "All Icon Types" and every library option that just rendered.
+			// A dedicated option in the middle would compete with the library
+			// list; keeping it last frames it as an escape hatch for when the
+			// library doesn't have the icon a site needs.
+			var $typeSelect = $("#customify--sidebar-icon-type");
+			if (!$typeSelect.find('option[value="custom-svg"]').length) {
+				var svgLabel = (typeof Customify_Control_Args !== "undefined" && Customify_Control_Args.custom_svg_label)
+					? Customify_Control_Args.custom_svg_label
+					: "Custom SVG";
+				$typeSelect.append(
+					' <option value="custom-svg">' + svgLabel + "</option>"
+				);
+			}
 		},
 
 		addCSS: function (icon_config, font_type) {
@@ -3137,14 +3163,27 @@ import { attachPopoverChrome } from './popover-chrome';
 		changeType: function () {
 			$document.on("change", "#customify--sidebar-icon-type", function () {
 				var type = $(this).val();
-				if (!type || type == "all") {
-					$("#customify--icon-browser .customify--list-icons").show();
+				var $browser = $("#customify--icon-browser");
+				var $svgPanel = $("#customify--icon-custom-svg");
+				var $search = $("#customify--icon-search").closest(".customify--sidebar-search");
+
+				if (type === "custom-svg") {
+					// Swap browser for the SVG paste panel; search + library
+					// browser make no sense here.
+					$browser.hide();
+					$search.hide();
+					$svgPanel.addClass("is-active").show();
+				} else if (!type || type == "all") {
+					$browser.show();
+					$search.show();
+					$svgPanel.removeClass("is-active").hide();
+					$browser.find(".customify--list-icons").show();
 				} else {
-					$("#customify--icon-browser .customify--list-icons").hide();
-					$(
-						"#customify--icon-browser .customify--list-icons.icon-" +
-						type
-					).show();
+					$browser.show();
+					$search.show();
+					$svgPanel.removeClass("is-active").hide();
+					$browser.find(".customify--list-icons").hide();
+					$browser.find(".customify--list-icons.icon-" + type).show();
 				}
 			});
 		},
@@ -3210,6 +3249,32 @@ import { attachPopoverChrome } from './popover-chrome';
 				}
 				that.pickingEl = $el.closest(".customify--icon-picker");
 				that.pickingEl.addClass("customify--picking-icon");
+
+				// Preselect the icon-type dropdown to what the field already
+				// holds — if the current value is a custom SVG the sidebar
+				// opens straight onto the paste panel with the saved markup
+				// still there for editing, rather than dropping the user into
+				// the library browser and losing their SVG on re-save.
+				var currentType = $(".customify--input-icon-type", that.pickingEl).val() || "";
+				var currentSvg = $(".customify--input-icon-svg", that.pickingEl).val() || "";
+				var $typeSelect = $("#customify--sidebar-icon-type");
+				var $svgInput = $("#customify--icon-custom-svg-input");
+
+				if (currentType === "custom-svg") {
+					$typeSelect.val("custom-svg").trigger("change");
+					$svgInput.val(currentSvg);
+					that.updateSvgPreview(currentSvg);
+				} else {
+					// Only reset the browser selector if the last picker
+					// session left it on 'custom-svg'; otherwise leave the
+					// user's own filter alone.
+					if ($typeSelect.val() === "custom-svg") {
+						$typeSelect.val("all").trigger("change");
+					}
+					$svgInput.val("");
+					that.updateSvgPreview("");
+				}
+
 				that.show();
 			};
 
@@ -3236,6 +3301,7 @@ import { attachPopoverChrome } from './popover-chrome';
 				var icon = li.attr("data-icon") || "";
 				var type = li.attr("data-type") || "";
 				$(".customify--input-icon-type", that.pickingEl).val(type);
+				$(".customify--input-icon-svg", that.pickingEl).val("");
 				$(".customify--input-icon-name", that.pickingEl)
 					.val(icon)
 					.trigger("change");
@@ -3245,6 +3311,50 @@ import { attachPopoverChrome } from './popover-chrome';
 
 				that.close();
 			});
+
+			// Custom SVG — live preview while typing + Apply / Clear.
+			$document.on("input", "#customify--icon-custom-svg-input", function () {
+				that.updateSvgPreview($(this).val());
+			});
+
+			$document.on(
+				"click",
+				".customify--icon-custom-svg-apply",
+				function (e) {
+					e.preventDefault();
+					var raw = $("#customify--icon-custom-svg-input").val() || "";
+					var svg = that.sanitizeSvg(raw);
+					if (!svg) {
+						return;
+					}
+					if (!that.pickingEl) {
+						return;
+					}
+					// The saved shape stays { type, icon, svg } — icon is
+					// blanked so the sanitize_text_field pass on the server
+					// doesn't emit stray font-icon class output.
+					$(".customify--input-icon-type", that.pickingEl).val("custom-svg");
+					$(".customify--input-icon-svg", that.pickingEl).val(svg);
+					var svgLabelApply = (typeof Customify_Control_Args !== "undefined" && Customify_Control_Args.custom_svg_label)
+						? Customify_Control_Args.custom_svg_label
+						: "Custom SVG";
+					$(".customify--input-icon-name", that.pickingEl)
+						.val(svgLabelApply)
+						.trigger("change");
+					$(".customify--icon-preview-icon", that.pickingEl).html(svg);
+					that.close();
+				}
+			);
+
+			$document.on(
+				"click",
+				".customify--icon-custom-svg-clear",
+				function (e) {
+					e.preventDefault();
+					$("#customify--icon-custom-svg-input").val("");
+					that.updateSvgPreview("");
+				}
+			);
 
 			// remove
 			$document.on(
@@ -3259,12 +3369,44 @@ import { attachPopoverChrome } from './popover-chrome';
 					that.pickingEl.addClass("customify--picking-icon");
 
 					$(".customify--input-icon-type", that.pickingEl).val("");
+					$(".customify--input-icon-svg", that.pickingEl).val("");
 					$(".customify--input-icon-name", that.pickingEl)
 						.val("")
 						.trigger("change");
 					$(".customify--icon-preview-icon", that.pickingEl).html("");
 				}
 			);
+		},
+
+		// Client-side SVG sanitize. Strips <script> and inline event handlers
+		// so a preview cannot execute; the server does its own wp_kses pass
+		// on save so this is defence-in-depth, not the only line.
+		sanitizeSvg: function (raw) {
+			raw = String(raw || "").trim();
+			if (!raw) {
+				return "";
+			}
+			// Icon libraries (Tabler, Iconify exports) prefix every SVG with
+			// an HTML comment carrying the icon's tags/version/glyph code —
+			// harmless data but not valid SVG content, and it pushes the
+			// opening `<svg` past position 0 so the strict `^<svg` check
+			// below rejects a paste-in that is otherwise fine.
+			raw = raw.replace(/<!--[\s\S]*?-->/g, "").trim();
+			// Must open with <svg — everything else is discarded.
+			if (!/^<svg\b/i.test(raw)) {
+				return "";
+			}
+			// Drop <script>…</script> blocks and inline on* handlers.
+			raw = raw.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+			raw = raw.replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "");
+			// javascript: URLs on href / xlink:href.
+			raw = raw.replace(/(href|xlink:href)\s*=\s*("|')\s*javascript:[^"']*\2/gi, "$1=$2#$2");
+			return raw;
+		},
+
+		updateSvgPreview: function (raw) {
+			var svg = this.sanitizeSvg(raw);
+			$("#customify--icon-custom-svg .customify--icon-custom-svg-preview").html(svg);
 		},
 
 		ajaxLoad: function (cb) {

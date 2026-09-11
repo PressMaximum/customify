@@ -1,0 +1,80 @@
+/*--------------------------------------------------------------
+## Custom SVG icons — sizing + fit
+--------------------------------------------------------------*/
+//
+// `customify_render_icon()` wraps a user-pasted SVG in
+// `<span class="customify-icon customify-icon--svg">…</span>`. Without
+// constraints an inline `<svg>` renders at its intrinsic size — a 24px
+// viewBox with `width="24"` shows 24×24, but a paste-in from Figma that
+// starts `<svg width="100" height="100">` would blow past the header pill /
+// social slot / cart button and force the row to grow. And existing icon
+// libraries render `<i class="fa fa-heart">` which section icon-size
+// sliders target with `<section-selector> svg` or by font-size on `<i>`;
+// the wrapper has to slot into both paths so a slider written for a
+// font-icon site keeps working when the user switches to a custom SVG.
+//
+// Three constraints, all set on the wrapper (span), not the svg:
+//
+//   1. `display: inline-flex` centres the glyph on the text baseline the
+//      same way a font-icon glyph sits, so the wrapper drops into an
+//      existing font-icon slot with no per-call-site adjustment.
+//
+//   2. Default `width` / `height: 1em` gives the icon the same intrinsic
+//      size as a font glyph rendered at the current `font-size`. Any
+//      section that already sets `font-size` on the icon slot (the button
+//      item's `<i>` for instance) automatically sizes the SVG too.
+//
+//   3. The `svg` child fills 100% of the wrapper and has `max-width` /
+//      `max-height: 100%` as a belt: even if the wrapper's own size gets
+//      overridden to a specific px (from a section-level Icon Size
+//      slider that targets `svg { width: 24px }`), the SVG never
+//      overshoots that box. `preserveAspectRatio` is left to the SVG.
+//
+// Every existing selector — the Header Search Icon Size slider
+// (`body $selector svg`), the Cart icon-size, the Blog author-svg — keeps
+// working because they still match the inner `svg` element. This file only
+// establishes the DEFAULT; sliders continue to win by cascade.
+.customify-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	vertical-align: middle;
+}
+
+.customify-icon--svg {
+	// Wrapper hugs the inner SVG on both axes. Sizing is declared on
+	// the inner <svg> — that way an existing section slider written for
+	// `<section-selector> svg { width: 24px; height: 24px }` still wins
+	// (its selector matches the SVG directly, and the wrapper simply
+	// stretches to fit). If NO slider ever fires, `1em` on the svg gives
+	// it the same scale a font-icon glyph would have at the current
+	// font-size — so a row of mixed font-icon + custom-svg items sits on
+	// one optical baseline without per-call-site CSS.
+	width: auto;
+	height: auto;
+
+	> svg {
+		display: block;
+		width: 1em;
+		height: 1em;
+		// Colour follows currentColor so link/hover/palette rules that
+		// target the icon's parent (or the wrapper itself) tint the
+		// paths automatically — same behaviour as font icons.
+		//
+		// Both `fill` AND `stroke` are pinned here so an icon exported
+		// from Tabler / Iconify / Simple Icons (stroke-based, hardcoded
+		// `stroke="#607d8b"`) picks up the same colour as a filled font
+		// icon next to it in the same row. `fill` is set on the SVG
+		// element itself so children with no explicit fill inherit it;
+		// `stroke` is applied on any descendant that ALREADY carries a
+		// stroke attribute so we don't accidentally paint stroke on a
+		// path that was designed fill-only (which would show as a hairline
+		// outline). `[stroke]` limits the override to the intent lines
+		// the icon author declared, keeping filled icons unaffected.
+		fill: currentColor;
+		[stroke] {
+			stroke: currentColor;
+		}
+	}
+}

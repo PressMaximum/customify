@@ -1006,9 +1006,17 @@ $text_color: #555d66;
 }
 
 .customify--icon-picker {
+    // The row is three cells: a fixed-width preview chip on the left, the
+    // read-only icon-name input taking every leftover pixel in the middle,
+    // and a fixed-width remove chip on the right. Making the input the
+    // flex expander (rather than the two chips) keeps the ×/glyph chips
+    // legible instead of being crushed to a sliver when the field wraps
+    // narrow — the earlier `flex:1` on both chips + input `width:100%`
+    // fought each other and left the remove chip ~21px wide.
     display: flex;
+    align-items: stretch;
     .customify--icon-preview {
-        flex: 1;
+        flex: 0 0 40px;
         border: 1px solid #ddd;
         border-right: 0px;
         @include rtl(){
@@ -1018,18 +1026,26 @@ $text_color: #555d66;
         cursor: pointer;
         position: relative;
     }
+    .customify--input-icon-name {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
     .customify--icon-preview-icon {
-        width: 35px; display: block;
-        border-right: 0px;
-        text-align: center;
+        width: 35px;
         height: 100%;
-        position: relative;
+        // Flex-center the icon glyph so a font-icon (<i>), an inline SVG
+        // and the placeholder empty state all sit on the same optical line.
+        // The previous `position:absolute; top:50%; transform:translateY(-50%)`
+        // only centered the vertical axis and hard-coded left:13px for
+        // horizontal, which drifted whenever a different glyph size was
+        // rendered (custom SVG, replacement icon libraries).
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background: #FFFFFF;
         i {
-            position: absolute;
-            top: 50%;
-            left: 13px;
-            transform:  translateY(-50%);
+            display: block;
+            line-height: 1;
         }
     }
     input {
@@ -1039,18 +1055,30 @@ $text_color: #555d66;
     }
     .customify--icon-remove {
         cursor: pointer;
-        flex: 1;
+        flex: 0 0 40px;
         border: 1px solid #ddd;
         border-left: 0px;
         @include rtl(){
             border-left: 1px solid #ddd;
             border-right: 0px;
         }
+        // Flex-center the dashicons glyph so the × sits on the picker row's
+        // optical midline. Replaces the previous
+        // `transform: translateY(2px)` nudge, which centered by eye at 40px
+        // but broke when the chip row grew or shrank.
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-size: 18px;
+        color: #50575e;
+        &:hover {
+            color: #d63638;
+            background: #fafafa;
+        }
         .dashicons {
-            width: 30px;
             display: block;
-            transform: translateY(2px);
+            line-height: 1;
+            width: auto;
         }
     }
 }
@@ -1082,58 +1110,123 @@ $text_color: #555d66;
     *{
         box-sizing: border-box;
     }
+    // Header row — one horizontal flex line hosts the close button on the
+    // left, then the icon-type dropdown taking the remaining space. Every
+    // child is measured against the same 46px optical baseline instead of
+    // the earlier mix of absolute positioning + block containers, which
+    // left the close chevron 3-4px off centre and the dropdown drifting
+    // whenever the OS re-styled the native <select>.
     .customify--sidebar-header {
         height: 46px;
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 0 8px;
         border-bottom: 1px solid #ddd;
+        background: #ffffff;
     }
     .customify--icon-type-inner {
-        padding: 10px 10px 10px 50px;
+        // The dropdown claims all remaining width in the flex row; no
+        // per-side padding needed here now that the header row already
+        // manages the outer gutter.
+        flex: 1 1 auto;
+        min-width: 0;
+        padding: 0;
         display: block;
     }
     .customize-controls-icon-close {
-        display: block;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 45px;
-        height: 41px;
-        padding: 0 2px 0 0;
-        background: #eee;
-        border: none;
-        border-top: 4px solid #eee;
-        border-right: 1px solid #ddd;
-        color: #444;
-        text-align: left;
+        // Static in the flex row (no absolute positioning). The dashicons
+        // × sits on the picker row's optical midline via flex centring —
+        // no per-glyph `top:-3px` or `left:13px` nudges.
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        margin: 0;
+        background: #f6f7f7;
+        border: 1px solid #dcdcde;
+        border-radius: 2px;
+        color: #50575e;
         cursor: pointer;
-        transition: color .15s ease-in-out,border-color .15s ease-in-out,background .15s ease-in-out;
-        box-sizing: content-box;
         text-decoration: none;
+        transition: color .15s ease-in-out, border-color .15s ease-in-out, background .15s ease-in-out;
+        &:hover {
+            background: #f0f0f1;
+            color: #1e1e1e;
+            border-color: #a7aaad;
+        }
         &:before {
-            font: 400 22px/45px dashicons;
             content: "\f335";
-            position: relative;
-            top: -3px;
-            left: 13px;
+            font: 400 20px/1 dashicons;
         }
     }
+    // The icon-type dropdown lives in the sidebar header — a 46px row shared
+    // with the close button on the left (50px padding). Native <select>
+    // rendering blows this budget: browsers give <select> a 40px height, a
+    // 16px font and a wide inset padding, so it overshoots the header row's
+    // 26px slot and its own container's width. Constrain every axis
+    // explicitly, using `!important` selectively to beat the browser's own
+    // form-control UA rules that would otherwise re-inflate size on hover
+    // or when the option list opens.
     #customify--sidebar-icon-type {
         display: block;
         width: 100%;
+        max-width: 100%;
         height: 26px;
+        min-height: 0;
+        margin: 0;
+        padding: 0 22px 0 6px; // right room for the caret
+        font-size: 12px;
+        line-height: 1;
+        border: 1px solid #c3c4c7;
+        border-radius: 2px;
+        background-color: #fff;
+        color: #1e1e1e;
+        box-sizing: border-box;
+        // Kill the native OS chrome so the caret stays inside the row and
+        // the field doesn't grow past 26px — repeat -webkit- for older UAs.
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='12'%20height='12'%20viewBox='0%200%2016%2016'%3E%3Cpath%20d='M4%206l4%204%204-4'%20fill='none'%20stroke='%23646970'%20stroke-width='1.6'%20stroke-linecap='round'%20stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 6px center;
+        background-size: 10px 10px;
     }
+    // Search row — matches the header's 8px outer gutter so the input
+    // aligns with the dropdown above it. Input height 32px sits on the
+    // same scale as the close button and select for visual rhythm.
+    // WordPress admin's default `form-table input` gives every text/search
+    // input a min-height of 30-32px via UA + admin.css together, and the
+    // Customizer panel adds its own 40px on top — pin the height + kill
+    // min-height so the row measures exactly 48px (32 + 2*8) whatever
+    // rules load after this stylesheet.
     .customify--sidebar-search {
         background: #ffffff;
-        padding: 10px;
-        input {
+        padding: 8px;
+        border-bottom: 1px solid #f0f0f1;
+        input[type="text"] {
             display: block;
             width: 100%;
+            height: 32px;
+            min-height: 32px;
+            margin: 0;
+            padding: 0 10px;
+            font-size: 12px;
+            line-height: 32px;
+            box-sizing: border-box;
         }
     }
 
+    // Browser fills the remaining sidebar height under header (46px) +
+    // search row (48px = 32 + 8 + 8 padding). The old magic `top: 100px`
+    // baked in a 100px assumption that no longer matched either row.
     #customify--icon-browser {
         position: absolute;
-        top: 100px;
+        top: 94px;
         left: 0px;
         right: 0px;
         bottom: 0px;
@@ -1157,6 +1250,90 @@ $text_color: #555d66;
         &:after {
             clear: both; content: ""; display: block;
         }
+    }
+
+    // Custom SVG panel — replaces the library browser + search when the
+    // "Custom SVG" type is selected in the sidebar dropdown. Hidden by
+    // default; JS toggles `.is-active` / display when the picker opens on
+    // an existing custom-svg value or when the dropdown changes to it.
+    .customify--icon-custom-svg {
+        display: none;
+        position: absolute;
+        top: 46px;      // sit under the header row
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 12px 12px 16px;
+        background: #ffffff;
+        overflow: auto;
+
+        &.is-active {
+            display: block;
+        }
+    }
+    .customify--icon-custom-svg-label {
+        display: block;
+        font-weight: 500;
+        margin: 0 0 6px;
+    }
+    .customify--icon-custom-svg-input {
+        display: block;
+        width: 100%;
+        min-height: 140px;
+        font-family: Menlo, Consolas, monospace;
+        font-size: 12px;
+        line-height: 1.45;
+        padding: 8px 10px;
+        margin: 0 0 10px;
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        background: #f6f7f7;
+        resize: vertical;
+    }
+    .customify--icon-custom-svg-preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 72px;
+        margin: 0 0 12px;
+        padding: 8px;
+        background: #f0f0f1;
+        border: 1px dashed #c3c4c7;
+        border-radius: 2px;
+        color: #1e1e1e;
+
+        // Cap oversized paste-ins so the preview stays legible.
+        svg {
+            max-width: 48px;
+            max-height: 48px;
+            display: block;
+        }
+        &:empty::before {
+            content: "";
+        }
+    }
+    .customify--icon-custom-svg-actions {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin: 0 0 10px;
+    }
+    .customify--icon-custom-svg-help {
+        margin: 0;
+        font-size: 11px;
+        color: #646970;
+    }
+}
+
+// Inline SVG rendered inside the preview chip of the icon control (the
+// small square next to the icon-name input). Keep it constrained so a
+// large paste-in doesn't blow up the control's row height.
+.customify--icon-preview-icon {
+    svg {
+        max-width: 100%;
+        max-height: 100%;
+        width: 20px;
+        height: 20px;
     }
 }
 

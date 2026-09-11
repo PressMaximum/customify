@@ -314,6 +314,11 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 				'reset'            => __( 'Reset this section settings', 'customify' ),
 				'untitled'         => __( 'Untitled', 'customify' ),
 				'confirm_reset'    => __( 'Do you want to reset this section settings?', 'customify' ),
+				// Label shown for the Custom SVG entry in the icon type
+				// dropdown AND as the read-only icon name once a custom SVG
+				// is applied. Kept translatable and passed through localized
+				// args so the JS control never hard-codes English.
+				'custom_svg_label' => __( 'Custom SVG', 'customify' ),
 				'list_font_weight' => array(
 					''       => __( 'Default', 'customify' ),
 					'normal' => _x( 'Normal', 'customify-font-weight', 'customify' ),

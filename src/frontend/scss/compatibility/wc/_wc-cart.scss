@@ -182,6 +182,26 @@
 				transform: translate(-50%, -50%);
 			}
 		}
+		// Custom SVG variant sizes on the SAME scale as the font-icon
+		// variant above (`i { width: 1.3em }`), so switching a cart item
+		// from a Font Awesome glyph to a pasted SVG produces an icon of
+		// the same VISUAL weight — an SVG at only `1em` here rendered
+		// noticeably smaller than the font glyph next to it, because
+		// most icon libraries (Tabler, Iconify) ship SVGs with several
+		// pixels of empty padding inside the viewBox that a font glyph's
+		// intrinsic hinting doesn't have.
+		//
+		// Kept in `em` (not `px`) so the Icon Size slider actually
+		// scales the SVG — the slider sets `font-size` on `.cart-icon`,
+		// and this rule resolves against that font-size at cascade time.
+		// A `px` value here would win over the slider by equal
+		// specificity + later source order and pin every SVG to a fixed
+		// size regardless of the slider setting.
+		> svg,
+		.customify-icon--svg > svg {
+			width: 1.3em;
+			height: 1.3em;
+		}
 		.cart-qty {
 			position: absolute;
 			top: -4px;
