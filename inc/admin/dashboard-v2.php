@@ -359,7 +359,8 @@ function customify_dashboard_v2_boot_data(): array {
 			'starterTemplatesInstall' => admin_url( 'plugin-install.php?tab=search&s=starter+templates' ),
 			'legacyDashboard' => admin_url( 'themes.php?page=customify-legacy' ),
 			'docs'           => 'https://pressmaximum.com/docs/customify/',
-			'proUpgrade'     => 'https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules',
+			'proUpgrade'     => customify_get_pro_url( 'pro_modules' ),
+			'proUpgradeFreeVsPro' => customify_get_pro_url( 'free_vs_pro' ),
 		),
 		'rest'         => array(
 			'root'        => esc_url_raw( rest_url() ),
