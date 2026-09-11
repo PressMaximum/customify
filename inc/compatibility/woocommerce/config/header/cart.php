@@ -238,7 +238,13 @@ class Customify_Builder_Item_WC_Cart {
 				'device_settings' => true,
 				'max'             => 150,
 				'title'           => __( 'Icon Size', 'customify' ),
-				'selector'        => '.builder-header-' . $this->id . '-item .cart-icon i:before',
+				// Set `font-size` on the wrapper so BOTH the font-icon `<i>`
+				// (drawn at `width: 1.3em`) and the custom-SVG `<svg>`
+				// (drawn at `width: 1.3em` in the same partial) scale off
+				// the slider. Font-icons and SVG icons render at the same
+				// pixel size for a given slider value, matching what the
+				// slider label promises.
+				'selector'        => '.builder-header-' . $this->id . '-item .cart-icon',
 				'css_format'      => 'font-size: {{value}};',
 				'default'         => array(),
 			),
@@ -537,12 +543,13 @@ class Customify_Builder_Item_WC_Cart {
 			array(
 				'type' => '',
 				'icon' => '',
+				'svg'  => '',
 			)
 		);
 
-		$icon_html = '';
-		if ( $icon['icon'] ) {
-			$icon_html = '<i class="' . esc_attr( $icon['icon'] ) . '"></i> ';
+		$icon_html = customify_render_icon( $icon );
+		if ( '' !== $icon_html ) {
+			$icon_html .= ' ';
 		}
 
 		if ( $text ) {

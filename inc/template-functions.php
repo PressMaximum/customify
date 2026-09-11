@@ -914,3 +914,190 @@ function customify_search_form( $form ) {
 }
 
 add_filter( 'get_search_form', 'customify_search_form' );
+
+if ( ! function_exists( 'customify_sanitize_svg' ) ) {
+	/**
+	 * Sanitize a user-pasted SVG snippet for safe rendering as inline HTML.
+	 *
+	 * Icon controls store either a font-icon class or, when the "Custom SVG"
+	 * type is selected, an inline `<svg>` blob. Because the blob is rendered
+	 * unescaped on the front end (that is the whole point — an escaped SVG is
+	 * just text), it MUST pass through this pipe on both save and render:
+	 *
+	 *   • wp_kses with an SVG-focused allowlist strips `<script>`, embedded
+	 *     `<foreignObject>` HTML, form controls, links, and every non-SVG tag.
+	 *   • Inline event handlers (`onclick`, `onload`, …) never survive kses.
+	 *   • `javascript:` URLs on href/xlink:href are rewritten to a harmless
+	 *     anchor before kses runs, so a mangled kses whitelist can't
+	 *     re-approve them.
+	 *   • The blob must open with `<svg` — everything else is rejected.
+	 *
+	 * The output is safe to emit with `echo` (do NOT wrap in esc_html/esc_attr,
+	 * which would turn the markup into visible text). Attribute values inside
+	 * the SVG are already normalised by wp_kses.
+	 *
+	 * @param string $raw Raw SVG markup as pasted by the user.
+	 *
+	 * @return string Sanitised SVG, or an empty string if the input isn't
+	 *                a well-formed SVG.
+	 */
+	function customify_sanitize_svg( $raw ) {
+		$raw = trim( (string) $raw );
+		if ( '' === $raw ) {
+			return '';
+		}
+
+		// Iconify / Tabler / Simple Icons exports prefix each SVG with an
+		// HTML comment carrying the icon's tags, unicode code point or
+		// version — informational only, not part of the rendered graphic.
+		// wp_kses's default filter drops comments already, but strip them
+		// up front so the `<svg` opening check below sees the real start
+		// of the markup instead of `<!-- --><svg…>` and rejects an
+		// otherwise-valid paste-in.
+		$raw = preg_replace( '/<!--[\s\S]*?-->/', '', $raw );
+		$raw = trim( $raw );
+
+		if ( '' === $raw || 0 !== stripos( $raw, '<svg' ) ) {
+			return '';
+		}
+
+		// Neutralise javascript: URLs BEFORE kses — some kses configs still
+		// pass the attribute through if the value looks well-formed.
+		$raw = preg_replace(
+			'#(href|xlink:href)\s*=\s*(["\'])\s*javascript:[^"\']*\2#i',
+			'$1=$2#$2',
+			$raw
+		);
+
+		$common_attrs = array(
+			'id'                => true,
+			'class'             => true,
+			'style'             => true,
+			'fill'              => true,
+			'fill-opacity'      => true,
+			'fill-rule'         => true,
+			'stroke'            => true,
+			'stroke-width'      => true,
+			'stroke-linecap'    => true,
+			'stroke-linejoin'   => true,
+			'stroke-dasharray'  => true,
+			'stroke-opacity'    => true,
+			'opacity'           => true,
+			'transform'         => true,
+			'clip-path'         => true,
+			'clip-rule'         => true,
+			'mask'              => true,
+			'filter'            => true,
+			'color'             => true,
+			'shape-rendering'   => true,
+			'aria-hidden'       => true,
+			'aria-label'        => true,
+			'aria-labelledby'   => true,
+			'role'              => true,
+			'focusable'         => true,
+			'data-*'            => true,
+		);
+
+		$allowed = array(
+			'svg'            => array_merge(
+				$common_attrs,
+				array(
+					'xmlns'               => true,
+					'xmlns:xlink'         => true,
+					'viewbox'             => true,
+					'width'               => true,
+					'height'              => true,
+					'preserveaspectratio' => true,
+					'version'             => true,
+				)
+			),
+			'g'              => $common_attrs,
+			'defs'           => $common_attrs,
+			'title'          => $common_attrs,
+			'desc'           => $common_attrs,
+			'path'           => array_merge( $common_attrs, array( 'd' => true ) ),
+			'circle'         => array_merge( $common_attrs, array( 'cx' => true, 'cy' => true, 'r' => true ) ),
+			'ellipse'        => array_merge( $common_attrs, array( 'cx' => true, 'cy' => true, 'rx' => true, 'ry' => true ) ),
+			'rect'           => array_merge( $common_attrs, array( 'x' => true, 'y' => true, 'width' => true, 'height' => true, 'rx' => true, 'ry' => true ) ),
+			'line'           => array_merge( $common_attrs, array( 'x1' => true, 'y1' => true, 'x2' => true, 'y2' => true ) ),
+			'polyline'       => array_merge( $common_attrs, array( 'points' => true ) ),
+			'polygon'        => array_merge( $common_attrs, array( 'points' => true ) ),
+			'text'           => array_merge( $common_attrs, array( 'x' => true, 'y' => true, 'dx' => true, 'dy' => true, 'text-anchor' => true, 'font-family' => true, 'font-size' => true, 'font-weight' => true ) ),
+			'tspan'          => array_merge( $common_attrs, array( 'x' => true, 'y' => true, 'dx' => true, 'dy' => true ) ),
+			'use'            => array_merge( $common_attrs, array( 'href' => true, 'xlink:href' => true, 'x' => true, 'y' => true, 'width' => true, 'height' => true ) ),
+			'symbol'         => array_merge( $common_attrs, array( 'viewbox' => true ) ),
+			'lineargradient' => array_merge( $common_attrs, array( 'x1' => true, 'y1' => true, 'x2' => true, 'y2' => true, 'gradientunits' => true, 'gradienttransform' => true ) ),
+			'radialgradient' => array_merge( $common_attrs, array( 'cx' => true, 'cy' => true, 'r' => true, 'fx' => true, 'fy' => true, 'gradientunits' => true, 'gradienttransform' => true ) ),
+			'stop'           => array_merge( $common_attrs, array( 'offset' => true, 'stop-color' => true, 'stop-opacity' => true ) ),
+			'clippath'       => $common_attrs,
+			'mask'           => array_merge( $common_attrs, array( 'x' => true, 'y' => true, 'width' => true, 'height' => true, 'maskunits' => true ) ),
+		);
+
+		/**
+		 * Filter the allowed tags + attributes when sanitising a custom SVG.
+		 *
+		 * @param array $allowed wp_kses-shaped allowlist.
+		 */
+		$allowed = apply_filters( 'customify/icon/svg_allowed_html', $allowed );
+
+		return wp_kses( $raw, $allowed );
+	}
+}
+
+if ( ! function_exists( 'customify_render_icon' ) ) {
+	/**
+	 * Render an icon-control value as ready-to-emit HTML.
+	 *
+	 * The value shape is `{ type: string, icon: string, svg: string }`. When
+	 * `type === 'custom-svg'` the sanitised svg blob is returned as-is (safe
+	 * to echo directly, do NOT esc_html). Otherwise the traditional font-icon
+	 * `<i class>` markup is returned, so upgrading a call site from the old
+	 * `<i class>` inline snippet to this helper is a drop-in replacement for
+	 * every saved value shipped before the SVG feature landed.
+	 *
+	 * @param array|string $value    Icon value from Customify()->get_setting()
+	 *                               or a repeater row.
+	 * @param array        $args     Optional: `wrapper_class` (extra classes on
+	 *                               `<i>` for font icons) and `title` (title
+	 *                               attribute on the wrapper).
+	 *
+	 * @return string HTML, or empty string when there is nothing to render.
+	 */
+	function customify_render_icon( $value, $args = array() ) {
+		$value = wp_parse_args(
+			(array) $value,
+			array(
+				'type' => '',
+				'icon' => '',
+				'svg'  => '',
+			)
+		);
+		$args = wp_parse_args(
+			$args,
+			array(
+				'wrapper_class' => '',
+				'title'         => '',
+			)
+		);
+
+		$title_attr = '' !== $args['title'] ? ' title="' . esc_attr( $args['title'] ) . '"' : '';
+
+		if ( 'custom-svg' === $value['type'] ) {
+			$svg = customify_sanitize_svg( (string) $value['svg'] );
+			if ( '' === $svg ) {
+				return '';
+			}
+			$wrapper_class = trim( 'customify-icon customify-icon--svg ' . $args['wrapper_class'] );
+
+			return '<span class="' . esc_attr( $wrapper_class ) . '"' . $title_attr . '>' . $svg . '</span>';
+		}
+
+		if ( '' === $value['icon'] ) {
+			return '';
+		}
+
+		$class = trim( $value['icon'] . ' ' . $args['wrapper_class'] );
+
+		return '<i class="' . esc_attr( $class ) . '"' . $title_attr . '></i>';
+	}
+}

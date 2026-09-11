@@ -244,15 +244,23 @@ class Customify_Sanitize_Input {
 	}
 
 	private function sanitize_icon( $value ) {
-		$value                         = wp_parse_args(
+		$value = wp_parse_args(
 			$value,
 			array(
 				'type' => '',
 				'icon' => '',
+				'svg'  => '',
 			)
 		);
-		$value['type']                 = sanitize_text_field( $value['type'] );
-		$value['icon']                 = sanitize_text_field( $value['icon'] );
+		$value['type'] = sanitize_text_field( $value['type'] );
+		$value['icon'] = sanitize_text_field( $value['icon'] );
+		// Only accept an svg blob when the type explicitly says so. Any other
+		// type coming with a leftover `svg` field (e.g. a font-icon that used
+		// to be a custom-svg) is discarded so the sanitized shape matches the
+		// currently-chosen mode.
+		$value['svg'] = ( 'custom-svg' === $value['type'] )
+			? customify_sanitize_svg( (string) $value['svg'] )
+			: '';
 		$this->icons[ $value['type'] ] = true;
 
 		return $value;

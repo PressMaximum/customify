@@ -125,6 +125,36 @@ class Customify_Builder_Item_Search_Icon {
 			),
 
 			array(
+				'name'            => $this->section . '_icon',
+				'type'            => 'icon',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'label'           => __( 'Search Icon', 'customify' ),
+				'description'     => __( 'Leave empty to use the theme default magnifier. Pick a font icon or paste a Custom SVG to override.', 'customify' ),
+				'default'         => array(
+					'type' => '',
+					'icon' => '',
+					'svg'  => '',
+				),
+			),
+
+			array(
+				'name'            => $this->section . '_close_icon',
+				'type'            => 'icon',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'label'           => __( 'Close Icon', 'customify' ),
+				'description'     => __( 'Shown when the search modal is open. Leave empty for the default cross.', 'customify' ),
+				'default'         => array(
+					'type' => '',
+					'icon' => '',
+					'svg'  => '',
+				),
+			),
+
+			array(
 				'name'    => $this->section . '_modal_h',
 				'type'    => 'heading',
 				'section' => $this->section,
@@ -342,16 +372,28 @@ class Customify_Builder_Item_Search_Icon {
 		$placeholder = Customify()->get_setting( $this->section . '_placeholder' );
 		$placeholder = sanitize_text_field( $placeholder );
 
+		// User-picked icons for the two states. Both are OPT-IN: an empty
+		// value falls back to the shipped default (magnifier + cross), so a
+		// site upgrading past this feature sees exactly the same UI.
+		$open_icon  = Customify()->get_setting( $this->section . '_icon' );
+		$close_icon = Customify()->get_setting( $this->section . '_close_icon' );
+
+		$open_html  = function_exists( 'customify_render_icon' ) ? customify_render_icon( $open_icon ) : '';
+		$close_html = function_exists( 'customify_render_icon' ) ? customify_render_icon( $close_icon ) : '';
+
+		// Baked defaults — kept as literal SVG (not moved to a helper) so
+		// the exact byte output of unconfigured sites doesn't change.
+		$default_open  = '<svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"><path fill="currentColor" fill-rule="evenodd" d="M12.514 14.906a8.264 8.264 0 0 1-4.322 1.21C3.668 16.116 0 12.513 0 8.07 0 3.626 3.668.023 8.192.023c4.525 0 8.193 3.603 8.193 8.047 0 2.033-.769 3.89-2.035 5.307l4.999 5.552-1.775 1.597-5.06-5.62zm-4.322-.843c3.37 0 6.102-2.684 6.102-5.993 0-3.31-2.732-5.994-6.102-5.994S2.09 4.76 2.09 8.07c0 3.31 2.732 5.993 6.102 5.993z"></path></svg>';
+		$default_close = '<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="612px" height="612px" viewBox="0 0 612 612" fill="currentColor" style="enable-background:new 0 0 612 612;" xml:space="preserve"><g><g id="cross"><g><polygon points="612,36.004 576.521,0.603 306,270.608 35.478,0.603 0,36.004 270.522,306.011 0,575.997 35.478,611.397 306,341.411 576.521,611.397 612,575.997 341.459,306.011 " /></g></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>';
+
 		echo '<div class="header-' . esc_attr( $this->id ) . '-item item--' . esc_attr( $this->id ) . '">';
 		?>
 		<a class="search-icon" href="#" aria-label="<?php esc_attr_e( 'open search tool', 'customify' ) ?>">
 			<span class="ic-search">
-				<svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21">
-					<path fill="currentColor" fill-rule="evenodd" d="M12.514 14.906a8.264 8.264 0 0 1-4.322 1.21C3.668 16.116 0 12.513 0 8.07 0 3.626 3.668.023 8.192.023c4.525 0 8.193 3.603 8.193 8.047 0 2.033-.769 3.89-2.035 5.307l4.999 5.552-1.775 1.597-5.06-5.62zm-4.322-.843c3.37 0 6.102-2.684 6.102-5.993 0-3.31-2.732-5.994-6.102-5.994S2.09 4.76 2.09 8.07c0 3.31 2.732 5.993 6.102 5.993z"></path>
-				</svg>
+				<?php echo '' !== $open_html ? $open_html : $default_open; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon output is kses-sanitised; default is a literal SVG constant. ?>
 			</span>
 			<span class="ic-close">
-				<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="612px" height="612px" viewBox="0 0 612 612" fill="currentColor" style="enable-background:new 0 0 612 612;" xml:space="preserve"><g><g id="cross"><g><polygon points="612,36.004 576.521,0.603 306,270.608 35.478,0.603 0,36.004 270.522,306.011 0,575.997 35.478,611.397 306,341.411 576.521,611.397 612,575.997 341.459,306.011 " /></g></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
+				<?php echo '' !== $close_html ? $close_html : $default_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- see above. ?>
 			</span>
 			<span class="arrow-down"></span>
 		</a>
@@ -368,9 +410,7 @@ class Customify_Builder_Item_Search_Icon {
 					<input type="search" class="search-field" placeholder="<?php echo esc_attr( $placeholder ); ?>" value="<?php echo get_search_query(); ?>" name="s" title="<?php echo esc_attr_x( 'Search for:', 'label', 'customify' ); ?>" />
 				</label>
 				<button type="submit" class="search-submit" aria-label="<?php esc_attr_e( 'submit search', 'customify' ) ?>">
-					<svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21">
-						<path fill="currentColor" fill-rule="evenodd" d="M12.514 14.906a8.264 8.264 0 0 1-4.322 1.21C3.668 16.116 0 12.513 0 8.07 0 3.626 3.668.023 8.192.023c4.525 0 8.193 3.603 8.193 8.047 0 2.033-.769 3.89-2.035 5.307l4.999 5.552-1.775 1.597-5.06-5.62zm-4.322-.843c3.37 0 6.102-2.684 6.102-5.993 0-3.31-2.732-5.994-6.102-5.994S2.09 4.76 2.09 8.07c0 3.31 2.732 5.993 6.102 5.993z"></path>
-					</svg>
+					<?php echo '' !== $open_html ? $open_html : $default_open; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- same rendering pipe as the trigger icon above. ?>
 				</button>
 			</form>
 		</div>
