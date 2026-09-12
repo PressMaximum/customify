@@ -182,25 +182,32 @@
 				transform: translate(-50%, -50%);
 			}
 		}
-		// Custom SVG variant sizes on the SAME scale as the font-icon
-		// variant above (`i { width: 1.3em }`), so switching a cart item
-		// from a Font Awesome glyph to a pasted SVG produces an icon of
-		// the same VISUAL weight — an SVG at only `1em` here rendered
-		// noticeably smaller than the font glyph next to it, because
-		// most icon libraries (Tabler, Iconify) ship SVGs with several
-		// pixels of empty padding inside the viewBox that a font glyph's
-		// intrinsic hinting doesn't have.
+		// SVG variant (preset library OR pasted custom SVG). `1em` here
+		// resolves against `.cart-icon`'s own `font-size: 1.3em`, which
+		// itself sits inside `.cart-item-link.text-small` (`0.875em`):
 		//
-		// Kept in `em` (not `px`) so the Icon Size slider actually
-		// scales the SVG — the slider sets `font-size` on `.cart-icon`,
-		// and this rule resolves against that font-size at cascade time.
-		// A `px` value here would win over the slider by equal
-		// specificity + later source order and pin every SVG to a fixed
-		// size regardless of the slider setting.
+		//   16px root → 14px link → 18.2px .cart-icon → 18.2px svg
+		//
+		// i.e. the cart's SVG paints at the SAME 18px as the header
+		// Search icon (`.search-icon svg { width: 18px }` in
+		// header/builder_items/_search.scss), so a header carrying both
+		// items reads as one set instead of a big cart next to a small
+		// magnifier. It was `1.3em` — 23.7px — which is what made the
+		// cart look oversized beside every other header item.
+		//
+		// The font-icon `<i>` above KEEPS its `1.3em`: Font Awesome
+		// glyphs carry their own internal padding and are the saved
+		// value on existing sites, so their rendered size must not move.
+		//
+		// Kept in `em` (not `px`) so the Icon Size slider still wins —
+		// the slider writes `font-size` on `.cart-icon`, and this rule
+		// resolves against that font-size at cascade time. A `px` value
+		// here would pin every SVG to a fixed size and make the slider
+		// inert for SVG icons.
 		> svg,
 		.customify-icon--svg > svg {
-			width: 1.3em;
-			height: 1.3em;
+			width: 1em;
+			height: 1em;
 		}
 		.cart-qty {
 			position: absolute;

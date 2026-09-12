@@ -40,11 +40,11 @@
  *     drawn for stroke-width 1.5 and reads visibly lighter beside Lucide at 2.
  *
  *   • Phosphor Icons — MIT License. https://phosphoricons.com
- *     Package `@phosphor-icons/core`, `regular` and `thin` weights. These are
- *     the thin, rounded, minimal silhouettes; Phosphor draws every weight as
- *     FILLED paths on a 256×256 grid, which is why they carry
- *     `'style' => 'filled'` and their own viewBox below even though they read
- *     as fine outlines.
+ *     Package `@phosphor-icons/core`, `regular` weight. The rounded, generous
+ *     silhouettes. Phosphor draws every weight as FILLED paths on a 256×256
+ *     grid, which is why these carry `'style' => 'filled'` and their own
+ *     viewBox below even though they read as outlines. Its `thin` weight was
+ *     tried and dropped — hairlines disappear at header size.
  *
  * Only the upstream `<svg>` wrapper is discarded during extraction, plus
  * Tabler's transparent `M0 0h24v24H0z` bounding-box path (sprite-build
@@ -56,8 +56,8 @@
  * or interoperate with Shopify software or services", with all other uses
  * "strictly prohibited". Customify is a WordPress theme distributed under GPL
  * on WordPress.org, so shipping Dawn's assets would fall outside that grant
- * AND break GPL compatibility. Phosphor's `thin` / `regular` weights give the
- * same thin, rounded, minimal silhouettes under a licence we can actually use.
+ * AND break GPL compatibility. Phosphor's `regular` weight gives the same
+ * rounded, minimal silhouettes under a licence we can actually use.
  * ---------------------------------------------------------------------------
  *
  * ICON STYLE CONTRACT — every entry must honour it, including icons added
@@ -85,8 +85,9 @@
  *
  * NAMING — `-outline` marks an alternate, softer silhouette of the same
  * subject (`bag` is Lucide's squared-shoulder bag, `bag-outline` Tabler's
- * rounded one). `-filled` marks the solid counterpart, `-thin` the hairline
- * one. The per-field "Suggested" rows offer these as a quick visual choice.
+ * rounded one); `-alt` a second distinct one; `-soft` a rounder one; and
+ * `-filled` the solid counterpart. The per-field "Suggested" rows offer these
+ * as a quick visual choice.
  *
  * @package Customify
  * @since   0.4.25
@@ -131,91 +132,77 @@ if ( ! function_exists( 'customify_get_svg_icons' ) ) {
 				// trolley, and the header cart item's Suggested row is ordered to
 				// match. Outline and solid silhouettes of the same subject sit
 				// next to each other so a shop can match its own line weight.
-				'bag'              => array(
+				'bag'                => array(
 					'label'   => __( 'Shopping Bag', 'customify' ),
 					'source'  => 'lucide/shopping-bag',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/>',
 				),
-				'bag-outline'      => array(
+				'bag-outline'        => array(
 					'label'   => __( 'Shopping Bag (Soft)', 'customify' ),
 					'source'  => 'tabler/shopping-bag',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M6.331 8h11.339a2 2 0 0 1 1.977 2.304l-1.255 8.152a3 3 0 0 1 -2.966 2.544h-6.852a3 3 0 0 1 -2.965 -2.544l-1.255 -8.152a2 2 0 0 1 1.977 -2.304"/><path d="M9 11v-5a3 3 0 0 1 6 0v5"/>',
 				),
-				'bag-handle'       => array(
+				'bag-handle'         => array(
 					'label'   => __( 'Handbag', 'customify' ),
 					'source'  => 'lucide/handbag',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M2.048 18.566A2 2 0 0 0 4 21h16a2 2 0 0 0 1.952-2.434l-2-9A2 2 0 0 0 18 8H6a2 2 0 0 0-1.952 1.566z"/><path d="M8 11V6a4 4 0 0 1 8 0v5"/>',
 				),
-				'bag-tote'         => array(
+				'bag-tote'           => array(
 					'label'   => __( 'Tote Bag', 'customify' ),
 					'source'  => 'phosphor/tote',
 					'style'   => 'filled',
 					'viewbox' => '0 0 256 256',
 					'body'    => '<path d="M236,69.4A16.13,16.13,0,0,0,223.92,64H176a48,48,0,0,0-96,0H32.08a16.13,16.13,0,0,0-12,5.4,16,16,0,0,0-3.92,12.48l14.26,120a16,16,0,0,0,16,14.12H209.67a16,16,0,0,0,16-14.12l14.26-120A16,16,0,0,0,236,69.4ZM128,32a32,32,0,0,1,32,32H96A32,32,0,0,1,128,32Zm81.76,168a.13.13,0,0,1-.09,0H46.25L32.08,80H80v24a8,8,0,0,0,16,0V80h64v24a8,8,0,0,0,16,0V80h48Z"/>',
 				),
-				'bag-thin'         => array(
-					'label'   => __( 'Handbag (Thin)', 'customify' ),
-					'source'  => 'phosphor-thin/handbag',
-					'style'   => 'filled',
-					'viewbox' => '0 0 256 256',
-					'body'    => '<path d="M235.92,198.59l-14.26-120a12,12,0,0,0-12-10.59H172V64a44,44,0,0,0-88,0v4H46.33a12,12,0,0,0-12,10.59l-14.26,120A12,12,0,0,0,23,207.94,12.11,12.11,0,0,0,32.08,212H223.92a12.11,12.11,0,0,0,9.06-4.06A12,12,0,0,0,235.92,198.59ZM92,64a36,36,0,0,1,72,0v4H92ZM227,202.63a4.08,4.08,0,0,1-3.08,1.37H32.08A4.08,4.08,0,0,1,29,202.63a3.9,3.9,0,0,1-1-3.09l14.25-120a4,4,0,0,1,4-3.54H84v28a4,4,0,0,0,8,0V76h72v28a4,4,0,0,0,8,0V76h37.67a4,4,0,0,1,4.05,3.54l14.25,120A3.9,3.9,0,0,1,227,202.63Z"/>',
-				),
-				'bag-filled'       => array(
+				'bag-filled'         => array(
 					'label'   => __( 'Shopping Bag (Solid)', 'customify' ),
 					'source'  => 'heroicons-solid/shopping-bag',
 					'style'   => 'filled',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path fill-rule="evenodd" d="M7.5 6v.75H5.513c-.96 0-1.764.724-1.865 1.679l-1.263 12A1.875 1.875 0 0 0 4.25 22.5h15.5a1.875 1.875 0 0 0 1.865-2.071l-1.263-12a1.875 1.875 0 0 0-1.865-1.679H16.5V6a4.5 4.5 0 1 0-9 0ZM12 3a3 3 0 0 0-3 3v.75h6V6a3 3 0 0 0-3-3Zm-3 8.25a3 3 0 1 0 6 0v-.75a.75.75 0 0 1 1.5 0v.75a4.5 4.5 0 1 1-9 0v-.75a.75.75 0 0 1 1.5 0v.75Z" clip-rule="evenodd"/>',
 				),
-				'cart'             => array(
+				'cart'               => array(
 					'label'   => __( 'Shopping Cart', 'customify' ),
 					'source'  => 'lucide/shopping-cart',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="m2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18"/><path d="M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25"/><circle cx="18" cy="20" r="2"/><circle cx="8" cy="20" r="2"/>',
 				),
-				'cart-outline'     => array(
+				'cart-outline'       => array(
 					'label'   => __( 'Cart (Simple)', 'customify' ),
 					'source'  => 'tabler/shopping-cart',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M4 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M15 19a2 2 0 1 0 4 0a2 2 0 1 0 -4 0"/><path d="M17 17h-11v-14h-2"/><path d="M6 5l14 1l-1 7h-13"/>',
 				),
-				'cart-thin'        => array(
-					'label'   => __( 'Cart (Thin)', 'customify' ),
-					'source'  => 'phosphor-thin/shopping-cart-simple',
-					'style'   => 'filled',
-					'viewbox' => '0 0 256 256',
-					'body'    => '<path d="M235.18,69.58A4,4,0,0,0,232,68H54.15L43.85,30.93A4,4,0,0,0,40,28H16a4,4,0,0,0,0,8H37L72.89,165.35A20.06,20.06,0,0,0,92.16,180H191a20.06,20.06,0,0,0,19.27-14.65l25.63-92.28A4,4,0,0,0,235.18,69.58Zm-32.67,93.63A12,12,0,0,1,191,172H92.16a12,12,0,0,1-11.56-8.79L56.37,76H226.74ZM100,216a12,12,0,1,1-12-12A12,12,0,0,1,100,216Zm104,0a12,12,0,1,1-12-12A12,12,0,0,1,204,216Z"/>',
-				),
-				'cart-filled'      => array(
+				'cart-filled'        => array(
 					'label'   => __( 'Cart (Solid)', 'customify' ),
 					'source'  => 'tabler-filled/shopping-cart',
 					'style'   => 'filled',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M6 2a1 1 0 0 1 .993 .883l.007 .117v1.068l13.071 .935a1 1 0 0 1 .929 1.024l-.01 .114l-1 7a1 1 0 0 1 -.877 .853l-.113 .006h-12v2h10a3 3 0 1 1 -2.995 3.176l-.005 -.176l.005 -.176c.017 -.288 .074 -.564 .166 -.824h-5.342a3 3 0 1 1 -5.824 1.176l-.005 -.176l.005 -.176a3.002 3.002 0 0 1 1.995 -2.654v-12.17h-1a1 1 0 0 1 -.993 -.883l-.007 -.117a1 1 0 0 1 .883 -.993l.117 -.007h2zm0 16a1 1 0 1 0 0 2a1 1 0 0 0 0 -2m11 0a1 1 0 1 0 0 2a1 1 0 0 0 0 -2"/>',
 				),
-				'basket'           => array(
+				'basket'             => array(
 					'label'   => __( 'Basket', 'customify' ),
 					'source'  => 'lucide/shopping-basket',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="m15 11-1 9"/><path d="m19 11-4-7"/><path d="M2 11h20"/><path d="m3.5 11 1.6 7.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6l1.7-7.4"/><path d="M4.5 15.5h15"/><path d="m5 11 4-7"/><path d="m9 11 1 9"/>',
 				),
-				'basket-alt'       => array(
+				'basket-alt'         => array(
 					'label'   => __( 'Basket (Soft)', 'customify' ),
 					'source'  => 'tabler/basket',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M10 14a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"/><path d="M5.001 8h13.999a2 2 0 0 1 1.977 2.304l-1.255 7.152a3 3 0 0 1 -2.966 2.544h-9.512a3 3 0 0 1 -2.965 -2.544l-1.255 -7.152a2 2 0 0 1 1.977 -2.304"/><path d="M17 10l-2 -6"/><path d="M7 10l2 -6"/>',
 				),
-				'basket-filled'    => array(
+				'basket-filled'      => array(
 					'label'   => __( 'Basket (Solid)', 'customify' ),
 					'source'  => 'tabler-filled/basket',
 					'style'   => 'filled',
@@ -224,63 +211,77 @@ if ( ! function_exists( 'customify_get_svg_icons' ) ) {
 				),
 				// --------------------------------------------------- Account
 				// Pro's User Icon item reuses `contact` and `id-card`; keep them.
-				'user'             => array(
+				'user'               => array(
 					'label'   => __( 'User', 'customify' ),
+					'source'  => 'lucide/user-round',
+					'style'   => 'outline',
+					'viewbox' => '0 0 24 24',
+					'body'    => '<circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/>',
+				),
+				'user-alt'           => array(
+					'label'   => __( 'User (Square)', 'customify' ),
 					'source'  => 'lucide/user',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
 				),
-				'user-outline'     => array(
+				'user-outline'       => array(
 					'label'   => __( 'User (Soft)', 'customify' ),
 					'source'  => 'tabler/user',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0"/><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/>',
 				),
-				'user-thin'        => array(
-					'label'   => __( 'User (Thin)', 'customify' ),
-					'source'  => 'phosphor-thin/user',
-					'style'   => 'filled',
-					'viewbox' => '0 0 256 256',
-					'body'    => '<path d="M227.46,214c-16.52-28.56-43-48.06-73.68-55.09a68,68,0,1,0-51.56,0c-30.64,7-57.16,26.53-73.68,55.09a4,4,0,0,0,6.92,4C55,184.19,89.62,164,128,164s73,20.19,92.54,54a4,4,0,0,0,3.46,2,3.93,3.93,0,0,0,2-.54A4,4,0,0,0,227.46,214ZM68,96a60,60,0,1,1,60,60A60.07,60.07,0,0,1,68,96Z"/>',
-				),
-				'user-circle'      => array(
-					'label'   => __( 'User Circle', 'customify' ),
-					'source'  => 'lucide/circle-user-round',
-					'style'   => 'outline',
-					'viewbox' => '0 0 24 24',
-					'body'    => '<path d="M17.925 20.056a6 6 0 0 0-11.851.001"/><circle cx="12" cy="11" r="4"/><circle cx="12" cy="12" r="10"/>',
-				),
-				'user-circle-thin' => array(
-					'label'   => __( 'User Circle (Thin)', 'customify' ),
-					'source'  => 'phosphor/user-circle',
-					'style'   => 'filled',
-					'viewbox' => '0 0 256 256',
-					'body'    => '<path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/>',
-				),
-				'user-square'      => array(
-					'label'   => __( 'User Square', 'customify' ),
-					'source'  => 'lucide/square-user-round',
-					'style'   => 'outline',
-					'viewbox' => '0 0 24 24',
-					'body'    => '<path d="M18 21a6 6 0 0 0-12 0"/><circle cx="12" cy="11" r="4"/><rect width="18" height="18" x="3" y="3" rx="2"/>',
-				),
-				'user-filled'      => array(
+				'user-filled'        => array(
 					'label'   => __( 'User (Solid)', 'customify' ),
 					'source'  => 'tabler-filled/user',
 					'style'   => 'filled',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M12 2a5 5 0 1 1 -5 5l.005 -.217a5 5 0 0 1 4.995 -4.783z"/><path d="M14 14a5 5 0 0 1 5 5v1a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2v-1a5 5 0 0 1 5 -5h4z"/>',
 				),
-				'contact'          => array(
+				'user-circle'        => array(
+					'label'   => __( 'User Circle', 'customify' ),
+					'source'  => 'lucide/circle-user-round',
+					'style'   => 'outline',
+					'viewbox' => '0 0 24 24',
+					'body'    => '<path d="M17.925 20.056a6 6 0 0 0-11.851.001"/><circle cx="12" cy="11" r="4"/><circle cx="12" cy="12" r="10"/>',
+				),
+				'user-circle-alt'    => array(
+					'label'   => __( 'User Circle (Soft)', 'customify' ),
+					'source'  => 'tabler/user-circle',
+					'style'   => 'outline',
+					'viewbox' => '0 0 24 24',
+					'body'    => '<path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/><path d="M9 10a3 3 0 1 0 6 0a3 3 0 1 0 -6 0"/><path d="M6.168 18.849a4 4 0 0 1 3.832 -2.849h4a4 4 0 0 1 3.834 2.855"/>',
+				),
+				'user-circle-soft'   => array(
+					'label'   => __( 'User Circle (Round)', 'customify' ),
+					'source'  => 'phosphor/user-circle',
+					'style'   => 'filled',
+					'viewbox' => '0 0 256 256',
+					'body'    => '<path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM74.08,197.5a64,64,0,0,1,107.84,0,87.83,87.83,0,0,1-107.84,0ZM96,120a32,32,0,1,1,32,32A32,32,0,0,1,96,120Zm97.76,66.41a79.66,79.66,0,0,0-36.06-28.75,48,48,0,1,0-59.4,0,79.66,79.66,0,0,0-36.06,28.75,88,88,0,1,1,131.52,0Z"/>',
+				),
+				'user-circle-filled' => array(
+					'label'   => __( 'User Circle (Solid)', 'customify' ),
+					'source'  => 'heroicons-solid/user-circle',
+					'style'   => 'filled',
+					'viewbox' => '0 0 24 24',
+					'body'    => '<path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" clip-rule="evenodd"/>',
+				),
+				'user-square'        => array(
+					'label'   => __( 'User Square', 'customify' ),
+					'source'  => 'tabler/user-square-rounded',
+					'style'   => 'outline',
+					'viewbox' => '0 0 24 24',
+					'body'    => '<path d="M12 13a3 3 0 1 0 0 -6a3 3 0 0 0 0 6"/><path d="M12 3c7.2 0 9 1.8 9 9c0 7.2 -1.8 9 -9 9c-7.2 0 -9 -1.8 -9 -9c0 -7.2 1.8 -9 9 -9"/><path d="M6 20.05v-.05a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v.05"/>',
+				),
+				'contact'            => array(
 					'label'   => __( 'Contact', 'customify' ),
 					'source'  => 'lucide/contact-round',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M16 2v2"/><path d="M17.915 21a6 6 0 10-12 0"/><path d="M8 2v2"/><circle cx="12" cy="11" r="4"/><rect x="3" y="3" width="18" height="18" rx="2"/>',
 				),
-				'id-card'          => array(
+				'id-card'            => array(
 					'label'   => __( 'ID Card', 'customify' ),
 					'source'  => 'lucide/id-card',
 					'style'   => 'outline',
@@ -289,56 +290,56 @@ if ( ! function_exists( 'customify_get_svg_icons' ) ) {
 				),
 				// ------------------------------------------ Wishlist / saved
 				// Pro's Wishlist item reuses the heart pair.
-				'heart'            => array(
+				'heart'              => array(
 					'label'   => __( 'Heart', 'customify' ),
 					'source'  => 'lucide/heart',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5"/>',
 				),
-				'heart-outline'    => array(
+				'heart-outline'      => array(
 					'label'   => __( 'Heart (Soft)', 'customify' ),
 					'source'  => 'tabler/heart',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572"/>',
 				),
-				'heart-plus'       => array(
+				'heart-plus'         => array(
 					'label'   => __( 'Heart with Plus', 'customify' ),
 					'source'  => 'lucide/heart-plus',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="m14.479 19.374-.971.939a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5a5.2 5.2 0 0 1-.219 1.49"/><path d="M15 15h6"/><path d="M18 12v6"/>',
 				),
-				'heart-filled'     => array(
+				'heart-filled'       => array(
 					'label'   => __( 'Heart (Solid)', 'customify' ),
 					'source'  => 'tabler-filled/heart',
 					'style'   => 'filled',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M6.979 3.074a6 6 0 0 1 4.988 1.425l.037 .033l.034 -.03a6 6 0 0 1 4.733 -1.44l.246 .036a6 6 0 0 1 3.364 10.008l-.18 .185l-.048 .041l-7.45 7.379a1 1 0 0 1 -1.313 .082l-.094 -.082l-7.493 -7.422a6 6 0 0 1 3.176 -10.215z"/>',
 				),
-				'bookmark'         => array(
+				'bookmark'           => array(
 					'label'   => __( 'Bookmark', 'customify' ),
 					'source'  => 'lucide/bookmark',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M17 3a2 2 0 0 1 2 2v15a1 1 0 0 1-1.496.868l-4.512-2.578a2 2 0 0 0-1.984 0l-4.512 2.578A1 1 0 0 1 5 20V5a2 2 0 0 1 2-2z"/>',
 				),
-				'bookmark-filled'  => array(
+				'bookmark-filled'    => array(
 					'label'   => __( 'Bookmark (Solid)', 'customify' ),
 					'source'  => 'tabler-filled/bookmark',
 					'style'   => 'filled',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M14 2a5 5 0 0 1 5 5v14a1 1 0 0 1 -1.555 .832l-5.445 -3.63l-5.444 3.63a1 1 0 0 1 -1.55 -.72l-.006 -.112v-14a5 5 0 0 1 5 -5h4z"/>',
 				),
-				'star'             => array(
+				'star'               => array(
 					'label'   => __( 'Star', 'customify' ),
 					'source'  => 'lucide/star',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/>',
 				),
-				'star-filled'      => array(
+				'star-filled'        => array(
 					'label'   => __( 'Star (Solid)', 'customify' ),
 					'source'  => 'tabler-filled/star',
 					'style'   => 'filled',
@@ -349,91 +350,91 @@ if ( ! function_exists( 'customify_get_svg_icons' ) ) {
 				// Deliberately lean and header-oriented — this is not a general
 				// icon font, and every extra key is one more string a shop has to
 				// scroll past to reach the icon it actually wants.
-				'search'           => array(
+				'search'             => array(
 					'label'   => __( 'Search', 'customify' ),
 					'source'  => 'lucide/search',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/>',
 				),
-				'menu'             => array(
+				'menu'               => array(
 					'label'   => __( 'Menu', 'customify' ),
 					'source'  => 'lucide/menu',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/>',
 				),
-				'close'            => array(
+				'close'              => array(
 					'label'   => __( 'Close', 'customify' ),
 					'source'  => 'lucide/x',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
 				),
-				'chevron-down'     => array(
+				'chevron-down'       => array(
 					'label'   => __( 'Chevron Down', 'customify' ),
 					'source'  => 'lucide/chevron-down',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="m6 9 6 6 6-6"/>',
 				),
-				'arrow-right'      => array(
+				'arrow-right'        => array(
 					'label'   => __( 'Arrow Right', 'customify' ),
 					'source'  => 'lucide/arrow-right',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
 				),
-				'external-link'    => array(
+				'external-link'      => array(
 					'label'   => __( 'External Link', 'customify' ),
 					'source'  => 'lucide/external-link',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
 				),
-				'home'             => array(
+				'home'               => array(
 					'label'   => __( 'Home', 'customify' ),
 					'source'  => 'lucide/house',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
 				),
-				'phone'            => array(
+				'phone'              => array(
 					'label'   => __( 'Phone', 'customify' ),
 					'source'  => 'lucide/phone',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"/>',
 				),
-				'mail'             => array(
+				'mail'               => array(
 					'label'   => __( 'Mail', 'customify' ),
 					'source'  => 'lucide/mail',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"/><rect x="2" y="4" width="20" height="16" rx="2"/>',
 				),
-				'map-pin'          => array(
+				'map-pin'            => array(
 					'label'   => __( 'Map Pin', 'customify' ),
 					'source'  => 'lucide/map-pin',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/>',
 				),
-				'globe'            => array(
+				'globe'              => array(
 					'label'   => __( 'Globe', 'customify' ),
 					'source'  => 'lucide/globe',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
 				),
-				'clock'            => array(
+				'clock'              => array(
 					'label'   => __( 'Clock', 'customify' ),
 					'source'  => 'lucide/clock',
 					'style'   => 'outline',
 					'viewbox' => '0 0 24 24',
 					'body'    => '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
 				),
-				'calendar'         => array(
+				'calendar'           => array(
 					'label'   => __( 'Calendar', 'customify' ),
 					'source'  => 'lucide/calendar',
 					'style'   => 'outline',

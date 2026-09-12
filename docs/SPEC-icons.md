@@ -116,13 +116,13 @@ The path data is **copied verbatim from upstream sets** — nothing in the libra
 | [Tabler](https://tabler.io/icons) (`@tabler/icons`, `icons/outline`) | MIT | 24 | stroke | The softer `-outline` variants |
 | [Tabler](https://tabler.io/icons) (`icons/filled`) | MIT | 24 | fill | The `-filled` solids |
 | [Heroicons](https://heroicons.com) (`heroicons`, `24/solid`) | MIT | 24 | fill | `bag-filled` only |
-| [Phosphor](https://phosphoricons.com) (`@phosphor-icons/core`, `regular` + `thin`) | MIT | 256 | fill | The thin, rounded, minimal silhouettes |
+| [Phosphor](https://phosphoricons.com) (`@phosphor-icons/core`, `regular`) | MIT | 256 | fill | The rounded, generous silhouettes |
 
-Tabler shares Lucide's grid exactly (24×24, stroke 2, round caps), which is why the two mix without a seam. Heroicons is used for one icon because neither Lucide nor Tabler ships a solid shopping bag; Heroicons' **outline** set is deliberately unused — it is drawn for stroke-width 1.5 and reads visibly lighter beside Lucide at 2. Phosphor draws every weight as filled paths on a 256 grid, which is why its glyphs are `filled` entries with their own viewBox even though they read as hairlines.
+Tabler shares Lucide's grid exactly (24×24, stroke 2, round caps), which is why the two mix without a seam. Heroicons is used for one icon because neither Lucide nor Tabler ships a solid shopping bag; Heroicons' **outline** set is deliberately unused — it is drawn for stroke-width 1.5 and reads visibly lighter beside Lucide at 2. Phosphor draws every weight as filled paths on a 256 grid, which is why its glyphs are `filled` entries with their own viewBox even though they read as outlines. Its `thin` weight was tried and dropped — hairlines disappear at header size.
 
 Only the upstream `<svg>` wrapper is discarded during extraction, plus Tabler's transparent `M0 0h24v24H0z` bounding-box path (sprite-build padding) and per-set `class` / `data-slot` hooks.
 
-> **Shopify Dawn is NOT used, despite being the reference look.** Dawn's `LICENSE.md` is not plain MIT: the grant is limited to "themes that integrate or interoperate with Shopify software or services", with all other uses "strictly prohibited". Customify is a GPL WordPress theme on WordPress.org, so shipping Dawn's assets would fall outside that grant *and* break GPL compatibility. Phosphor's `thin` / `regular` weights give the same thin, rounded, minimal silhouettes under a licence the project can actually use. Do not re-add Dawn.
+> **Shopify Dawn is NOT used, despite being the reference look.** Dawn's `LICENSE.md` is not plain MIT: the grant is limited to "themes that integrate or interoperate with Shopify software or services", with all other uses "strictly prohibited". Customify is a GPL WordPress theme on WordPress.org, so shipping Dawn's assets would fall outside that grant *and* break GPL compatibility. Phosphor's `regular` weight gives the same rounded, minimal silhouettes under a licence the project can actually use. Do not re-add Dawn.
 
 ### 5.2 Icon style contract
 
@@ -144,14 +144,16 @@ Every entry — including anything filtered in — must honour it, or the set st
 
 | Family | Keys |
 |---|---|
-| Commerce (13) | `bag` `bag-outline` `bag-handle` `bag-tote` `bag-thin` `bag-filled` `cart` `cart-outline` `cart-thin` `cart-filled` `basket` `basket-alt` `basket-filled` |
-| Account (9) | `user` `user-outline` `user-thin` `user-circle` `user-circle-thin` `user-square` `user-filled` `contact` `id-card` |
+| Commerce (11) | `bag` `bag-outline` `bag-handle` `bag-tote` `bag-filled` `cart` `cart-outline` `cart-filled` `basket` `basket-alt` `basket-filled` |
+| Account (11) | `user` `user-alt` `user-outline` `user-filled` `user-circle` `user-circle-alt` `user-circle-soft` `user-circle-filled` `user-square` `contact` `id-card` |
 | Wishlist (8) | `heart` `heart-outline` `heart-plus` `heart-filled` `bookmark` `bookmark-filled` `star` `star-filled` |
 | General UI (13) | `search` `menu` `close` `chevron-down` `arrow-right` `external-link` `home` `phone` `mail` `map-pin` `globe` `clock` `calendar` |
 
 The General UI family is deliberately lean and header-oriented. This is not a replacement icon font — every extra key is one more cell a shop scrolls past to reach the icon it actually wants. Pro's User Icon item reuses `contact` and `id-card`; its Wishlist item reuses the heart pair.
 
-`-outline` marks an alternate, softer silhouette of the same subject (`bag` is Lucide's squared-shoulder bag, `bag-outline` Tabler's rounded one); `-filled` marks the solid counterpart and `-thin` the hairline one. Keys are stored in `theme_mod`s: **treat them as public API — add, never rename or remove.** A removed key renders nothing, and the site silently loses its icon.
+`-outline` marks an alternate, softer silhouette of the same subject (`bag` is Lucide's squared-shoulder bag, `bag-outline` Tabler's rounded one); `-alt` a second distinct one, `-soft` a rounder one, and `-filled` the solid counterpart.
+
+A key may be **re-pointed** to better geometry while it is unreleased — `user` now draws Lucide's `user-round` rather than its squarer `user`, and the old glyph lives on as `user-alt`. Once shipped, a key's meaning is frozen even if its artwork is refreshed. Keys are stored in `theme_mod`s: **treat them as public API — add, never rename or remove.** A removed key renders nothing, and the site silently loses its icon.
 
 Each entry also carries a `source` field (`lucide/shopping-bag`, `tabler-filled/basket`). Nothing reads it at runtime; it exists so a maintainer can re-extract an icon without guessing which set it came from.
 
@@ -233,6 +235,23 @@ Sizing lives on the markup, not on per-call-site CSS:
 - `svg.customify-svg-icon { fill: none; stroke: currentColor }` — higher specificity, so preset stroke glyphs are not flooded solid by the `fill` default above.
 - `svg.customify-svg-icon.customify-svg-icon--filled { fill: currentColor; stroke: none }` — two classes deep, so the solid entries beat that outline default regardless of source order. The Customizer picker mirrors both rules (grid cells and Suggested cells) so a preview matches what the site renders.
 - `[stroke] { stroke: currentColor }` on descendants — a pasted Tabler/Iconify icon with a hardcoded `stroke="#607d8b"` tints with the theme palette instead.
+
+### 9.1 Cross-item size parity
+
+Header items must agree on a default icon size or the row looks accidental. The Search icon's default is a flat `.search-icon svg { width: 18px; height: 18px }`. The cart cannot copy that literally — its Icon Size slider writes `font-size` on `.cart-icon`, and a `px` width would make the slider inert for SVG icons — so it expresses the same size in `em`:
+
+```scss
+.cart-icon {
+    font-size: 1.3em;          // unchanged
+    i { width: 1.3em; height: 1.3em; }          // font icons UNCHANGED
+    > svg,
+    .customify-icon--svg > svg { width: 1em; height: 1em; }   // was 1.3em
+}
+```
+
+The chain is `16px root → .cart-item-link.text-small 0.875em → 14px → .cart-icon 1.3em → 18.2px → svg 1em → 18.2px`, measured at **17.68px** against the Search icon's 18px. It was `1.3em`, i.e. 23px, which is what made the cart look oversized next to every other header item.
+
+The font-icon `<i>` keeps `1.3em` deliberately: Font Awesome glyphs carry their own internal padding and are the saved value on existing sites, so their rendered size must not move. **Pro should mirror the `1em` rule for any builder item that renders an SVG inside a `font-size`-scaled wrapper.**
 
 Because both `fill` and `stroke` resolve to `currentColor`, any existing **colour** control that sets `color` on an ancestor already colours the SVG. When widening a styling selector for this, list both elements — e.g. the cart's `… .cart-icon i, … .cart-icon svg`. Adding the `svg` half cannot change an existing site: a font-icon cart has no `svg` element to match.
 
