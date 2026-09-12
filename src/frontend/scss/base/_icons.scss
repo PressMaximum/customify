@@ -96,3 +96,16 @@ svg.customify-svg-icon {
 	fill: none;
 	stroke: currentColor;
 }
+
+// …except the solid ones. The library ships both paint modes (Lucide/Tabler
+// outlines alongside Tabler-filled, Heroicons-solid and Phosphor glyphs, which
+// are filled paths even when they read as hairlines), and the rule above would
+// blank every one of them into an invisible outline-of-nothing.
+//
+// Two classes deep, so it beats the single-class rule above regardless of
+// source order — `customify_get_svg_icon()` always emits both classes together
+// on a filled entry.
+svg.customify-svg-icon.customify-svg-icon--filled {
+	fill: currentColor;
+	stroke: none;
+}

@@ -219,8 +219,13 @@ if ( empty( $library ) ) {
 	printf( "PASS  library is not empty (%d icons)\n", count( $library ) );
 }
 
-foreach ( array_keys( $library ) as $key ) {
+$style_counts = array();
+
+foreach ( $library as $key => $entry ) {
 	$markup = customify_get_svg_icon( $key );
+	$style  = isset( $entry['style'] ) ? $entry['style'] : 'outline';
+
+	$style_counts[ $style ] = ( isset( $style_counts[ $style ] ) ? $style_counts[ $style ] : 0 ) + 1;
 
 	// width / height must be absent from the ROOT element only — <rect> and
 	// friends legitimately carry them inside the glyph.
@@ -229,10 +234,32 @@ foreach ( array_keys( $library ) as $key ) {
 		$root = $m[0];
 	}
 
+	// The viewBox may be any SQUARE grid: upstream sets disagree (Lucide and
+	// Tabler draw on 24, Phosphor on 256) and rescaling by hand would mean
+	// editing geometry, which the library deliberately never does.
+	$square = false;
+	if ( preg_match( '/viewBox="0 0 (\d+(?:\.\d+)?) (\d+(?:\.\d+)?)"/', $root, $vb ) ) {
+		$square = ( $vb[1] === $vb[2] );
+	}
+
+	// Paint mode must match the declared style, and a filled entry must carry
+	// the class the frontend override rule keys off — without it the outline
+	// default blanks the glyph.
+	if ( 'filled' === $style ) {
+		$paint_ok = false !== strpos( $root, 'fill="currentColor"' )
+			&& false !== strpos( $root, 'stroke="none"' )
+			&& false !== strpos( $root, 'customify-svg-icon--filled' );
+	} else {
+		$paint_ok = false !== strpos( $root, 'fill="none"' )
+			&& false !== strpos( $root, 'stroke="currentColor"' )
+			&& false === strpos( $root, 'customify-svg-icon--filled' );
+	}
+
 	$checks++;
 	$ok = '' !== $markup
 		&& '' !== $root
-		&& false !== strpos( $root, 'viewBox="0 0 24 24"' )
+		&& $square
+		&& $paint_ok
 		&& false === strpos( $root, ' width="' )
 		&& false === strpos( $root, ' height="' )
 		&& false !== strpos( $markup, 'aria-hidden="true"' )
@@ -243,13 +270,21 @@ foreach ( array_keys( $library ) as $key ) {
 
 	if ( ! $ok ) {
 		$failures++;
-		printf( "FAIL  preset '%s' violates the icon style contract\n", $key );
-		printf( "      out: %s\n", substr( $markup, 0, 200 ) );
+		printf( "FAIL  preset '%s' (%s) violates the icon style contract\n", $key, $style );
+		printf( "      out: %s\n", substr( $markup, 0, 220 ) );
 	}
 }
 
 if ( ! $failures ) {
-	printf( "PASS  every preset honours the 24x24 / no-size / a11y contract\n" );
+	ksort( $style_counts );
+	$summary = array();
+	foreach ( $style_counts as $style => $n ) {
+		$summary[] = "$n $style";
+	}
+	printf(
+		"PASS  every preset honours the square-viewBox / no-size / paint / a11y contract (%s)\n",
+		implode( ', ', $summary )
+	);
 }
 
 $checks++;

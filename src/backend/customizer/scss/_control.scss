@@ -1281,6 +1281,10 @@ $text_color: #555d66;
             fill: none;
             stroke: currentColor;
         }
+        svg.customify-svg-icon--filled {
+            fill: currentColor;
+            stroke: none;
+        }
     }
 
     .customify--sidebar-search {
@@ -1352,6 +1356,14 @@ $text_color: #555d66;
             height: 24px;
             fill: none;
             stroke: currentColor;
+        }
+        // Solid entries (Tabler-filled, Heroicons-solid, Phosphor) would be
+        // blanked by the outline default above. Mirrors the frontend rule in
+        // src/frontend/scss/base/_icons.scss so the picker previews exactly
+        // what the site renders.
+        svg.customify-svg-icon--filled {
+            fill: currentColor;
+            stroke: none;
         }
     }
 

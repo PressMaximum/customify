@@ -92,14 +92,14 @@ The return value is **already safe to echo** — escaping it would turn an inlin
 
 ### 4.1 Why preset markup is not stored
 
-Only the **key** is persisted. The markup is looked up at render time, so a later redraw of an icon reaches every site that picked it, and a 58-icon library costs nothing in `theme_mod` size.
+Only the **key** is persisted. The markup is looked up at render time, so a later redraw of an icon reaches every site that picked it, and a 43-icon library costs nothing in `theme_mod` size.
 
 ---
 
 ## 5. Preset SVG library
 
 ```php
-customify_get_svg_icons()        // key => array( 'label', 'source', 'body' )
+customify_get_svg_icons()        // key => array( 'label', 'source', 'style', 'viewbox', 'body' )
 customify_get_svg_icon( $key )   // full <svg> markup, or '' for an unknown key
 customify_get_svg_icons_for_js() // key => array( 'label', 'svg' ) — the Customizer payload
 ```
@@ -110,38 +110,50 @@ customify_get_svg_icons_for_js() // key => array( 'label', 'svg' ) — the Custo
 
 The path data is **copied verbatim from upstream sets** — nothing in the library is hand-drawn. Re-extract from a newer upstream release rather than editing geometry by hand, or the set drifts out of visual sync with itself.
 
-| Set | Licence | Role |
-|---|---|---|
-| [Lucide](https://lucide.dev) (`lucide-static`) | ISC | **Primary** — 52 of 58 icons |
-| [Tabler Icons](https://tabler.io/icons) (`@tabler/icons`, `icons/outline`) | MIT | 6 icons — the softer `-outline` variants and the bag-with-badge pair |
+| Set | Licence | Grid | Paint | Role |
+|---|---|---|---|---|
+| [Lucide](https://lucide.dev) (`lucide-static`) | ISC | 24 | stroke | **Primary** outline set |
+| [Tabler](https://tabler.io/icons) (`@tabler/icons`, `icons/outline`) | MIT | 24 | stroke | The softer `-outline` variants |
+| [Tabler](https://tabler.io/icons) (`icons/filled`) | MIT | 24 | fill | The `-filled` solids |
+| [Heroicons](https://heroicons.com) (`heroicons`, `24/solid`) | MIT | 24 | fill | `bag-filled` only |
+| [Phosphor](https://phosphoricons.com) (`@phosphor-icons/core`, `regular` + `thin`) | MIT | 256 | fill | The thin, rounded, minimal silhouettes |
 
-Tabler shares Lucide's grid exactly (24×24, stroke 2, round caps), which is why the two mix without a seam. Only the upstream `<svg>` wrapper is discarded during extraction, plus Tabler's transparent `M0 0h24v24H0z` bounding-box path (sprite-build padding).
+Tabler shares Lucide's grid exactly (24×24, stroke 2, round caps), which is why the two mix without a seam. Heroicons is used for one icon because neither Lucide nor Tabler ships a solid shopping bag; Heroicons' **outline** set is deliberately unused — it is drawn for stroke-width 1.5 and reads visibly lighter beside Lucide at 2. Phosphor draws every weight as filled paths on a 256 grid, which is why its glyphs are `filled` entries with their own viewBox even though they read as hairlines.
 
-Heroicons (MIT) and Phosphor (MIT) were evaluated and **not** used: Heroicons outline is drawn for stroke-width 1.5 and reads visibly lighter beside Lucide at 2, and Phosphor is a 256×256 fill-based set whose solid silhouettes cannot honour the stroke contract at all.
+Only the upstream `<svg>` wrapper is discarded during extraction, plus Tabler's transparent `M0 0h24v24H0z` bounding-box path (sprite-build padding) and per-set `class` / `data-slot` hooks.
+
+> **Shopify Dawn is NOT used, despite being the reference look.** Dawn's `LICENSE.md` is not plain MIT: the grant is limited to "themes that integrate or interoperate with Shopify software or services", with all other uses "strictly prohibited". Customify is a GPL WordPress theme on WordPress.org, so shipping Dawn's assets would fall outside that grant *and* break GPL compatibility. Phosphor's `thin` / `regular` weights give the same thin, rounded, minimal silhouettes under a licence the project can actually use. Do not re-add Dawn.
 
 ### 5.2 Icon style contract
 
 Every entry — including anything filtered in — must honour it, or the set stops reading as one set:
 
-- 24×24 user units (`viewBox="0 0 24 24"`), outline/stroke based
+- a **square** `viewBox`, declared per entry (`0 0 24 24`, `0 0 256 256`, …). Upstream sets disagree on grid size and rescaling by hand would mean editing geometry.
 - **no `width` / `height` on the root** — CSS sizes the icon
-- `fill="none"`, `stroke="currentColor"`, `stroke-width="2"`, round caps + joins (Lucide's and Tabler's native weight)
+- `'style' => 'outline'` → rendered `fill="none" stroke="currentColor"`, stroke-width 2, round caps + joins (Lucide's and Tabler's native weight)
+- `'style' => 'filled'` → rendered `fill="currentColor" stroke="none"` **plus the class `customify-svg-icon--filled`**, which the frontend override rule keys off; without it the outline default blanks the glyph
 - `aria-hidden="true"` + `focusable="false"` — icons are decorative; the accessible name comes from the surrounding link or label
 
-`bin/test-svg-sanitize.php` asserts all of this against every library entry.
+`style` is the **paint mode, not the visual weight**: Phosphor's hairline glyphs are `filled` because their geometry is a filled outline, and they still look like the thinnest icons in the set.
+
+`style` and `viewbox` are optional on a filtered-in entry and default to `outline` / `0 0 24 24` — what a hand-written Lucide-style addition wants anyway.
+
+`bin/test-svg-sanitize.php` asserts all of this against every library entry, per paint style.
 
 ### 5.3 Families and naming
 
 | Family | Keys |
 |---|---|
-| Commerce (18) | `bag` `bag-outline` `bag-handle` `bag-paper` `bag-check` `bag-plus` `cart` `cart-outline` `cart-plus` `basket` `basket-alt` `package` `store` `truck` `gift` `tag` `percent` `credit-card` |
-| Account (8) | `user` `user-outline` `user-circle` `user-square` `users` `contact` `id-card` `lock` |
-| Wishlist (5) | `heart` `heart-outline` `heart-plus` `bookmark` `star` |
-| General UI (27) | `search` `menu` `close` `chevron-down` `chevron-up` `chevron-left` `chevron-right` `arrow-left` `arrow-right` `home` `phone` `mail` `map-pin` `globe` `clock` `calendar` `external-link` `share` `download` `eye` `check` `plus` `minus` `filter` `grid` `list` `settings` |
+| Commerce (13) | `bag` `bag-outline` `bag-handle` `bag-tote` `bag-thin` `bag-filled` `cart` `cart-outline` `cart-thin` `cart-filled` `basket` `basket-alt` `basket-filled` |
+| Account (9) | `user` `user-outline` `user-thin` `user-circle` `user-circle-thin` `user-square` `user-filled` `contact` `id-card` |
+| Wishlist (8) | `heart` `heart-outline` `heart-plus` `heart-filled` `bookmark` `bookmark-filled` `star` `star-filled` |
+| General UI (13) | `search` `menu` `close` `chevron-down` `arrow-right` `external-link` `home` `phone` `mail` `map-pin` `globe` `clock` `calendar` |
 
-Every glyph is stroke/outline, so an `-outline` suffix does **not** mean "the outline version of a filled icon" — it marks an alternate, softer silhouette of the same subject (`bag` is Lucide's squared-shoulder bag, `bag-outline` Tabler's rounded one). Keys are stored in `theme_mod`s: **treat them as public API — add, never rename or remove.** A removed key renders nothing, and the site silently loses its icon.
+The General UI family is deliberately lean and header-oriented. This is not a replacement icon font — every extra key is one more cell a shop scrolls past to reach the icon it actually wants. Pro's User Icon item reuses `contact` and `id-card`; its Wishlist item reuses the heart pair.
 
-Each entry also carries a `source` field (`lucide/shopping-bag`, `tabler/basket`). Nothing reads it at runtime; it exists so a maintainer can re-extract an icon without guessing which set it came from.
+`-outline` marks an alternate, softer silhouette of the same subject (`bag` is Lucide's squared-shoulder bag, `bag-outline` Tabler's rounded one); `-filled` marks the solid counterpart and `-thin` the hairline one. Keys are stored in `theme_mod`s: **treat them as public API — add, never rename or remove.** A removed key renders nothing, and the site silently loses its icon.
+
+Each entry also carries a `source` field (`lucide/shopping-bag`, `tabler-filled/basket`). Nothing reads it at runtime; it exists so a maintainer can re-extract an icon without guessing which set it came from.
 
 ### 5.4 Extending it
 
@@ -168,7 +180,7 @@ array(
     'name'    => 'wc_cart_icon',
     'type'    => 'icon',
     'section' => 'wc_cart',
-    'presets' => array( 'bag', 'bag-outline', 'bag-handle', 'bag-paper', 'cart', 'cart-outline', 'basket', 'basket-alt' ),
+    'presets' => array( 'bag', 'bag-filled', 'bag-outline', 'bag-handle', 'cart', 'cart-filled', 'basket', 'basket-filled' ),
     'default' => array( 'icon' => 'fa fa-shopping-basket', 'type' => 'font-awesome' ),
 )
 ```
@@ -219,6 +231,7 @@ Sizing lives on the markup, not on per-call-site CSS:
 
 - `.customify-icon--svg > svg { width: 1em; height: 1em; fill: currentColor }` — an SVG drops into a font-icon slot and inherits whatever `font-size` that slot already had, so a section's existing Icon Size slider scales it with no new control.
 - `svg.customify-svg-icon { fill: none; stroke: currentColor }` — higher specificity, so preset stroke glyphs are not flooded solid by the `fill` default above.
+- `svg.customify-svg-icon.customify-svg-icon--filled { fill: currentColor; stroke: none }` — two classes deep, so the solid entries beat that outline default regardless of source order. The Customizer picker mirrors both rules (grid cells and Suggested cells) so a preview matches what the site renders.
 - `[stroke] { stroke: currentColor }` on descendants — a pasted Tabler/Iconify icon with a hardcoded `stroke="#607d8b"` tints with the theme palette instead.
 
 Because both `fill` and `stroke` resolve to `currentColor`, any existing **colour** control that sets `color` on an ancestor already colours the SVG. When widening a styling selector for this, list both elements — e.g. the cart's `… .cart-icon i, … .cart-icon svg`. Adding the `svg` half cannot change an existing site: a font-icon cart has no `svg` element to match.

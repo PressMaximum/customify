@@ -102,7 +102,9 @@ class Customify_Builder_Item_WC_Cart {
 				// case is one click instead of a scroll through ~2,000
 				// FontAwesome glyphs. Bags lead because that is what modern
 				// storefronts reach for; the trolley and basket forms follow.
-				'presets'         => array( 'bag', 'bag-outline', 'bag-handle', 'bag-paper', 'cart', 'cart-outline', 'basket', 'basket-alt' ),
+				// Outline and solid alternate so a shop can match its own line
+				// weight at a glance rather than hunting for the solid twin.
+				'presets'         => array( 'bag', 'bag-filled', 'bag-outline', 'bag-handle', 'cart', 'cart-filled', 'basket', 'basket-filled' ),
 				// DEFAULT UNCHANGED — deliberately. Every site that has a
 				// cart item but never opened this field falls back to the
 				// default, so flipping it to an SVG preset would silently
