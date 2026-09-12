@@ -271,27 +271,29 @@ Sizing lives on the markup, not on per-call-site CSS:
 
 ### 9.1 Cross-item size parity
 
-Header items must agree on a default icon size or the row looks accidental. The shared number is **18px** — the Search icon's flat `.search-icon svg { width: 18px; height: 18px }`, and what Pro's User item already paints at.
-
-The cart cannot express that as an `em` multiple. `1em` resolves against `.cart-icon`'s `font-size: 1.3em` inside `.cart-item-link { font-size: 0.85em }` → 16 × 0.85 × 1.3 = **17.68px** — close to 18, but visibly off when the two glyphs sit side by side. A flat `width: 18px` would hit the number but make the Icon Size slider inert, because the slider writes `font-size` on `.cart-icon` and a font-size cannot override a px width.
-
-So the size travels through a custom property:
+Header items must agree on a default icon size or the row looks accidental. **One token owns it:**
 
 ```scss
-.cart-icon {
-    font-size: 1.3em;                                  // UNCHANGED
-    --customify-cart-icon-size: 18px;                  // the shared default
-
-    i { width: 1.3em; height: 1.3em; }                 // font icons UNCHANGED
-    > svg,
-    .customify-icon--svg > svg {
-        width:  var(--customify-cart-icon-size);
-        height: var(--customify-cart-icon-size);
-    }
+.customify-header-items-v2 {
+    --customify-header-icon-size: 20px;   // tune the whole header row here
 }
 ```
 
-and the slider emits both declarations, so it still wins:
+Every icon+label item reads it with the pre-token value as the fallback, so a legacy site (no body class, §5.5) never sees the token and renders exactly what it always did:
+
+| Item | Rule | Legacy | v2 |
+|---|---|---|---|
+| Search | `.search-icon svg { width: var(--customify-header-icon-size, 18px) }` | 18px | 20px |
+| Cart | `.cart-icon { --customify-cart-icon-size: var(--customify-header-icon-size, 18px) }` | 18px | 20px |
+
+**The sliders must keep outranking the token, so both use sites stay at their ORIGINAL selector specificity.** This is the trap to avoid: scoping a copy of the size under `.customify-header-items-v2 .item--search_icon .search-icon > svg` would be `(0,3,1)` and would silently beat the Search Icon Size slider's generated `body .search-icon svg` `(0,1,2)`. The token sets the default; it must never become the override.
+
+| Consumer | Selector | Specificity | Outranked by |
+|---|---|---|---|
+| Search default | `.search-icon svg` | (0,1,1) | slider `body .search-icon svg` (0,1,2) |
+| Cart default | `.cart-icon` | (0,1,0) | slider `.builder-header-wc_cart-item .cart-icon` (0,2,0) |
+
+The cart cannot express its size as an `em` multiple at all: `1em` resolves against `.cart-icon`'s `font-size: 1.3em` inside `.cart-item-link { font-size: 0.85em }` → 17.68px, and a flat `px` width would make its slider inert (the slider writes `font-size`, which cannot override a px width). Hence the intermediate `--customify-cart-icon-size` property, which the slider writes alongside `font-size`:
 
 ```php
 'css_format' => 'font-size: {{value}}; --customify-cart-icon-size: {{value}};',
@@ -299,7 +301,7 @@ and the slider emits both declarations, so it still wins:
 
 The extra declaration is inert on a font-icon site — nothing reads the property unless an `<svg>` is present. The font-icon `<i>` is untouched and still rides `font-size: 1.3em` (22.98px): Font Awesome glyphs carry their own internal padding and are the saved value on existing sites, so their rendered size must not move.
 
-Measured in a rendered harness against the built CSS: **cart svg 18.00 × 18.00, search svg 18.00 × 18.00.**
+Measured in a rendered harness against the built CSS — **v2: cart svg 20.00 × 20.00, search svg 20.00 × 20.00. Legacy: both 18.00 × 18.00.**
 
 ### 9.2 Shared header icon+label style
 
@@ -316,7 +318,7 @@ Cart, Search and Pro's User Icon are the same shape of thing — a glyph with an
 | `letter-spacing` | `0` | |
 | `line-height` | `1.2` | restores a real line box (`.search-icon` sets `line-height: 0` for a bare glyph) |
 | icon box | `display: inline-flex; align-items: center; justify-content: center; line-height: 0` | an `inline-block` leaves descender space under the SVG — that gap is what dropped the cart glyph below its label |
-| icon size | `18px` | §9.1 |
+| icon size | `20px` | §9.1 — from `--customify-header-icon-size`, one token for the whole row |
 
 `.cart-qty` keeps `position: absolute` against `.cart-icon`, which keeps `position: relative` — verified present and visible after the flex change. The font-icon's `top: -1px` optical nudge is zeroed under this scope: it existed to fake centring inside the old inline-block, and would now push the glyph *off* centre.
 

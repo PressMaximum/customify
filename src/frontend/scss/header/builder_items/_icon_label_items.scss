@@ -24,6 +24,26 @@ every declaration inside is written to stand on its own.
 */
 
 .customify-header-items-v2 {
+	// THE header icon size. Every icon+label item resolves its glyph size
+	// from this one token, so tuning the whole row is a one-line change
+	// here rather than an edit per item partial.
+	//
+	// Declared on the v2 scope (the body class) and read through
+	// `var(--customify-header-icon-size, 18px)` at each use site, which is
+	// what keeps legacy sites safe: a site without the body class never
+	// sees the token, falls back to 18px, and renders exactly what it
+	// rendered before the token existed.
+	//
+	// Read by:
+	//   • .search-icon svg          — header/builder_items/_search.scss
+	//   • --customify-cart-icon-size — compatibility/wc/_wc-cart.scss
+	//
+	// Both read it at their ORIGINAL selector specificity, so the per-item
+	// Icon Size sliders still win: the token sets the default, never the
+	// override. Do not re-declare the size under this scope at higher
+	// specificity — that would outrank the sliders' generated CSS.
+	--customify-header-icon-size: 20px;
+
 	// Selector list rather than a shared class, because the markup classes
 	// are public API (AGENTS.md §4.4): adding a new class to the render
 	// output of an existing item is a change child themes and page builders

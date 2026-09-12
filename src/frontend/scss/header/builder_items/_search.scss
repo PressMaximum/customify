@@ -16,8 +16,17 @@
 		color: currentColor;
 	}
 	svg {
-		width: 18px;
-		height: 18px;
+		// Reads the shared header icon token (builder_items/_icon_label_items.scss),
+		// falling back to the 18px this rule has always hardcoded. A legacy
+		// site never defines the token, so it keeps 18px exactly.
+		//
+		// Kept at THIS selector's original specificity (0,1,1) on purpose:
+		// the Icon Size slider generates `body .search-icon svg` (0,1,2) and
+		// must keep outranking it. Scoping a 20px copy under
+		// `.customify-header-items-v2` would have made the rule (0,3,1) and
+		// silently killed the slider.
+		width: var(--customify-header-icon-size, 18px);
+		height: var(--customify-header-icon-size, 18px);
 	}
 	.ic-close {
 		display: none;

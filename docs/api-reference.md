@@ -106,7 +106,9 @@ Install marker (public API — Customify Pro reads it to keep its own builder-it
 defaults in step): option `customify_installed_version`, helpers
 `customify_get_installed_version()` and `customify_is_fresh_install_since( $version )`
 in [`inc/install-marker.php`](../inc/install-marker.php). Body class
-`customify-header-items-v2` opts a site into the shared header icon+label style.
+`customify-header-items-v2` opts a site into the shared header icon+label style and
+carries `--customify-header-icon-size` (20px), the single token every header
+icon+label item sizes from.
 
 ### 2.4 Control internals
 

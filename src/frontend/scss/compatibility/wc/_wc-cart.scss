@@ -208,7 +208,15 @@
 		// `font-size: 1.3em`: Font Awesome glyphs carry their own internal
 		// padding and are the saved value on every existing site, so their
 		// rendered size must not move by even a fraction of a pixel.
-		--customify-cart-icon-size: 18px;
+		// Seeded from the shared header icon token
+		// (header/builder_items/_icon_label_items.scss) so the cart tracks
+		// the Search icon automatically, with the 18px this file used to
+		// hardcode as the legacy fallback for sites that never define it.
+		//
+		// Left at `.cart-icon` (0,1,0) — the slider writes this same property
+		// at `.builder-header-wc_cart-item .cart-icon` (0,2,0) and must stay
+		// the winner.
+		--customify-cart-icon-size: var(--customify-header-icon-size, 18px);
 
 		> svg,
 		.customify-icon--svg > svg {
