@@ -97,6 +97,18 @@ class Customify_Builder_Item_WC_Cart {
 				'section'         => $this->section,
 				'selector'        => '.builder-header-' . $this->id . '-item',
 				'render_callback' => $fn,
+				// Shortlist shown at the top of the icon picker — the cart
+				// silhouettes a shop actually chooses between, so the common
+				// case is one click instead of a scroll through ~2,000
+				// FontAwesome glyphs. Bags lead because that is what modern
+				// storefronts reach for; the trolley and basket forms follow.
+				'presets'         => array( 'bag', 'bag-outline', 'bag-handle', 'bag-paper', 'cart', 'cart-outline', 'basket', 'basket-alt' ),
+				// DEFAULT UNCHANGED — deliberately. Every site that has a
+				// cart item but never opened this field falls back to the
+				// default, so flipping it to an SVG preset would silently
+				// redraw the header icon on tens of thousands of live shops
+				// (AGENTS.md §4.1: defaults must not change silently).
+				// The SVG presets are opt-in via the picker.
 				'default'         => array(
 					'icon' => 'fa fa-shopping-basket',
 					'type' => 'font-awesome',
@@ -255,9 +267,16 @@ class Customify_Builder_Item_WC_Cart {
 				'section'     => $this->section,
 				'title'       => __( 'Styling', 'customify' ),
 				'description' => __( 'Advanced styling for cart icon', 'customify' ),
+				// Both the font-icon `<i>` and the inline `<svg>` (preset or
+				// custom) are listed so Advanced Styling — colour above all —
+				// reaches the icon whichever kind it is. `currentColor` on the
+				// SVG's fill/stroke turns the `color` declaration into the
+				// glyph colour, matching the font-icon behaviour exactly.
+				// Adding the `svg` selector cannot change an existing site:
+				// a font-icon cart has no `svg` element for it to match.
 				'selector'    => array(
-					'normal' => '.builder-header-' . $this->id . '-item .cart-item-link .cart-icon i',
-					'hover'  => '.builder-header-' . $this->id . '-item:hover .cart-item-link .cart-icon i',
+					'normal' => '.builder-header-' . $this->id . '-item .cart-item-link .cart-icon i, .builder-header-' . $this->id . '-item .cart-item-link .cart-icon svg',
+					'hover'  => '.builder-header-' . $this->id . '-item:hover .cart-item-link .cart-icon i, .builder-header-' . $this->id . '-item:hover .cart-item-link .cart-icon svg',
 				),
 				'css_format'  => 'styling',
 				'default'     => array(),

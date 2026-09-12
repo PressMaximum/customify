@@ -1103,7 +1103,16 @@ $text_color: #555d66;
     width: 300px;
     bottom: 0px;
     top: 0px;
-    display: block;
+    // Column flow, not stacked absolute boxes. The header + search rows
+    // measure themselves, then exactly ONE scrolling pane (the library
+    // browser OR the Custom SVG panel) claims the rest. The panes are
+    // siblings in normal flow, so hiding one cannot leave the other
+    // showing through: with the old `position: absolute; top: 46px`
+    // overlay a stale/miscascaded `display` left the FontAwesome grid
+    // visible UNDER the SVG textarea.
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     z-index: 230;
     background: #EBEBEB;
 
@@ -1118,6 +1127,7 @@ $text_color: #555d66;
     // whenever the OS re-styled the native <select>.
     .customify--sidebar-header {
         height: 46px;
+        flex: 0 0 auto;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -1204,7 +1214,77 @@ $text_color: #555d66;
     // Customizer panel adds its own 40px on top — pin the height + kill
     // min-height so the row measures exactly 48px (32 + 2*8) whatever
     // rules load after this stylesheet.
+    // Per-field shortlist, above the search. Only rendered for icon fields
+    // that declare a `presets` arg (the WooCommerce cart ships cart / bag /
+    // basket variants); every other field keeps the row hidden and the
+    // sidebar looks exactly as it did.
+    .customify--icon-suggested {
+        flex: 0 0 auto;
+        padding: 10px 8px;
+        background: #ffffff;
+        border-bottom: 1px solid #f0f0f1;
+    }
+    .customify--icon-suggested-label {
+        margin: 0 0 8px;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        color: #646970;
+    }
+    .customify--icon-suggested-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+    .customify--icon-suggested-item {
+        // Deliberately larger than a browser grid cell: these are THE
+        // recommended choices for this field, so they get a real hit area
+        // and a visible selected state instead of the grid's hover-scale.
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+        color: #1e1e1e;
+        background: #f6f7f7;
+        border: 1px solid #dcdcde;
+        border-radius: 3px;
+        transition: border-color .15s ease-in-out, background .15s ease-in-out, box-shadow .15s ease-in-out;
+
+        &:hover {
+            background: #fff;
+            border-color: #a7aaad;
+        }
+
+        &.is-selected {
+            background: #fff;
+            border-color: #2271b1;
+            box-shadow: 0 0 0 1px #2271b1;
+        }
+
+        .icon-wrapper {
+            display: inline-flex;
+        }
+
+        svg {
+            display: block;
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: currentColor;
+        }
+    }
+
     .customify--sidebar-search {
+        flex: 0 0 auto;
         background: #ffffff;
         padding: 8px;
         border-bottom: 1px solid #f0f0f1;
@@ -1221,15 +1301,13 @@ $text_color: #555d66;
         }
     }
 
-    // Browser fills the remaining sidebar height under header (46px) +
-    // search row (48px = 32 + 8 + 8 padding). The old magic `top: 100px`
-    // baked in a 100px assumption that no longer matched either row.
+    // Browser claims whatever height the header + search rows leave. No
+    // magic offset: earlier revisions hardcoded `top: 94px` (and before
+    // that `top: 100px`), which silently desynced every time either row
+    // changed height.
     #customify--icon-browser {
-        position: absolute;
-        top: 94px;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
+        flex: 1 1 auto;
+        min-height: 0;
         overflow: auto;
     }
     .customify--list-icons {
@@ -1252,17 +1330,42 @@ $text_color: #555d66;
         }
     }
 
-    // Custom SVG panel — replaces the library browser + search when the
-    // "Custom SVG" type is selected in the sidebar dropdown. Hidden by
-    // default; JS toggles `.is-active` / display when the picker opens on
-    // an existing custom-svg value or when the dropdown changes to it.
+    // Preset SVG grid. Same 5-up cell rhythm as the font grids so switching
+    // the type dropdown doesn't reflow the sidebar, but the glyphs are
+    // inline `<svg>` (no webfont to wait for) and need an explicit box:
+    // the shipped icons carry no width/height attributes by design, so
+    // without this they would render at the CSS-initial 300×150.
+    .customify--list-svg-icons {
+        li {
+            // `transform: scale(1.5)` on hover is inherited from the shared
+            // rule above; keep the resting cell identical to the font grid.
+            color: #1e1e1e;
+        }
+        .icon-wrapper {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        svg {
+            display: block;
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+        }
+    }
+
+    // Custom SVG panel — REPLACES the library browser + search row when the
+    // "Custom SVG" type is selected in the sidebar dropdown. It is a normal
+    // flow sibling of the browser (both `flex: 1 1 auto`), so exactly one of
+    // the two occupies the pane at any moment and neither can paint over the
+    // other. Hidden by default; JS toggles `.is-active` (and jQuery's inline
+    // display) when the picker opens on an existing custom-svg value or when
+    // the dropdown changes to it.
     .customify--icon-custom-svg {
         display: none;
-        position: absolute;
-        top: 46px;      // sit under the header row
-        left: 0;
-        right: 0;
-        bottom: 0;
+        flex: 1 1 auto;
+        min-height: 0;
         padding: 12px 12px 16px;
         background: #ffffff;
         overflow: auto;

@@ -509,6 +509,8 @@ class Customify
 			// Functions which enhance the theme by hooking into WordPress and itself (huh?).
 			'/inc/template-tags.php',
 			// Custom template tags for this theme.
+			'/inc/icons-svg.php',
+			// Preset inline-SVG icon library + `customify/svg_icons` filter.
 			'/inc/template-functions.php',
 			// Functions which enhance the theme by hooking into WordPress.
 			'/inc/customizer/class-customizer.php',

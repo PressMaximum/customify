@@ -1,3 +1,9 @@
+= 0.4.25 =
+* NEW: Inline SVG icons for header builder items - pick from a built-in set of 58 modern outline icons, or paste your own SVG, anywhere an icon can be chosen.
+* NEW: The WooCommerce cart icon now suggests eight bag, cart and basket SVG variants at the top of the icon picker, one click away.
+* IMPROVED: Pasted SVG is sanitized on save and again on output, and is capped at 20KB.
+* FIXED: Icon picker sidebar no longer shows the Custom SVG panel on top of the icon grid; switching icon type now swaps the panel, search and grid cleanly.
+
 = 0.4.24 =
 * IMPROVED: Starter Templates tab is now always shown in the dashboard, with an "Install/Activate plugin" CTA when Customify Starter Sites is not active.
 
