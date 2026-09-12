@@ -37,6 +37,8 @@ Three kinds of icon share one field type and one storage shape, so a site can mi
 | File | Responsibility |
 |---|---|
 | [`inc/icons-svg.php`](../inc/icons-svg.php) | Preset SVG library + `customify/svg_icons` filter + markup builder |
+| [`inc/install-marker.php`](../inc/install-marker.php) | `customify_is_fresh_install_since()` — gates modern defaults |
+| [`src/frontend/scss/header/builder_items/_icon_label_items.scss`](../src/frontend/scss/header/builder_items/_icon_label_items.scss) | Shared header icon+label style (§9.2) |
 | [`inc/template-functions.php`](../inc/template-functions.php) | `customify_sanitize_svg()`, `customify_render_icon()` and its get/echo aliases |
 | [`inc/customizer/class-customizer-icons.php`](../inc/customizer/class-customizer-icons.php) | Font Awesome catalogs + stylesheet enqueue |
 | [`inc/customizer/class-customizer-sanitize.php`](../inc/customizer/class-customizer-sanitize.php) | `sanitize_icon()` — the save-time pass |
@@ -173,6 +175,37 @@ One registration is enough: the front-end renderer, the picker grid and the per-
 
 ---
 
+### 5.5 Gating a modern default — the install marker
+
+A default that can never change is a default frozen in 2019; a default that changes freely redraws 30,000 live headers overnight. [`inc/install-marker.php`](../inc/install-marker.php) splits the two populations.
+
+```php
+customify_get_installed_version()            // '0.4.25' | '0.0.0' | …
+customify_is_fresh_install_since( '0.4.25' ) // bool
+```
+
+The `customify_installed_version` option is stamped **once**, on first read (and on `after_switch_theme`, which catches a genuinely fresh activation at the earliest moment):
+
+| Site state when first asked | Stamped | Effect |
+|---|---|---|
+| Has any Customify `theme_mod` | `0.0.0` | Never passes a gate — keeps every legacy default |
+| No Customify `theme_mod` at all | running version | Passes gates at or below that version |
+
+WordPress seeds `theme_mods_<stylesheet>` itself on theme switch (`0`, `nav_menu_locations`, `custom_css_post_id`, `sidebars_widgets`), so those keys are skipped — the option merely existing proves nothing.
+
+Two consumers today, both gated on `0.4.25`:
+
+1. **The cart's icon default** — [`config/header/cart.php`](../inc/compatibility/woocommerce/config/header/cart.php) registers `{type:'svg', icon:'bag'}` on a fresh install and the Font Awesome basket otherwise. Config arrays are built at runtime, so the branch is evaluated per request.
+2. **The `customify-header-items-v2` body class** — [`inc/element-classes.php`](../inc/element-classes.php), which scopes §9.2's shared header-item style.
+
+A site that **saved** a value is unaffected either way: the saved value always beats the default. The gate only decides what a site that never touched the field sees.
+
+> **Known ambiguity, deliberately fail-safe.** A site that installed the theme years ago and never customised anything is indistinguishable from a fresh install, and will be stamped as fresh. By construction such a site has only ever rendered defaults, so the exposure is one cosmetic icon on a header nobody configured. Every site that has *any* saved setting is correctly stamped legacy.
+
+`customify_is_fresh_install_since()` is generic on purpose — later items (User Icon, Search) gate the same way instead of inventing a second mechanism. **The option is public API and Pro reads it**, so its builder-item defaults move in step with the theme's.
+
+---
+
 ## 6. The `presets` control arg
 
 An `icon` field may declare a shortlist of library keys. The picker then shows them as a one-click **Suggested** row above the search — the common case becomes one click instead of a scroll through ~2,000 FontAwesome glyphs. Order matters: the cart item leads with bags because that is what modern storefronts reach for.
@@ -238,20 +271,58 @@ Sizing lives on the markup, not on per-call-site CSS:
 
 ### 9.1 Cross-item size parity
 
-Header items must agree on a default icon size or the row looks accidental. The Search icon's default is a flat `.search-icon svg { width: 18px; height: 18px }`. The cart cannot copy that literally — its Icon Size slider writes `font-size` on `.cart-icon`, and a `px` width would make the slider inert for SVG icons — so it expresses the same size in `em`:
+Header items must agree on a default icon size or the row looks accidental. The shared number is **18px** — the Search icon's flat `.search-icon svg { width: 18px; height: 18px }`, and what Pro's User item already paints at.
+
+The cart cannot express that as an `em` multiple. `1em` resolves against `.cart-icon`'s `font-size: 1.3em` inside `.cart-item-link { font-size: 0.85em }` → 16 × 0.85 × 1.3 = **17.68px** — close to 18, but visibly off when the two glyphs sit side by side. A flat `width: 18px` would hit the number but make the Icon Size slider inert, because the slider writes `font-size` on `.cart-icon` and a font-size cannot override a px width.
+
+So the size travels through a custom property:
 
 ```scss
 .cart-icon {
-    font-size: 1.3em;          // unchanged
-    i { width: 1.3em; height: 1.3em; }          // font icons UNCHANGED
+    font-size: 1.3em;                                  // UNCHANGED
+    --customify-cart-icon-size: 18px;                  // the shared default
+
+    i { width: 1.3em; height: 1.3em; }                 // font icons UNCHANGED
     > svg,
-    .customify-icon--svg > svg { width: 1em; height: 1em; }   // was 1.3em
+    .customify-icon--svg > svg {
+        width:  var(--customify-cart-icon-size);
+        height: var(--customify-cart-icon-size);
+    }
 }
 ```
 
-The chain is `16px root → .cart-item-link.text-small 0.875em → 14px → .cart-icon 1.3em → 18.2px → svg 1em → 18.2px`, measured at **17.68px** against the Search icon's 18px. It was `1.3em`, i.e. 23px, which is what made the cart look oversized next to every other header item.
+and the slider emits both declarations, so it still wins:
 
-The font-icon `<i>` keeps `1.3em` deliberately: Font Awesome glyphs carry their own internal padding and are the saved value on existing sites, so their rendered size must not move. **Pro should mirror the `1em` rule for any builder item that renders an SVG inside a `font-size`-scaled wrapper.**
+```php
+'css_format' => 'font-size: {{value}}; --customify-cart-icon-size: {{value}};',
+```
+
+The extra declaration is inert on a font-icon site — nothing reads the property unless an `<svg>` is present. The font-icon `<i>` is untouched and still rides `font-size: 1.3em` (22.98px): Font Awesome glyphs carry their own internal padding and are the saved value on existing sites, so their rendered size must not move.
+
+Measured in a rendered harness against the built CSS: **cart svg 18.00 × 18.00, search svg 18.00 × 18.00.**
+
+### 9.2 Shared header icon+label style
+
+Cart, Search and Pro's User Icon are the same shape of thing — a glyph with an optional word beside it. [`src/frontend/scss/header/builder_items/_icon_label_items.scss`](../src/frontend/scss/header/builder_items/_icon_label_items.scss) is their single definition. **Pro must mirror this table exactly.**
+
+| Property | Value | Note |
+|---|---|---|
+| `display` | `inline-flex` | shrink-to-fit inside the builder column |
+| `align-items` | `center` | glyph and label share one optical centre line |
+| `gap` | `8px` | owns icon↔label spacing; replaces the old `> span { margin: 0 2px }` |
+| `font-size` | `0.875em` | the theme's `.text-small` token |
+| `font-weight` | `500` | |
+| `text-transform` | `none` | sentence case — beats the `text-uppercase` class still printed in the cart markup |
+| `letter-spacing` | `0` | |
+| `line-height` | `1.2` | restores a real line box (`.search-icon` sets `line-height: 0` for a bare glyph) |
+| icon box | `display: inline-flex; align-items: center; justify-content: center; line-height: 0` | an `inline-block` leaves descender space under the SVG — that gap is what dropped the cart glyph below its label |
+| icon size | `18px` | §9.1 |
+
+`.cart-qty` keeps `position: absolute` against `.cart-icon`, which keeps `position: relative` — verified present and visible after the flex change. The font-icon's `top: -1px` optical nudge is zeroed under this scope: it existed to fake centring inside the old inline-block, and would now push the glyph *off* centre.
+
+Measured: icon centre and label centre differ by **0.00px**, with the icon both before and after the label.
+
+**Gated.** Every rule is scoped under `.customify-header-items-v2` (§5.5), so only sites that first installed at 0.4.25+ get it. Verified unchanged on a legacy site: link `flex` / `uppercase` / `13.6px` / `600`, `<i>` `22.98px` with `top: -1px`, span margins `2px`. To promote it to the global default later, delete the wrapper selector — every declaration inside stands on its own.
 
 Because both `fill` and `stroke` resolve to `currentColor`, any existing **colour** control that sets `color` on an ancestor already colours the SVG. When widening a styling selector for this, list both elements — e.g. the cart's `… .cart-icon i, … .cart-icon svg`. Adding the `svg` half cannot change an existing site: a font-icon cart has no `svg` element to match.
 

@@ -72,6 +72,18 @@ if ( ! function_exists( 'customify_body_classes' ) ) {
 			}
 		}
 
+		// Opts a site into the unified header icon+label style (one size, one
+		// weight, sentence case, one icon/label gap across Cart, Search and
+		// Pro's User item). It changes how an existing header LOOKS, so it is
+		// gated on the install marker exactly like the cart's icon default:
+		// sites that started on 0.4.25+ get it, everything older keeps the
+		// uppercase, per-item styling it has always rendered.
+		// See docs/SPEC-icons.md §9.2 for the style table Pro mirrors.
+		if ( function_exists( 'customify_is_fresh_install_since' )
+			&& customify_is_fresh_install_since( '0.4.25' ) ) {
+			$classes[] = 'customify-header-items-v2';
+		}
+
 		return $classes;
 	}
 }

@@ -1,0 +1,93 @@
+/* Header "icon + label" items — one shared default
+--------------------------------------------------------------
+Cart, Search and Pro's User Icon are the same shape of thing: a small glyph
+with an optional word next to it, sitting in a header row. They grew up
+separately, so by 0.4.24 they disagreed on every axis — the cart shouted
+"CART / $543.97" in uppercase at 0.85em/600 while the user item said
+"Account" in sentence case at a different size, and the cart's glyph sat a
+pixel or two below its own label. Side by side in one row it read as three
+plugins, not one theme.
+
+This file is the single definition they now share. The numbers are in
+docs/SPEC-icons.md §9.2 as a table, because Customify Pro has to mirror them
+exactly for its own builder items.
+
+GATING — everything here is scoped under `.customify-header-items-v2`, a body
+class emitted only for sites that first installed the theme at 0.4.25+
+(inc/element-classes.php → customify_is_fresh_install_since). Restyling the
+cart label on 30,000 live shops that never asked for it is precisely what
+AGENTS.md §4.1 exists to prevent, so existing sites keep their uppercase,
+per-item styling and only new installs get the unified look.
+
+To promote this to the global default later, delete the wrapper selector —
+every declaration inside is written to stand on its own.
+*/
+
+.customify-header-items-v2 {
+	// Selector list rather than a shared class, because the markup classes
+	// are public API (AGENTS.md §4.4): adding a new class to the render
+	// output of an existing item is a change child themes and page builders
+	// can trip over, while matching the classes that are already there is
+	// invisible to them.
+	.item--wc_cart .cart-item-link,
+	.item--search_icon .search-icon,
+	.item--search_box .search-icon {
+		// Flex so the glyph and the word share one optical centre line
+		// whatever their individual heights are. `inline-flex` (not `flex`)
+		// keeps the item shrink-to-fit inside the builder column, so the
+		// hit area doesn't stretch across the whole cell.
+		display: inline-flex;
+		align-items: center;
+		// Owns the space between glyph and label, replacing the old
+		// `> span { margin: 0 2px }` pattern. `gap` applies between flex
+		// items only, so it produces no stray edge margin when the label
+		// or the icon is switched off, and it needs no `:first-child` /
+		// `:last-child` unpicking when Icon Position flips before/after.
+		gap: 8px;
+
+		// `line-height: 0` is set on `.search-icon` to collapse the inline
+		// box around a bare glyph. With a label present that would crush
+		// the text, so restore a real line box here.
+		line-height: 1.2;
+
+		font-size: 0.875em; // the theme's `.text-small` token
+		font-weight: 500;
+		letter-spacing: 0;
+		// Beats the `text-uppercase` class that Customify_Builder_Item_WC_Cart
+		// prints in the markup. The class stays on the element — removing it
+		// would be a public-selector change — but it no longer decides the
+		// casing of a header label.
+		text-transform: none;
+
+		// The old per-span margins are subsumed by `gap`.
+		> span {
+			margin: 0;
+		}
+	}
+
+	// Icon slot: no line box of its own, so the glyph centres on the flex
+	// cross-axis instead of on a text baseline it doesn't share.
+	.item--wc_cart .cart-icon,
+	.item--search_icon .search-icon > svg,
+	.item--search_box .search-icon > svg {
+		line-height: 0;
+	}
+
+	.item--wc_cart .cart-icon {
+		// `inline-flex` replaces `inline-block` so the icon box hugs the
+		// glyph exactly — an inline-block leaves descender space under the
+		// SVG, which is what pushed the cart glyph below the label's centre.
+		// `position: relative` is preserved: `.cart-qty` is absolutely
+		// positioned against this box and must keep its containing block.
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+
+		// The font-icon variant carries a `top: -1px` nudge that exists to
+		// fake optical centring inside that inline-block. Flex centring does
+		// it properly, so the nudge would now push the glyph UP off centre.
+		i {
+			top: 0;
+		}
+	}
+}

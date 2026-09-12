@@ -182,32 +182,38 @@
 				transform: translate(-50%, -50%);
 			}
 		}
-		// SVG variant (preset library OR pasted custom SVG). `1em` here
-		// resolves against `.cart-icon`'s own `font-size: 1.3em`, which
-		// itself sits inside `.cart-item-link.text-small` (`0.875em`):
+		// SVG variant (preset library OR pasted custom SVG), sized through
+		// a custom property rather than an em multiple.
 		//
-		//   16px root → 14px link → 18.2px .cart-icon → 18.2px svg
+		// The header's shared icon size is 18px — that is what the Search
+		// icon paints at (`.search-icon svg { width: 18px }` in
+		// header/builder_items/_search.scss) and what Pro's User item
+		// paints at. The cart has to hit the same number exactly, or a
+		// header carrying all three reads as three different icon sets.
 		//
-		// i.e. the cart's SVG paints at the SAME 18px as the header
-		// Search icon (`.search-icon svg { width: 18px }` in
-		// header/builder_items/_search.scss), so a header carrying both
-		// items reads as one set instead of a big cart next to a small
-		// magnifier. It was `1.3em` — 23.7px — which is what made the
-		// cart look oversized beside every other header item.
+		// An em value cannot get there. `1em` resolves against
+		// `.cart-icon`'s `font-size: 1.3em`, itself inside
+		// `.cart-item-link { font-size: 0.85em }` — 16 × 0.85 × 1.3 =
+		// 17.68px. Close, but not 18, and the residue is visible when the
+		// two icons sit side by side.
 		//
-		// The font-icon `<i>` above KEEPS its `1.3em`: Font Awesome
-		// glyphs carry their own internal padding and are the saved
-		// value on existing sites, so their rendered size must not move.
+		// So: an exact 18px default, published as a custom property that
+		// the Icon Size slider overrides (its css_format emits both
+		// `font-size` and `--customify-cart-icon-size` — see
+		// config/header/cart.php). The property keeps the slider working
+		// without a specificity fight, which a plain `width: 18px` would
+		// have lost or won unpredictably depending on stylesheet order.
 		//
-		// Kept in `em` (not `px`) so the Icon Size slider still wins —
-		// the slider writes `font-size` on `.cart-icon`, and this rule
-		// resolves against that font-size at cascade time. A `px` value
-		// here would pin every SVG to a fixed size and make the slider
-		// inert for SVG icons.
+		// The font-icon `<i>` above is untouched and still rides
+		// `font-size: 1.3em`: Font Awesome glyphs carry their own internal
+		// padding and are the saved value on every existing site, so their
+		// rendered size must not move by even a fraction of a pixel.
+		--customify-cart-icon-size: 18px;
+
 		> svg,
 		.customify-icon--svg > svg {
-			width: 1em;
-			height: 1em;
+			width: var(--customify-cart-icon-size);
+			height: var(--customify-cart-icon-size);
 		}
 		.cart-qty {
 			position: absolute;

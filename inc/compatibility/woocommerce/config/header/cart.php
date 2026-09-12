@@ -105,16 +105,25 @@ class Customify_Builder_Item_WC_Cart {
 				// Outline and solid alternate so a shop can match its own line
 				// weight at a glance rather than hunting for the solid twin.
 				'presets'         => array( 'bag', 'bag-filled', 'bag-outline', 'bag-handle', 'cart', 'cart-filled', 'basket', 'basket-filled' ),
-				// DEFAULT UNCHANGED — deliberately. Every site that has a
-				// cart item but never opened this field falls back to the
-				// default, so flipping it to an SVG preset would silently
-				// redraw the header icon on tens of thousands of live shops
-				// (AGENTS.md §4.1: defaults must not change silently).
-				// The SVG presets are opt-in via the picker.
-				'default'         => array(
-					'icon' => 'fa fa-shopping-basket',
-					'type' => 'font-awesome',
-				),
+				// Gated default. Every site that has a cart item but never
+				// opened this field falls back to whatever is registered
+				// here, so flipping it outright would silently redraw the
+				// header icon on tens of thousands of live shops
+				// (AGENTS.md §4.1). The install marker splits the two
+				// populations: sites that first installed the theme at
+				// 0.4.25+ get the modern inline-SVG bag, everything older
+				// keeps the Font Awesome basket it has always drawn.
+				// A site that SAVED a value is unaffected either way.
+				'default'         => customify_is_fresh_install_since( '0.4.25' )
+					? array(
+						'icon' => 'bag',
+						'type' => 'svg',
+						'svg'  => '',
+					)
+					: array(
+						'icon' => 'fa fa-shopping-basket',
+						'type' => 'font-awesome',
+					),
 				'title'           => __( 'Icon', 'customify' ),
 			),
 
@@ -252,14 +261,23 @@ class Customify_Builder_Item_WC_Cart {
 				'device_settings' => true,
 				'max'             => 150,
 				'title'           => __( 'Icon Size', 'customify' ),
-				// Set `font-size` on the wrapper so BOTH the font-icon `<i>`
-				// (drawn at `width: 1.3em`) and the custom-SVG `<svg>`
-				// (drawn at `width: 1.3em` in the same partial) scale off
-				// the slider. Font-icons and SVG icons render at the same
-				// pixel size for a given slider value, matching what the
-				// slider label promises.
+				// TWO declarations, one slider:
+				//
+				//   • `font-size` drives the font-icon `<i>` (`width: 1.3em`),
+				//     exactly as it always has. Untouched so every existing
+				//     Font Awesome cart keeps its pixel size.
+				//   • `--customify-cart-icon-size` drives the inline `<svg>`.
+				//     The SVG can't ride `font-size` and still land on the
+				//     header's shared 18px default — an em value resolves
+				//     against `.cart-icon`'s own 1.3em and lands at 17.68px,
+				//     just off the Search icon's 18px. A custom property lets
+				//     the DEFAULT be an exact 18px while the slider still
+				//     overrides it. See _wc-cart.scss.
+				//
+				// The extra declaration is inert on a font-icon site: nothing
+				// reads the property unless an `<svg>` is present.
 				'selector'        => '.builder-header-' . $this->id . '-item .cart-icon',
-				'css_format'      => 'font-size: {{value}};',
+				'css_format'      => 'font-size: {{value}}; --customify-cart-icon-size: {{value}};',
 				'default'         => array(),
 			),
 

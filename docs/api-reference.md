@@ -99,8 +99,14 @@ add_filter( 'customify/styling/primary-color', function ( $css ) {
 | `customify/icon/svg_allowed_html` | filter | `array` — wp_kses allowlist for pasted SVG | [`inc/template-functions.php`](../inc/template-functions.php) |
 | `customify/icon/svg_max_bytes` | filter | `int` — max accepted pasted-SVG length (default 20480) | [`inc/template-functions.php`](../inc/template-functions.php) |
 
-Full icon-system reference — value shapes, helpers, the `presets` control arg:
-[`SPEC-icons.md`](SPEC-icons.md).
+Full icon-system reference — value shapes, helpers, the `presets` control arg,
+and the install-version gate for modern defaults: [`SPEC-icons.md`](SPEC-icons.md).
+
+Install marker (public API — Customify Pro reads it to keep its own builder-item
+defaults in step): option `customify_installed_version`, helpers
+`customify_get_installed_version()` and `customify_is_fresh_install_since( $version )`
+in [`inc/install-marker.php`](../inc/install-marker.php). Body class
+`customify-header-items-v2` opts a site into the shared header icon+label style.
 
 ### 2.4 Control internals
 
