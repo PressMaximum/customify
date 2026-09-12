@@ -85,6 +85,36 @@ every declaration inside is written to stand on its own.
 		}
 	}
 
+	// ---------------------------------------------------------------- colour
+	// The cart glyph must be the same colour as its own label, and as the
+	// Search and Pro User glyphs beside it.
+	//
+	// base/_skins.scss deliberately paints it in the HOVER colour instead —
+	// `.light-mode .cart-item-link .cart-icon { color: black(0.8) }` while the
+	// link itself is `black(0.55)` (dark mode: 0.99 against 0.79). That was a
+	// design choice back when the cart was the only icon+label item in the
+	// row; with Search and User next to it, it just reads as a darker cart.
+	//
+	// `inherit` rather than re-stating a colour, so all four states keep
+	// working for free: base and `:hover` both cascade from `.cart-item-link`,
+	// which the skins already colour, and any palette/Customizer colour a site
+	// sets on the link flows straight through.
+	//
+	// The skin rules are `(0,3,0)`; prefixing with the v2 body class makes
+	// these `(0,4,0)`, which is the minimum that wins. The `.header-menu-sidebar`
+	// pair covers the same item inside the mobile off-canvas panel.
+	//
+	// Cart → Icon Styling (Advanced Styling) is unaffected: it generates
+	// `… .cart-icon i, … .cart-icon svg { color: … }`, targeting the glyph
+	// element itself, and an explicit colour on the child always beats
+	// `inherit` on its parent.
+	.light-mode .cart-item-link .cart-icon,
+	.dark-mode .cart-item-link .cart-icon,
+	.header-menu-sidebar.light-mode .cart-icon,
+	.header-menu-sidebar.dark-mode .cart-icon {
+		color: inherit;
+	}
+
 	// Icon slot: no line box of its own, so the glyph centres on the flex
 	// cross-axis instead of on a text baseline it doesn't share.
 	.item--wc_cart .cart-icon,

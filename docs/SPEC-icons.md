@@ -319,10 +319,41 @@ Cart, Search and Pro's User Icon are the same shape of thing — a glyph with an
 | `line-height` | `1.2` | restores a real line box (`.search-icon` sets `line-height: 0` for a bare glyph) |
 | icon box | `display: inline-flex; align-items: center; justify-content: center; line-height: 0` | an `inline-block` leaves descender space under the SVG — that gap is what dropped the cart glyph below its label |
 | icon size | `20px` | §9.1 — from `--customify-header-icon-size`, one token for the whole row |
+| icon colour | `inherit` | same colour as the label, base and hover — see below |
 
 `.cart-qty` keeps `position: absolute` against `.cart-icon`, which keeps `position: relative` — verified present and visible after the flex change. The font-icon's `top: -1px` optical nudge is zeroed under this scope: it existed to fake centring inside the old inline-block, and would now push the glyph *off* centre.
 
 Measured: icon centre and label centre differ by **0.00px**, with the icon both before and after the label.
+
+#### Colour
+
+The glyph takes the **same colour as its own label**, like Search and the Pro User item.
+
+`base/_skins.scss` deliberately paints it in the *hover* colour instead — `.light-mode .cart-item-link .cart-icon { color: black(0.8) }` while the link is `black(0.55)` (dark mode: `0.99` vs `0.79`), plus the same pair under `.header-menu-sidebar`. That was reasonable when the cart was the only icon+label item in the row; beside Search and User it just reads as a darker cart.
+
+The v2 scope resets all four to `color: inherit`:
+
+| Skin rule | Specificity | v2 override | Specificity |
+|---|---|---|---|
+| `.light-mode .cart-item-link .cart-icon` | (0,3,0) | `.customify-header-items-v2 .light-mode .cart-item-link .cart-icon` | (0,4,0) |
+| `.dark-mode .cart-item-link .cart-icon` | (0,3,0) | same + `.dark-mode` | (0,4,0) |
+| `.header-menu-sidebar.light-mode .cart-icon` | (0,3,0) | same + prefix | (0,4,0) |
+| `.header-menu-sidebar.dark-mode .cart-icon` | (0,3,0) | same + prefix | (0,4,0) |
+
+`inherit` rather than a restated colour, so every state keeps working for free: base and `:hover` both cascade from `.cart-item-link`, which the skins already colour, and any palette or Customizer colour a site sets on the link flows straight through.
+
+Cart → **Icon Styling** (Advanced Styling) is unaffected — it generates `… .cart-icon i, … .cart-icon svg { color: … }`, targeting the glyph element itself, and an explicit colour on the child always beats `inherit` on its parent. Verified: a styled cart still renders the exact colour the control emits, in both modes.
+
+Measured:
+
+| | label | cart glyph | search glyph |
+|---|---|---|---|
+| v2 light | `rgba(0,0,0,.55)` | **`rgba(0,0,0,.55)`** | `rgba(0,0,0,.55)` |
+| v2 dark | `rgba(255,255,255,.79)` | **`rgba(255,255,255,.79)`** | `rgba(255,255,255,.79)` |
+| legacy light | `rgba(0,0,0,.55)` | `rgba(0,0,0,.8)` | `rgba(0,0,0,.55)` |
+| legacy dark | `rgba(255,255,255,.79)` | `rgba(255,255,255,.99)` | `rgba(255,255,255,.79)` |
+
+Hover verified by driving the link's own colour and reading the glyph: link, label and glyph resolve to the same value together.
 
 **Gated.** Every rule is scoped under `.customify-header-items-v2` (§5.5), so only sites that first installed at 0.4.25+ get it. Verified unchanged on a legacy site: link `flex` / `uppercase` / `13.6px` / `600`, `<i>` `22.98px` with `top: -1px`, span margins `2px`. To promote it to the global default later, delete the wrapper selector — every declaration inside stands on its own.
 
