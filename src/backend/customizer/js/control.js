@@ -1286,7 +1286,13 @@ import { attachPopoverChrome } from './popover-chrome';
 					$(this).remove();
 				}
 			});
+			// Idempotent: refreshFromSetting() re-runs initField() after an
+			// external setting write, which lands here again with the same
+			// container. The heading sits outside the emptied fields area, so
+			// without this guard every external set stacked another switcher
+			// onto it (seen as 2-4 device rows on nav_icon_size).
 			$(".customify-field-heading", $el)
+				.not(".customify-devices-added")
 				.append(clone)
 				.addClass("customify-devices-added");
 		},
