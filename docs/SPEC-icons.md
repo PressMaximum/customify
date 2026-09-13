@@ -94,7 +94,7 @@ The return value is **already safe to echo** — escaping it would turn an inlin
 
 ### 4.1 Why preset markup is not stored
 
-Only the **key** is persisted. The markup is looked up at render time, so a later redraw of an icon reaches every site that picked it, and a 43-icon library costs nothing in `theme_mod` size.
+Only the **key** is persisted. The markup is looked up at render time, so a later redraw of an icon reaches every site that picked it, and a 49-icon library costs nothing in `theme_mod` size.
 
 ---
 
@@ -149,7 +149,7 @@ Every entry — including anything filtered in — must honour it, or the set st
 | Commerce (11) | `bag` `bag-outline` `bag-handle` `bag-tote` `bag-filled` `cart` `cart-outline` `cart-filled` `basket` `basket-alt` `basket-filled` |
 | Account (11) | `user` `user-alt` `user-outline` `user-filled` `user-circle` `user-circle-alt` `user-circle-soft` `user-circle-filled` `user-square` `contact` `id-card` |
 | Wishlist (8) | `heart` `heart-outline` `heart-plus` `heart-filled` `bookmark` `bookmark-filled` `star` `star-filled` |
-| General UI (13) | `search` `menu` `close` `chevron-down` `arrow-right` `external-link` `home` `phone` `mail` `map-pin` `globe` `clock` `calendar` |
+| General UI (19) | `search` `menu` `menu-lines` `menu-narrow` `menu-minimal` `menu-deep` `menu-left` `menu-right` `close` `chevron-down` `arrow-right` `external-link` `home` `phone` `mail` `map-pin` `globe` `clock` `calendar` |
 
 The General UI family is deliberately lean and header-oriented. This is not a replacement icon font — every extra key is one more cell a shop scrolls past to reach the icon it actually wants. Pro's User Icon item reuses `contact` and `id-card`; its Wishlist item reuses the heart pair.
 
@@ -358,6 +358,54 @@ Hover verified by driving the link's own colour and reading the glyph: link, lab
 **Gated.** Every rule is scoped under `.customify-header-items-v2` (§5.5), so only sites that first installed at 0.4.25+ get it. Verified unchanged on a legacy site: link `flex` / `uppercase` / `13.6px` / `600`, `<i>` `22.98px` with `top: -1px`, span margins `2px`. To promote it to the global default later, delete the wrapper selector — every declaration inside stands on its own.
 
 Because both `fill` and `stroke` resolve to `currentColor`, any existing **colour** control that sets `color` on an ancestor already colours the SVG. When widening a styling selector for this, list both elements — e.g. the cart's `… .cart-icon i, … .cart-icon svg`. Adding the `svg` half cannot change an existing site: a font-icon cart has no `svg` element to match.
+
+---
+
+## 9.3 Menu Icon: empty means "the hamburger"
+
+The Menu Icon item (`inc/customizer/configs/header/nav-icon.php`) is the one place where an **empty icon value is a real choice, not a missing one**. It draws a CSS hamburger — three `<span>`s, the squeeze-to-X animation, bar widths driven by the Small/Medium/Large control — and that is what every existing site renders.
+
+So the field registers **no default**. `customify_render_icon()` returns `''` for the empty value, and `render()` falls through to the hamburger branch, whose markup is emitted as an explicit string so the output is **byte-identical** to what the item printed before the field existed (verified: 386 bytes, `cmp`-clean against the previous implementation). Clearing the icon in the picker — the `×` button, which writes `{type:'', icon:'', svg:''}` — puts the hamburger back. The field carries a description saying so, since the picker has no way to render "no icon" as a grid cell.
+
+Suggested presets: `menu` `menu-lines` `menu-narrow` `menu-minimal` `menu-deep` `menu-left` `menu-right` — seven distinct hamburger silhouettes.
+
+### Size
+
+Same custom-property pattern as the cart, keyed off the shared token:
+
+```scss
+.menu-mobile-toggle {
+    --customify-nav-icon-size: var(--customify-header-icon-size, 18px);
+    &.is-size-small { --customify-nav-icon-size: calc(var(--customify-header-icon-size, 18px) - 4px); }
+    &.is-size-large { --customify-nav-icon-size: calc(var(--customify-header-icon-size, 18px) + 8px); }
+}
+```
+
+emitted for both the bare `.is-size-<step>` class and the per-device `.is-size-<device>-<step>` classes `render()` produces, the latter inside the matching media query.
+
+| Step | v2 | legacy | hamburger bars today |
+|---|---|---|---|
+| Small | 16px | 14px | 19px wide |
+| **Medium** | **20px** | **18px** | 22px wide |
+| Large | 28px | 26px | 31px wide |
+
+Medium is the shared header icon size by definition, so a Menu Icon sits at exactly the scale of the Search magnifier and the cart bag. The ±4 / +8 steps round the hamburger's own -3 / +9 spread to numbers that stay legible against an 18 or 20px token. Font Awesome values are sized with `font-size` on the `<i>` — a glyph has no box to set `width`/`height` on.
+
+This section is **not** install-gated: no existing site can have an icon saved, so there is no prior rendering to preserve.
+
+### Open state
+
+`theme.js` toggles `is-active` on `.menu-mobile-toggle` (and on `.hamburger`) and never touches markup. So `render()` prints **both** glyphs — the chosen icon and the library `close` preset — and CSS shows one:
+
+```scss
+.nav-icon--icon-close { display: none; }
+.menu-mobile-toggle.is-active {
+    .nav-icon--icon-open  { display: none; }
+    .nav-icon--icon-close { display: inline-flex; }
+}
+```
+
+No JS change, no selector change, nothing to fetch mid-flip. The close glyph is always the theme's `close` preset rather than a counterpart from the chosen icon's own set: Font Awesome has no version-stable "times" class (`fa-times` vs `fa-xmark`) and a pasted custom SVG has no close counterpart at all, so one theme-authored glyph on the same 24-grid is the only answer that covers all three value types.
 
 ---
 

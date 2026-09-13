@@ -1,6 +1,7 @@
 = 0.4.25 =
 * NEW: Inline SVG icons for header builder items - pick from a built-in set of modern outline and solid icons, or paste your own SVG, anywhere an icon can be chosen.
 * NEW: The WooCommerce cart icon now suggests bag, cart and basket SVG variants - outline and solid - at the top of the icon picker, one click away.
+* NEW: The Menu Icon header item can now use an SVG icon instead of the default hamburger, with seven suggested menu silhouettes. Leave it empty - or clear it - to keep the hamburger.
 * IMPROVED: Pasted SVG is sanitized on save and again on output, and is capped at 20KB.
 * FIXED: Icon picker sidebar no longer shows the Custom SVG panel on top of the icon grid; switching icon type now swaps the panel, search and grid cleanly.
 

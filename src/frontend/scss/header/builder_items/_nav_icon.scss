@@ -237,3 +237,89 @@ $hamburger-hover-filter    : opacity(50%) !default;
         }
     }
 }
+/* Custom icon variant
+--------------------------------------------------------------
+The Menu Icon item draws a CSS hamburger by default (everything above).
+When the user picks something in the Icon field, `render()` swaps that
+block for two glyphs — the chosen icon and the library `close` preset —
+and adds `.has-custom-icon`. Nothing here touches the hamburger path, so
+a site that never opens the field renders byte-identical markup and CSS.
+
+No install gate on this section: no existing site can have an icon saved
+(the field ships empty), so there is no previous rendering to preserve.
+*/
+
+.menu-mobile-toggle {
+	// Icon size, one property, same pattern as the cart
+	// (compatibility/wc/_wc-cart.scss). Medium is THE shared header icon
+	// size, so a Menu Icon sits at exactly the same scale as the Search
+	// magnifier, the cart bag and Pro's user glyph; Small and Large step
+	// around it.
+	//
+	// The steps mirror the hamburger's own bar widths, which are 19 / 22 /
+	// 31px — roughly -3 and +9 around Medium. Rounded to -4 / +8 so the
+	// arithmetic stays legible against a 20px (v2) or 18px (legacy) token.
+	--customify-nav-icon-size: var(--customify-header-icon-size, 18px);
+
+	.nav-icon--icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		line-height: 0;
+
+		> svg,
+		.customify-icon--svg > svg {
+			width: var(--customify-nav-icon-size);
+			height: var(--customify-nav-icon-size);
+		}
+
+		// Font Awesome variant: sized by font-size, since a glyph has no
+		// intrinsic box to set width/height on.
+		> i {
+			font-size: var(--customify-nav-icon-size);
+			line-height: 1;
+		}
+	}
+
+	// Open/close swap. theme.js toggles `is-active` on `.menu-mobile-toggle`
+	// (and on `.hamburger`) and never touches markup — see theme.js ~L648.
+	// Both glyphs are always in the DOM and CSS picks one, so the existing
+	// toggle keeps working untouched and there is nothing to fetch mid-flip.
+	.nav-icon--icon-close {
+		display: none;
+	}
+
+	&.is-active {
+		.nav-icon--icon-open {
+			display: none;
+		}
+		.nav-icon--icon-close {
+			display: inline-flex;
+		}
+	}
+}
+
+// Size steps. Two passes to match how render() emits the class: a bare
+// `.is-size-<step>` when the setting is a plain string, and per-device
+// `.is-size-<device>-<step>` when device settings are on (the usual case).
+@mixin nav_icon_glyph_size( $suffix: "" ) {
+	&.is-size-#{$suffix}small {
+		--customify-nav-icon-size: calc(var(--customify-header-icon-size, 18px) - 4px);
+	}
+	&.is-size-#{$suffix}medium {
+		--customify-nav-icon-size: var(--customify-header-icon-size, 18px);
+	}
+	&.is-size-#{$suffix}large {
+		--customify-nav-icon-size: calc(var(--customify-header-icon-size, 18px) + 8px);
+	}
+}
+
+.menu-mobile-toggle {
+	@include nav_icon_glyph_size();
+
+	@each $mq-key, $mq-value in $gl-devices-list {
+		@media #{$mq-value} {
+			@include nav_icon_glyph_size("#{$mq-key}-");
+		}
+	}
+}

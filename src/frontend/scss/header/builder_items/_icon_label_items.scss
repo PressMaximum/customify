@@ -51,7 +51,8 @@ every declaration inside is written to stand on its own.
 	// invisible to them.
 	.item--wc_cart .cart-item-link,
 	.item--search_icon .search-icon,
-	.item--search_box .search-icon {
+	.item--search_box .search-icon,
+	.menu-mobile-toggle {
 		// Flex so the glyph and the word share one optical centre line
 		// whatever their individual heights are. `inline-flex` (not `flex`)
 		// keeps the item shrink-to-fit inside the builder column, so the
@@ -83,6 +84,24 @@ every declaration inside is written to stand on its own.
 		> span {
 			margin: 0;
 		}
+	}
+
+	// The Menu Icon's label carries its own uppercase + size from
+	// builder_items/_nav_icon.scss (`.nav-icon--label`). Inherit from the
+	// button instead, so it matches the cart and search labels exactly.
+	// `.nav-icon--label` is (0,1,0); this is (0,2,0) and wins.
+	.nav-icon--label {
+		text-transform: none;
+		font-size: inherit;
+	}
+
+	// The button's own baseline: `.menu-mobile-toggle` ships a 2.6em
+	// min-height and 2.5em line-height as part of its button reset, which
+	// makes it noticeably taller than the cart and search items sitting
+	// beside it in the same row.
+	.menu-mobile-toggle {
+		min-height: 0;
+		line-height: 1.2;
 	}
 
 	// ---------------------------------------------------------------- colour
