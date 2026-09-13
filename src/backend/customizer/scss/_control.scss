@@ -1285,6 +1285,19 @@ $text_color: #555d66;
             fill: currentColor;
             stroke: none;
         }
+        // Brand entries (payment logos) carry their own per-element colours
+        // and a landscape 38x24 card, so they must escape BOTH rules above
+        // and keep their aspect ratio. Mirrors the frontend exemption in
+        // src/frontend/scss/base/_icons.scss.
+        svg.customify-svg-icon.customify-svg-icon--brand {
+            width: auto;
+            height: 22px;
+            fill: none;
+            stroke: none;
+        }
+        svg.customify-svg-icon.customify-svg-icon--brand .customify-brand-bg {
+            stroke: #e3e5e8;
+        }
     }
 
     .customify--sidebar-search {
@@ -1364,6 +1377,21 @@ $text_color: #555d66;
         svg.customify-svg-icon--filled {
             fill: currentColor;
             stroke: none;
+        }
+        // Brand entries (the Payment family) are the coloured ones: their
+        // paint lives on the body's own elements, so the root must impose
+        // neither fill nor stroke. `width: auto` keeps the 38x24 card from
+        // being squashed into the grid's 24px square — the cell is wide
+        // enough for the wider box, and a distorted logo in the picker is a
+        // logo the user cannot recognise.
+        svg.customify-svg-icon.customify-svg-icon--brand {
+            width: auto;
+            height: 24px;
+            fill: none;
+            stroke: none;
+        }
+        svg.customify-svg-icon.customify-svg-icon--brand .customify-brand-bg {
+            stroke: #e3e5e8;
         }
     }
 
