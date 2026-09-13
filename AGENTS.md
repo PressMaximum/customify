@@ -41,7 +41,12 @@ Never use Grunt for CSS/JS compilation. Grunt is packaging-only.
 
 ### CI policy
 
-- Open feature and fix PRs against `dev`. Promote tested release work from `dev` to `master`.
+- Open feature and fix PRs against `dev` — lowercase, always. The theme's old `DEV`
+  and Pro's old `Dev` were deleted on 2026-09-13; a branch differing only by case
+  collides with `dev` on macOS and Windows, where git cannot hold both refs and the
+  checkout silently resolves whichever was fetched last. Never recreate them.
+  Snapshots live in the tags `backup-DEV-20260913` / `backup-Dev-20260913`.
+- Promote tested release work from `dev` to `master`.
 - CI runs only for non-draft, same-repository PRs targeting `dev` or `master`; documentation-only changes are ignored.
 - The self-hosted gate uses WordPress latest on PHP 8.3. It lints changed source files, builds production assets, validates the release ZIP, and activates that ZIP in WordPress.
 - Full-source JavaScript/style lint is not yet a merge gate because the legacy tree has baseline violations. Do not broaden incremental lint without first paying down that baseline.

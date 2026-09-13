@@ -81,8 +81,13 @@ Shared infrastructure (not a sellable product): `@pressmaximum/dashboard-kit` �
 admin-dashboard kit consumed by the products' dashboards — https://github.com/PressMaximum/dashboard-kit
 
 - **Branch convention: PRs target the repo's active dev branch — standard name is `dev`.**
-  Customify and Customify Pro use `dev`; the historical `DEV` and `Dev` branches are
-  retained only for compatibility. PressListing develops on `main`.
+  Customify and Customify Pro both use `dev` (lowercase). The old `DEV` (theme) and
+  `Dev` (Pro) branches were deleted on 2026-09-13 — do not recreate them, and do not
+  open PRs against them. A branch differing from `dev` only by case collides with it
+  on macOS and Windows, where git cannot hold both refs at once: the working copy
+  silently resolves whichever was fetched last. Snapshots of the deleted branches are
+  kept as tags `backup-DEV-20260913` / `backup-Dev-20260913` (and matching
+  `backup/*` branches) in their repos. PressListing develops on `main`.
 - Local checkout paths + Studio dev sites are machine-specific — NEVER commit them into
   this file. Each dev keeps their own map in `~/.claude/CLAUDE.md` (user-level, per
   machine) or a gitignored `CLAUDE.local.md`.
