@@ -78,3 +78,34 @@
 		}
 	}
 }
+
+// Preset library icons (`{ type: 'svg', icon: '<key>' }`, rendered by
+// customify_get_svg_icon()). They are STROKE glyphs: the `<svg>` carries
+// `fill="none" stroke="currentColor"` as presentation attributes, which a
+// stylesheet beats — so without this rule the `fill: currentColor` default
+// above would flood every outline icon into a solid blob.
+//
+// Higher specificity than the default (class + element vs element alone),
+// so ordering within this file is not load-bearing. The stroke width stays
+// on the element attribute so a site can override it per selector.
+//
+// The selector deliberately does NOT require the wrapper: a preset icon
+// rendered anywhere (a template partial, a Pro module) gets the same
+// treatment from its own class.
+svg.customify-svg-icon {
+	fill: none;
+	stroke: currentColor;
+}
+
+// …except the solid ones. The library ships both paint modes (Lucide/Tabler
+// outlines alongside Tabler-filled, Heroicons-solid and Phosphor glyphs, which
+// are filled paths even when they read as hairlines), and the rule above would
+// blank every one of them into an invisible outline-of-nothing.
+//
+// Two classes deep, so it beats the single-class rule above regardless of
+// source order — `customify_get_svg_icon()` always emits both classes together
+// on a filled entry.
+svg.customify-svg-icon.customify-svg-icon--filled {
+	fill: currentColor;
+	stroke: none;
+}

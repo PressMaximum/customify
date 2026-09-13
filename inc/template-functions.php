@@ -947,6 +947,24 @@ if ( ! function_exists( 'customify_sanitize_svg' ) ) {
 			return '';
 		}
 
+		/**
+		 * Filter the maximum accepted length of a pasted SVG, in bytes.
+		 *
+		 * An icon is a ~200 byte - 4KB glyph. Anything past 20KB is either a
+		 * traced photo (which would bloat every page it renders on) or an
+		 * attempt to make wp_kses do pathological work; reject it outright
+		 * rather than spend the CPU. The cap is applied BEFORE kses so a
+		 * hostile payload never reaches the parser.
+		 *
+		 * @since 0.4.25
+		 *
+		 * @param int $max_bytes Maximum length in bytes. Default 20480.
+		 */
+		$max_bytes = (int) apply_filters( 'customify/icon/svg_max_bytes', 20480 );
+		if ( $max_bytes > 0 && strlen( $raw ) > $max_bytes ) {
+			return '';
+		}
+
 		// Iconify / Tabler / Simple Icons exports prefix each SVG with an
 		// HTML comment carrying the icon's tags, unicode code point or
 		// version — informational only, not part of the rendered graphic.
@@ -999,14 +1017,26 @@ if ( ! function_exists( 'customify_sanitize_svg' ) ) {
 		);
 
 		$allowed = array(
+			// NOTE: `width` / `height` are deliberately absent here, so kses
+			// drops them from the `<svg>` element. A paste-in from Figma or
+			// an icon site routinely opens `<svg width="64" height="64">`,
+			// and those attributes beat the theme's CSS box — the icon would
+			// render 64x64 regardless of the section's Icon Size slider,
+			// blowing out the header row. Stripping them at the root leaves
+			// sizing entirely to CSS (see src/frontend/scss/base/_icons.scss),
+			// which is the same contract the preset library follows.
+			//
+			// `viewBox` is kept: without it the stripped SVG would have no
+			// intrinsic coordinate system left and would not scale at all.
+			// Geometry attributes on CHILDREN (`rect`, `use`, `mask`, …)
+			// keep their own width/height below — there they describe the
+			// drawing, not the icon's rendered size.
 			'svg'            => array_merge(
 				$common_attrs,
 				array(
 					'xmlns'               => true,
 					'xmlns:xlink'         => true,
 					'viewbox'             => true,
-					'width'               => true,
-					'height'              => true,
 					'preserveaspectratio' => true,
 					'version'             => true,
 				)
@@ -1048,12 +1078,20 @@ if ( ! function_exists( 'customify_render_icon' ) ) {
 	/**
 	 * Render an icon-control value as ready-to-emit HTML.
 	 *
-	 * The value shape is `{ type: string, icon: string, svg: string }`. When
-	 * `type === 'custom-svg'` the sanitised svg blob is returned as-is (safe
-	 * to echo directly, do NOT esc_html). Otherwise the traditional font-icon
-	 * `<i class>` markup is returned, so upgrading a call site from the old
-	 * `<i class>` inline snippet to this helper is a drop-in replacement for
-	 * every saved value shipped before the SVG feature landed.
+	 * The value shape is `{ type: string, icon: string, svg: string }`:
+	 *
+	 *   • `type` = a font library id (`font-awesome`, `font-awesome-v6`, …):
+	 *     `icon` is the CSS class → `<i class="…">`. Unchanged since day one,
+	 *     so upgrading a call site from an inline `<i class>` snippet to this
+	 *     helper is a drop-in replacement for every value saved before the
+	 *     SVG feature landed.
+	 *   • `type === 'svg'`: `icon` is a key into the preset library
+	 *     (`customify_get_svg_icons()`) → theme-authored inline `<svg>`.
+	 *   • `type === 'custom-svg'`: `svg` holds the user-pasted blob, returned
+	 *     sanitised (safe to echo directly, do NOT esc_html).
+	 *
+	 * Anything else — an unknown type, an unknown preset key, an empty value —
+	 * returns '' and renders nothing. No notices.
 	 *
 	 * @param array|string $value    Icon value from Customify()->get_setting()
 	 *                               or a repeater row.
@@ -1081,23 +1119,90 @@ if ( ! function_exists( 'customify_render_icon' ) ) {
 		);
 
 		$title_attr = '' !== $args['title'] ? ' title="' . esc_attr( $args['title'] ) . '"' : '';
+		$html       = '';
 
 		if ( 'custom-svg' === $value['type'] ) {
 			$svg = customify_sanitize_svg( (string) $value['svg'] );
-			if ( '' === $svg ) {
-				return '';
+			if ( '' !== $svg ) {
+				$wrapper_class = trim( 'customify-icon customify-icon--svg ' . $args['wrapper_class'] );
+
+				$html = '<span class="' . esc_attr( $wrapper_class ) . '"' . $title_attr . '>' . $svg . '</span>';
 			}
-			$wrapper_class = trim( 'customify-icon customify-icon--svg ' . $args['wrapper_class'] );
+		} elseif ( 'svg' === $value['type'] ) {
+			// Preset library icon. The markup is theme-authored (see
+			// inc/icons-svg.php), so it does NOT go through the user-input
+			// sanitiser; an unknown key returns '' and renders nothing.
+			// The wrapper carries the same classes a custom SVG gets, so
+			// every `.customify-icon--svg` sizing/colour rule already
+			// shipped applies to presets with no extra CSS.
+			$svg = customify_get_svg_icon( (string) $value['icon'] );
+			if ( '' !== $svg ) {
+				$wrapper_class = trim( 'customify-icon customify-icon--svg customify-icon--preset ' . $args['wrapper_class'] );
 
-			return '<span class="' . esc_attr( $wrapper_class ) . '"' . $title_attr . '>' . $svg . '</span>';
+				$html = '<span class="' . esc_attr( $wrapper_class ) . '"' . $title_attr . '>' . $svg . '</span>';
+			}
+		} elseif ( '' !== $value['icon'] ) {
+			$class = trim( $value['icon'] . ' ' . $args['wrapper_class'] );
+
+			$html = '<i class="' . esc_attr( $class ) . '"' . $title_attr . '></i>';
 		}
 
-		if ( '' === $value['icon'] ) {
-			return '';
-		}
+		/**
+		 * Filter the rendered icon HTML.
+		 *
+		 * Fires for every icon-control value the theme renders, including the
+		 * empty-string result for an unset or unresolvable icon — return
+		 * markup here to supply a fallback. Whatever is returned is echoed
+		 * UNESCAPED by the call sites, so a callback that injects user input
+		 * is responsible for its own sanitising.
+		 *
+		 * @since 0.4.25
+		 *
+		 * @param string $html  Rendered markup, or '' when nothing renders.
+		 * @param array  $value Normalised icon value: `{ type, icon, svg }`.
+		 * @param array  $args  Render args: `{ wrapper_class, title }`.
+		 */
+		return (string) apply_filters( 'customify/icon/html', $html, $value, $args );
+	}
+}
 
-		$class = trim( $value['icon'] . ' ' . $args['wrapper_class'] );
+if ( ! function_exists( 'customify_get_icon_html' ) ) {
+	/**
+	 * Alias of {@see customify_render_icon()}.
+	 *
+	 * `customify_render_icon()` is the original name and stays the canonical
+	 * implementation (it is already called from Pro-facing code paths and must
+	 * never change signature). This alias exists so the icon API reads as the
+	 * usual WordPress get_/echo pair alongside `customify_icon_html()`.
+	 *
+	 * @since 0.4.25
+	 *
+	 * @param array|string $value Icon value `{ type, icon, svg }`.
+	 * @param array        $args  Optional. `wrapper_class`, `title`.
+	 *
+	 * @return string HTML, or '' when there is nothing to render.
+	 */
+	function customify_get_icon_html( $value, $args = array() ) {
+		return customify_render_icon( $value, $args );
+	}
+}
 
-		return '<i class="' . esc_attr( $class ) . '"' . $title_attr . '></i>';
+if ( ! function_exists( 'customify_icon_html' ) ) {
+	/**
+	 * Echo variant of {@see customify_get_icon_html()}.
+	 *
+	 * The markup is already sanitised (custom SVG) or theme-authored (preset
+	 * SVG / font class), so it is echoed unescaped on purpose — escaping it
+	 * would turn an inline `<svg>` into visible angle brackets.
+	 *
+	 * @since 0.4.25
+	 *
+	 * @param array|string $value Icon value `{ type, icon, svg }`.
+	 * @param array        $args  Optional. `wrapper_class`, `title`.
+	 *
+	 * @return void
+	 */
+	function customify_icon_html( $value, $args = array() ) {
+		echo customify_get_icon_html( $value, $args ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }

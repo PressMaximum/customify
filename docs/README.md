@@ -79,6 +79,7 @@ The big picture — request flow + which subsystem owns which path. Deep-dive ea
 | Typography `--customify-typo-*` vars + legacy filter | [`SPEC-typography.md`](SPEC-typography.md) |
 | Header / Footer Builder V2 (storage + render + items) | [`SPEC-header-footer-builder.md`](SPEC-header-footer-builder.md) |
 | Transparent header conditional + Pro takeover | [`SPEC-header-transparent.md`](SPEC-header-transparent.md) |
+| Icon value shapes, preset SVG library, picker | [`SPEC-icons.md`](SPEC-icons.md) |
 | `theme.json`, block editor CSS bridge, patterns | [`SPEC-block-editor.md`](SPEC-block-editor.md) |
 | Top-level admin dashboard SPA | [`SPEC-dashboard.md`](SPEC-dashboard.md) |
 | Theme ↔ Pro contract (23 modules) | [`SPEC-pro-integration.md`](SPEC-pro-integration.md) |
@@ -101,6 +102,7 @@ Each SPEC owns one subsystem end-to-end: storage shape, render pipeline, design 
 | [`SPEC-typography.md`](SPEC-typography.md) | Typography `:root` vars pipeline (`--customify-typo-*`), legacy escape hatch, mixin |
 | [`SPEC-header-footer-builder.md`](SPEC-header-footer-builder.md) | Builder V2 storage, render pipeline, item registration, column settings |
 | [`SPEC-header-transparent.md`](SPEC-header-transparent.md) | Transparent header conditional chain, per-page metabox, Pro handoff |
+| [`SPEC-icons.md`](SPEC-icons.md) | Icon field storage shapes, preset inline-SVG library, sanitiser, picker sidebar |
 | [`SPEC-block-editor.md`](SPEC-block-editor.md) | `theme.json` sync, `Customify_Editor` CSS injection, block styles, patterns |
 | [`SPEC-dashboard.md`](SPEC-dashboard.md) | Top-level admin dashboard SPA, REST, Pro bridge |
 | [`SPEC-pro-integration.md`](SPEC-pro-integration.md) | Theme ↔ Pro contract — class names, options, REST namespaces |

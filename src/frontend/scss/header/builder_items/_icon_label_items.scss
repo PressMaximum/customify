@@ -1,0 +1,162 @@
+/* Header "icon + label" items — one shared default
+--------------------------------------------------------------
+Cart, Search and Pro's User Icon are the same shape of thing: a small glyph
+with an optional word next to it, sitting in a header row. They grew up
+separately, so by 0.4.24 they disagreed on every axis — the cart shouted
+"CART / $543.97" in uppercase at 0.85em/600 while the user item said
+"Account" in sentence case at a different size, and the cart's glyph sat a
+pixel or two below its own label. Side by side in one row it read as three
+plugins, not one theme.
+
+This file is the single definition they now share. The numbers are in
+docs/SPEC-icons.md §9.2 as a table, because Customify Pro has to mirror them
+exactly for its own builder items.
+
+GATING — everything here is scoped under `.customify-header-items-v2`, a body
+class emitted only for sites that first installed the theme at 0.4.25+
+(inc/element-classes.php → customify_is_fresh_install_since). Restyling the
+cart label on 30,000 live shops that never asked for it is precisely what
+AGENTS.md §4.1 exists to prevent, so existing sites keep their uppercase,
+per-item styling and only new installs get the unified look.
+
+To promote this to the global default later, delete the wrapper selector —
+every declaration inside is written to stand on its own.
+*/
+
+.customify-header-items-v2 {
+	// THE header icon size. Every icon+label item resolves its glyph size
+	// from this one token, so tuning the whole row is a one-line change
+	// here rather than an edit per item partial.
+	//
+	// Declared on the v2 scope (the body class) and read through
+	// `var(--customify-header-icon-size, 18px)` at each use site, which is
+	// what keeps legacy sites safe: a site without the body class never
+	// sees the token, falls back to 18px, and renders exactly what it
+	// rendered before the token existed.
+	//
+	// Read by:
+	//   • .search-icon svg          — header/builder_items/_search.scss
+	//   • --customify-cart-icon-size — compatibility/wc/_wc-cart.scss
+	//
+	// Both read it at their ORIGINAL selector specificity, so the per-item
+	// Icon Size sliders still win: the token sets the default, never the
+	// override. Do not re-declare the size under this scope at higher
+	// specificity — that would outrank the sliders' generated CSS.
+	--customify-header-icon-size: 20px;
+
+	// Selector list rather than a shared class, because the markup classes
+	// are public API (AGENTS.md §4.4): adding a new class to the render
+	// output of an existing item is a change child themes and page builders
+	// can trip over, while matching the classes that are already there is
+	// invisible to them.
+	.item--wc_cart .cart-item-link,
+	.item--search_icon .search-icon,
+	.item--search_box .search-icon,
+	.menu-mobile-toggle {
+		// Flex so the glyph and the word share one optical centre line
+		// whatever their individual heights are. `inline-flex` (not `flex`)
+		// keeps the item shrink-to-fit inside the builder column, so the
+		// hit area doesn't stretch across the whole cell.
+		display: inline-flex;
+		align-items: center;
+		// Owns the space between glyph and label, replacing the old
+		// `> span { margin: 0 2px }` pattern. `gap` applies between flex
+		// items only, so it produces no stray edge margin when the label
+		// or the icon is switched off, and it needs no `:first-child` /
+		// `:last-child` unpicking when Icon Position flips before/after.
+		gap: 8px;
+
+		// `line-height: 0` is set on `.search-icon` to collapse the inline
+		// box around a bare glyph. With a label present that would crush
+		// the text, so restore a real line box here.
+		line-height: 1.2;
+
+		font-size: 0.875em; // the theme's `.text-small` token
+		font-weight: 500;
+		letter-spacing: 0;
+		// Beats the `text-uppercase` class that Customify_Builder_Item_WC_Cart
+		// prints in the markup. The class stays on the element — removing it
+		// would be a public-selector change — but it no longer decides the
+		// casing of a header label.
+		text-transform: none;
+
+		// The old per-span margins are subsumed by `gap`.
+		> span {
+			margin: 0;
+		}
+	}
+
+	// The Menu Icon's label carries its own uppercase + size from
+	// builder_items/_nav_icon.scss (`.nav-icon--label`). Inherit from the
+	// button instead, so it matches the cart and search labels exactly.
+	// `.nav-icon--label` is (0,1,0); this is (0,2,0) and wins.
+	.nav-icon--label {
+		text-transform: none;
+		font-size: inherit;
+	}
+
+	// The button's own baseline: `.menu-mobile-toggle` ships a 2.6em
+	// min-height and 2.5em line-height as part of its button reset, which
+	// makes it noticeably taller than the cart and search items sitting
+	// beside it in the same row.
+	.menu-mobile-toggle {
+		min-height: 0;
+		line-height: 1.2;
+	}
+
+	// ---------------------------------------------------------------- colour
+	// The cart glyph must be the same colour as its own label, and as the
+	// Search and Pro User glyphs beside it.
+	//
+	// base/_skins.scss deliberately paints it in the HOVER colour instead —
+	// `.light-mode .cart-item-link .cart-icon { color: black(0.8) }` while the
+	// link itself is `black(0.55)` (dark mode: 0.99 against 0.79). That was a
+	// design choice back when the cart was the only icon+label item in the
+	// row; with Search and User next to it, it just reads as a darker cart.
+	//
+	// `inherit` rather than re-stating a colour, so all four states keep
+	// working for free: base and `:hover` both cascade from `.cart-item-link`,
+	// which the skins already colour, and any palette/Customizer colour a site
+	// sets on the link flows straight through.
+	//
+	// The skin rules are `(0,3,0)`; prefixing with the v2 body class makes
+	// these `(0,4,0)`, which is the minimum that wins. The `.header-menu-sidebar`
+	// pair covers the same item inside the mobile off-canvas panel.
+	//
+	// Cart → Icon Styling (Advanced Styling) is unaffected: it generates
+	// `… .cart-icon i, … .cart-icon svg { color: … }`, targeting the glyph
+	// element itself, and an explicit colour on the child always beats
+	// `inherit` on its parent.
+	.light-mode .cart-item-link .cart-icon,
+	.dark-mode .cart-item-link .cart-icon,
+	.header-menu-sidebar.light-mode .cart-icon,
+	.header-menu-sidebar.dark-mode .cart-icon {
+		color: inherit;
+	}
+
+	// Icon slot: no line box of its own, so the glyph centres on the flex
+	// cross-axis instead of on a text baseline it doesn't share.
+	.item--wc_cart .cart-icon,
+	.item--search_icon .search-icon > svg,
+	.item--search_box .search-icon > svg {
+		line-height: 0;
+	}
+
+	.item--wc_cart .cart-icon {
+		// `inline-flex` replaces `inline-block` so the icon box hugs the
+		// glyph exactly — an inline-block leaves descender space under the
+		// SVG, which is what pushed the cart glyph below the label's centre.
+		// `position: relative` is preserved: `.cart-qty` is absolutely
+		// positioned against this box and must keep its containing block.
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+
+		// The font-icon variant carries a `top: -1px` nudge that exists to
+		// fake optical centring inside that inline-block. Flex centring does
+		// it properly, so the nudge would now push the glyph UP off centre.
+		i {
+			top: 0;
+		}
+	}
+}

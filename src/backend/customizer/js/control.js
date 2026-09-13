@@ -1286,7 +1286,13 @@ import { attachPopoverChrome } from './popover-chrome';
 					$(this).remove();
 				}
 			});
+			// Idempotent: refreshFromSetting() re-runs initField() after an
+			// external setting write, which lands here again with the same
+			// container. The heading sits outside the emptied fields area, so
+			// without this guard every external set stacked another switcher
+			// onto it (seen as 2-4 device rows on nav_icon_size).
 			$(".customify-field-heading", $el)
+				.not(".customify-devices-added")
 				.append(clone)
 				.addClass("customify-devices-added");
 		},
@@ -3066,8 +3072,19 @@ import { attachPopoverChrome } from './popover-chrome';
 	var IconPicker = {
 		pickingEl: null,
 		listIcons: null,
+		// How many Suggested cells the current field rendered; 0 keeps the
+		// row hidden. Set by renderSuggested(), read by applyType().
+		suggestedCount: 0,
+		// `ajaxLoad()` runs from init() AND again from the first pick when the
+		// list hasn't arrived yet, so render() could fire twice and duplicate
+		// every <option> + every icon <ul> in the browser.
+		rendered: false,
 		render: function (list_icons) {
 			var that = this;
+			if (that.rendered) {
+				return;
+			}
+			that.rendered = true;
 			if (!_.isUndefined(list_icons) && !_.isEmpty(list_icons)) {
 				_.each(list_icons, function (icon_config, font_type) {
 					$("#customify--sidebar-icon-type").append(
@@ -3081,6 +3098,12 @@ import { attachPopoverChrome } from './popover-chrome';
 					that.addIcons(icon_config, font_type);
 				});
 			}
+			// Theme-shipped inline SVG presets sit between the font libraries
+			// and the Custom SVG escape hatch: they ARE a library (browsable,
+			// searchable grid) but they're the modern default we want people
+			// to find before they go hunting for a FontAwesome glyph.
+			that.addSvgPresets();
+
 			// "Custom SVG" sits at the BOTTOM of the type dropdown — below
 			// "All Icon Types" and every library option that just rendered.
 			// A dedicated option in the middle would compete with the library
@@ -3095,6 +3118,121 @@ import { attachPopoverChrome } from './popover-chrome';
 					' <option value="custom-svg">' + svgLabel + "</option>"
 				);
 			}
+		},
+
+		// The preset map, or {} when PHP shipped nothing (Pro filtered the
+		// library empty, or an old bundle is running against new PHP).
+		svgPresets: function () {
+			return typeof Customify_Control_Args !== "undefined" &&
+				Customify_Control_Args.svg_icons
+				? Customify_Control_Args.svg_icons
+				: {};
+		},
+
+		// Per-field shortlist. Reads the `presets` control arg republished on
+		// the picker element as `data-presets`, drops keys the library doesn't
+		// know (a Pro icon whose plugin was deactivated) and renders the rest
+		// as a one-click row above the search. A field without the arg gets
+		// the row hidden — the picker looks exactly as it did before.
+		renderSuggested: function ($picker) {
+			var that = this;
+			var $box = $("#customify--icon-suggested");
+			var $list = $box.find(".customify--icon-suggested-list");
+
+			$list.empty();
+
+			var raw = $picker ? String($picker.attr("data-presets") || "") : "";
+			var keys = raw
+				? raw.split(",").map(function (k) {
+					return $.trim(k);
+				})
+				: [];
+
+			var library = that.svgPresets();
+			var selectedType = $picker
+				? $(".customify--input-icon-type", $picker).val() || ""
+				: "";
+			var selectedIcon = $picker
+				? $(".customify--input-icon-name", $picker).val() || ""
+				: "";
+			var rendered = 0;
+
+			_.each(keys, function (key) {
+				if (!key || !library[key] || !library[key].svg) {
+					return;
+				}
+				rendered++;
+				var isActive = "svg" === selectedType && selectedIcon === key;
+				$list.append(
+					'<li class="customify--icon-suggested-item' +
+					(isActive ? " is-selected" : "") +
+					'" data-type="svg" data-icon="' +
+					_.escape(key) +
+					'" title="' +
+					_.escape(library[key].label || key) +
+					'"><span class="icon-wrapper">' +
+					library[key].svg +
+					"</span></li>"
+				);
+			});
+
+			// Visibility itself is applyType()'s call — the row is suppressed
+			// along with the browser when the Custom SVG panel takes over the
+			// sidebar. Record the count and let one function own the panes.
+			that.suggestedCount = rendered;
+		},
+
+		// Preset inline-SVG library (PHP: customify_get_svg_icons()). Comes in
+		// through Customify_Control_Args.svg_icons as { key: { label, svg } }
+		// where `svg` is the exact markup the front end will print, so what
+		// the picker shows is what the site renders. Selecting one stores
+		// { type: 'svg', icon: '<key>' } — the markup itself is never saved.
+		addSvgPresets: function () {
+			var presets = this.svgPresets();
+
+			if (_.isEmpty(presets)) {
+				return;
+			}
+
+			var typeLabel =
+				typeof Customify_Control_Args !== "undefined" &&
+					Customify_Control_Args.svg_icons_label
+					? Customify_Control_Args.svg_icons_label
+					: "SVG Icons";
+
+			var $typeSelect = $("#customify--sidebar-icon-type");
+			if (!$typeSelect.find('option[value="svg"]').length) {
+				$typeSelect.append(' <option value="svg">' + typeLabel + "</option>");
+			}
+
+			// `icon-svg` matches the `.icon-<type>` convention changeType()
+			// uses to show one library at a time; `data-icon` carries the
+			// storage key and `data-label` the human name so the search box
+			// matches both ("cart" and "Shopping Bag").
+			var html =
+				'<ul class="customify--list-icons customify--list-svg-icons icon-svg" data-type="svg">';
+
+			_.each(presets, function (item, key) {
+				var label = item && item.label ? String(item.label) : key;
+				var markup = item && item.svg ? String(item.svg) : "";
+				if (!markup) {
+					return;
+				}
+				html +=
+					'<li title="' +
+					_.escape(label) +
+					'" data-type="svg" data-icon="' +
+					_.escape(key) +
+					'" data-label="' +
+					_.escape(label.toLowerCase()) +
+					'"><span class="icon-wrapper">' +
+					markup +
+					"</span></li>";
+			});
+
+			html += "</ul>";
+
+			$("#customify--icon-browser").append(html);
 		},
 
 		addCSS: function (icon_config, font_type) {
@@ -3160,32 +3298,83 @@ import { attachPopoverChrome } from './popover-chrome';
 
 			$("#customify--icon-browser").append(icon_html);
 		},
-		changeType: function () {
-			$document.on("change", "#customify--sidebar-icon-type", function () {
-				var type = $(this).val();
-				var $browser = $("#customify--icon-browser");
-				var $svgPanel = $("#customify--icon-custom-svg");
-				var $search = $("#customify--icon-search").closest(".customify--sidebar-search");
+		// Show exactly ONE pane for the selected type. Called on every
+		// dropdown change and once when the sidebar opens, so the sidebar is
+		// never left in a mixed state (the old bug: the Custom SVG textarea
+		// painted over a still-visible FontAwesome grid because the panel was
+		// absolutely positioned and only the class was toggled).
+		applyType: function (type) {
+			var $browser = $("#customify--icon-browser");
+			var $svgPanel = $("#customify--icon-custom-svg");
+			var $suggested = $("#customify--icon-suggested");
+			var $search = $("#customify--icon-search").closest(
+				".customify--sidebar-search"
+			);
 
-				if (type === "custom-svg") {
-					// Swap browser for the SVG paste panel; search + library
-					// browser make no sense here.
-					$browser.hide();
-					$search.hide();
-					$svgPanel.addClass("is-active").show();
-				} else if (!type || type == "all") {
-					$browser.show();
-					$search.show();
-					$svgPanel.removeClass("is-active").hide();
-					$browser.find(".customify--list-icons").show();
-				} else {
-					$browser.show();
-					$search.show();
-					$svgPanel.removeClass("is-active").hide();
-					$browser.find(".customify--list-icons").hide();
-					$browser.find(".customify--list-icons.icon-" + type).show();
-				}
+			if (type === "custom-svg") {
+				// The paste panel replaces the browser outright: a library
+				// grid, a name search and a preset shortlist are all
+				// meaningless for markup the user types by hand.
+				$browser.hide().find(".customify--list-icons").hide();
+				$search.hide();
+				$suggested.prop("hidden", true);
+				$svgPanel.addClass("is-active").show();
+				return;
+			}
+
+			$svgPanel.removeClass("is-active").hide();
+			$browser.show();
+			$search.show();
+			$suggested.prop("hidden", !this.suggestedCount);
+
+			if (!type || type === "all") {
+				$browser.find(".customify--list-icons").show();
+			} else {
+				$browser.find(".customify--list-icons").hide();
+				$browser.find(".customify--list-icons.icon-" + type).show();
+			}
+
+			// Re-apply whatever is in the search box so switching type
+			// doesn't resurrect icons the user has filtered out.
+			this.filterIcons($("#customify--icon-search").val());
+		},
+
+		changeType: function () {
+			var that = this;
+			$document.on("change", "#customify--sidebar-icon-type", function () {
+				that.applyType($(this).val());
 			});
+		},
+
+		// Name search. FontAwesome cells carry the class in `data-icon`;
+		// preset SVG cells carry the storage key there plus the lowercased
+		// human label in `data-label`, so "bag" and "shopping" both hit.
+		filterIcons: function (term) {
+			var $browser = $("#customify--icon-browser");
+			var v = $.trim(String(term || ""));
+
+			if (!v) {
+				$browser.find("li").show();
+				return;
+			}
+
+			// Attribute selectors can't carry a raw quote or backslash.
+			var safe = v.replace(/["\\]/g, "");
+			if (!safe) {
+				$browser.find("li").show();
+				return;
+			}
+
+			$browser.find("li").hide();
+			$browser
+				.find(
+					'li[data-icon*="' +
+					safe +
+					'"], li[data-label*="' +
+					safe.toLowerCase() +
+					'"]'
+				)
+				.show();
 		},
 		show: function () {
 			var controlWidth = $("#customize-controls").width();
@@ -3261,7 +3450,7 @@ import { attachPopoverChrome } from './popover-chrome';
 				var $svgInput = $("#customify--icon-custom-svg-input");
 
 				if (currentType === "custom-svg") {
-					$typeSelect.val("custom-svg").trigger("change");
+					$typeSelect.val("custom-svg");
 					$svgInput.val(currentSvg);
 					that.updateSvgPreview(currentSvg);
 				} else {
@@ -3269,11 +3458,21 @@ import { attachPopoverChrome } from './popover-chrome';
 					// session left it on 'custom-svg'; otherwise leave the
 					// user's own filter alone.
 					if ($typeSelect.val() === "custom-svg") {
-						$typeSelect.val("all").trigger("change");
+						$typeSelect.val("all");
 					}
 					$svgInput.val("");
 					that.updateSvgPreview("");
 				}
+
+				// Drive the panes from the resolved type directly instead of
+				// relying on a `change` event firing — `.val()` on a <select>
+				// does NOT fire one, so the previous `.trigger("change")` was
+				// the only thing keeping the two panes in sync and any missed
+				// trigger left the paste panel over the icon grid.
+				// Suggested first (it sets the count applyType reads), then
+				// one call decides which panes are visible.
+				that.renderSuggested(that.pickingEl);
+				that.applyType($typeSelect.val());
 
 				that.show();
 			};
@@ -3294,23 +3493,17 @@ import { attachPopoverChrome } from './popover-chrome';
 				}
 			);
 
-			$document.on("click", "#customify--icon-browser li", function (e) {
-				e.preventDefault();
-				var li = $(this);
-				var icon_preview = li.find("i").clone();
-				var icon = li.attr("data-icon") || "";
-				var type = li.attr("data-type") || "";
-				$(".customify--input-icon-type", that.pickingEl).val(type);
-				$(".customify--input-icon-svg", that.pickingEl).val("");
-				$(".customify--input-icon-name", that.pickingEl)
-					.val(icon)
-					.trigger("change");
-				$(".customify--icon-preview-icon", that.pickingEl).html(
-					icon_preview
-				);
-
-				that.close();
-			});
+			// One cell handler for the library grid AND the Suggested row —
+			// both render `<li data-type data-icon>` with the glyph inside
+			// `.icon-wrapper`, so the same code stores the value either way.
+			$document.on(
+				"click",
+				"#customify--icon-browser li, .customify--icon-suggested-item",
+				function (e) {
+					e.preventDefault();
+					that.selectIcon($(this));
+				}
+			);
 
 			// Custom SVG — live preview while typing + Apply / Clear.
 			$document.on("input", "#customify--icon-custom-svg-input", function () {
@@ -3342,6 +3535,10 @@ import { attachPopoverChrome } from './popover-chrome';
 						.val(svgLabelApply)
 						.trigger("change");
 					$(".customify--icon-preview-icon", that.pickingEl).html(svg);
+					// A hand-written SVG is not one of the suggestions.
+					$(".customify--icon-suggested-item").removeClass(
+						"is-selected"
+					);
 					that.close();
 				}
 			);
@@ -3374,8 +3571,45 @@ import { attachPopoverChrome } from './popover-chrome';
 						.val("")
 						.trigger("change");
 					$(".customify--icon-preview-icon", that.pickingEl).html("");
+					$(".customify--icon-suggested-item").removeClass(
+						"is-selected"
+					);
 				}
 			);
+		},
+
+		// Commit one picker cell to the field being edited.
+		//
+		// `data-icon` is the STORED value: a CSS class for a font library, a
+		// preset library key for `type="svg"`. The `svg` input is blanked
+		// either way — preset markup is looked up from the library at render
+		// time, never persisted, so a later icon redraw reaches every site
+		// that picked it.
+		selectIcon: function ($li) {
+			if (!this.pickingEl) {
+				return;
+			}
+
+			var icon = $li.attr("data-icon") || "";
+			var type = $li.attr("data-type") || "";
+			var $glyph = $li.find(".icon-wrapper").children();
+			var preview = $glyph.length ? $glyph.clone() : $li.find("i").clone();
+
+			$(".customify--input-icon-type", this.pickingEl).val(type);
+			$(".customify--input-icon-svg", this.pickingEl).val("");
+			$(".customify--input-icon-name", this.pickingEl)
+				.val(icon)
+				.trigger("change");
+			$(".customify--icon-preview-icon", this.pickingEl).html(preview);
+
+			$(".customify--icon-suggested-item").removeClass("is-selected");
+			$(
+				'.customify--icon-suggested-item[data-icon="' +
+				icon.replace(/["\\]/g, "") +
+				'"]'
+			).addClass("is-selected");
+
+			this.close();
 		},
 
 		// Client-side SVG sanitize. Strips <script> and inline event handlers
@@ -3401,6 +3635,18 @@ import { attachPopoverChrome } from './popover-chrome';
 			raw = raw.replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, "");
 			// javascript: URLs on href / xlink:href.
 			raw = raw.replace(/(href|xlink:href)\s*=\s*("|')\s*javascript:[^"']*\2/gi, "$1=$2#$2");
+			// Drop width/height from the ROOT <svg> only — mirrors the kses
+			// allowlist server-side. A paste-in that opens
+			// `<svg width="64" height="64">` would otherwise render 64x64
+			// whatever the section's Icon Size says. Children keep theirs
+			// (a <rect>'s width/height is geometry, not display size), which
+			// is why this rewrites the opening tag rather than the blob.
+			raw = raw.replace(/^<svg\b[^>]*>/i, function (tag) {
+				return tag.replace(
+					/\s(width|height)\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi,
+					""
+				);
+			});
 			return raw;
 		},
 
@@ -3436,18 +3682,11 @@ import { attachPopoverChrome } from './popover-chrome';
 			var that = this;
 			that.ajaxLoad();
 			that.picker();
-			// Search icon
-			$document.on("keyup", "#customify--icon-search", function (e) {
-				var v = $(this).val();
-				v = v.trim();
-				if (v) {
-					$("#customify--icon-browser li").hide();
-					$(
-						"#customify--icon-browser li[data-icon*='" + v + "']"
-					).show();
-				} else {
-					$("#customify--icon-browser li").show();
-				}
+			// Search icon. `input` rather than `keyup` so a paste or a
+			// click on the field's native clear button filters too; the
+			// SVG preset grid matches on key AND human label.
+			$document.on("input keyup", "#customify--icon-search", function () {
+				that.filterIcons($(this).val());
 			});
 		}
 	};
