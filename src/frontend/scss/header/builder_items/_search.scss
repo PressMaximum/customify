@@ -109,6 +109,10 @@
 		display: block;
 		width: 100%;
 		height: 2.4em;
+		color: var(--customify-header-row-text-color, #{$color_text});
+		&::placeholder {
+			color: var(--customify-header-row-text-color, #{$color_text});
+		}
 		// Modal/popover search has NO .search-form-fields wrapper, so the field
 		// itself carries the outlined border + focus ring. Same softened look as
 		// the wrapper above (faint hairline + light inset shadow) — lighter than
@@ -131,14 +135,14 @@
 		box-shadow: none;
 		margin-left: -40px;
 		background: transparent;
-		color: $color_meta;
+		color: var(--customify-header-row-text-color, #{$color_meta});
 		line-height: 0px;
 		padding: 0.6em 0.7em;
 		min-height: auto;
 		&:hover {
 			box-shadow: none;
 			background-color: transparent;
-			color: $color_text;
+			color: var(--customify-header-row-text-color, #{$color_text});
 		}
 		svg {
 			width: 18px;

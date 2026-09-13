@@ -607,11 +607,11 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         var  code = {};
         _.each( format, function( string, pos ){
             var v = value[ pos ];
-            if ( v && string ) {
-                if ( string ) {
-                    v = v + value['unit'];
-                    code[ pos ] = that.str_value( v, string );
-                }
+            // Numeric zero is a valid ruler value. Dropping it leaves the
+            // browser's default border width active when border-style is set.
+            if ( ! _.isUndefined( v ) && ! _.isNull( v ) && '' !== v && string ) {
+                v = v + value['unit'];
+                code[ pos ] = that.str_value( v, string );
             }
         } );
 
@@ -871,7 +871,9 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
                         newfs[f.name]['selector'] = null;
                     }
                 } else {
-                    if ( _.isUndefined( fields[ f.name ] ) || fields[ f.name ] ) {
+                    var enabledByDefault = _.isUndefined( f.enabled_by_default ) || f.enabled_by_default;
+                    var enabled = ! _.isUndefined( fields[ f.name ] ) ? fields[ f.name ] : enabledByDefault;
+                    if ( enabled ) {
                         newfs[ f.name ] = f;
                         if ( ! _.isUndefined( selectors[ type+'_'+f.name ] ) ) {
                             newfs[ f.name ]['selector'] = selectors[ type+'_'+f.name ];
@@ -916,13 +918,13 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
 
         if ( !_.isUndefined( field.fields ) && _.isObject(field.fields ) ) {
             if ( ! _.isUndefined( field.fields.tabs  ) ) {
-                tabs = field.tabs;
+                tabs = field.fields.tabs;
             }
             if ( ! _.isUndefined( field.fields.normal_fields  ) ) {
-                normal_fields =field.normal_fields;
+                normal_fields = field.fields.normal_fields;
             }
             if ( ! _.isUndefined( field.fields.hover_fields ) ) {
-                hover_fields = field.hover_fields;
+                hover_fields = field.fields.hover_fields;
             }
         }
 

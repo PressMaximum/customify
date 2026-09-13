@@ -185,6 +185,7 @@ class Customify_Builder_Item_Search_Box {
 					'normal'            => "{$selector} .search-form-fields",
 					'hover'             => "{$selector} .search-form-fields",
 					'normal_text_color' => "{$selector} .search-form-fields,
+											{$selector} .search-form-fields .search-field,
 											{$selector} .search-form-fields input.search-field::placeholder,
 											.dark-mode {$selector} .search-form-fields .search-field,
 											.dark-mode {$selector} .search-form-fields .search-field::placeholder,

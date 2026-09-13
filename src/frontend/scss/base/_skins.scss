@@ -2,7 +2,7 @@
 
 .dark-mode {
 	.header--row & {
-		color: $light_color;
+		color: var(--customify-header-row-text-color, #{$light_color});
 		background: $dark_bg;
 	}
 
@@ -16,13 +16,13 @@
 					> a {
 						&:hover,
 						&:focus {
-							color: $light_color_link_hover;
+							color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 						}
 					}
 					&.current-menu-item,
 					&.current-menu-ancestor {
 						> a {
-							color: $light_color_link_hover;
+							color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 						}
 					}
 				}
@@ -33,7 +33,7 @@
 	// Site identity
 	.site-title,
 	.site-title a {
-		color: $light_color_link_hover;
+		color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 	}
 
 	.customify-builder-social-icons.color-custom li a,
@@ -41,19 +41,19 @@
 	.menu-mobile-toggle,
 	.nav-menu > li > a,
 	.item--html a {
-		color: $light_color_link;
+		color: var(--customify-header-row-text-color, #{$light_color_link});
 		&:hover {
-			color: $light_color_link_hover;
+			color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 		}
 	}
 
 	.cart-item-link {
-		color: $light_color_link;
+		color: var(--customify-header-row-text-color, #{$light_color_link});
 		.cart-icon {
-			color: $light_color_link_hover;
+			color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 		}
 		&:hover {
-			color: $light_color_link_hover;
+			color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 		}
 	}
 
@@ -62,19 +62,19 @@
 		.search-form-fields {
 			background: white(0.03);
 			border-color: $light_color_border;
-			color: $light_color_link;
+			color: var(--customify-header-row-text-color, #{$light_color_link});
 			
 			.search-field{
-				color: $light_color_link;
+				color: var(--customify-header-row-text-color, #{$light_color_link});
 				&::placeholder {
-					color: $light_color_link;
+					color: var(--customify-header-row-text-color, #{$light_color_link});
 				}
 			}
 		}
 		.search-submit {
-			color: $light_color_link;
+			color: var(--customify-header-row-text-color, #{$light_color_link});
 			&:hover {
-				color: $light_color_link_hover;
+				color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 			}
 		}
 	}
@@ -101,7 +101,7 @@
 
 .light-mode {
 	.header--row & {
-		color: $dark_color;
+		color: var(--customify-header-row-text-color, #{$dark_color});
 		background: $light_bg;
 	}
 
@@ -115,13 +115,13 @@
 					> a {
 						&:hover,
 						&:focus {
-							color: $dark_color_link_hover;
+							color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
 						}
 					}
 					&.current-menu-item,
 					&.current-menu-ancestor {
 						> a {
-							color: $dark_color_link_hover;
+							color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
 						}
 					}
 				}
@@ -132,7 +132,7 @@
 	// Site identity
 	.site-title,
 	.site-title a {
-		color: $dark_color_link_hover;
+		color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
 	}
 
 	.customify-builder-social-icons.color-custom li a,
@@ -140,19 +140,19 @@
 	.menu-mobile-toggle,
 	.item--html a,
 	.nav-menu > li > a {
-		color: $dark_color_link;
+		color: var(--customify-header-row-text-color, #{$dark_color_link});
 		&:hover {
-			color: $dark_color_link_hover;
+			color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
 		}
 	}
 
 	.cart-item-link {
-		color: $dark_color_link;
+		color: var(--customify-header-row-text-color, #{$dark_color_link});
 		.cart-icon {
-			color: $dark_color_link_hover;
+			color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
 		}
 		&:hover {
-			color: $dark_color_link_hover;
+			color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
 		}
 	}
 }

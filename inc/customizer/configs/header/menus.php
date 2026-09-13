@@ -32,9 +32,10 @@ class Customify_Builder_Item_Primary_Menu {
 	}
 
 	function customize() {
-		$section = $this->section;
-		$fn      = array( $this, 'render' );
-		$config  = array(
+		$section         = $this->section;
+		$fn              = array( $this, 'render' );
+		$mobile_selector = '#header-menu-sidebar .builder-item-sidebar .primary-menu-sidebar .primary-menu-ul';
+		$config          = array(
 			array(
 				'name'            => $section,
 				'type'            => 'section',
@@ -155,9 +156,9 @@ class Customify_Builder_Item_Primary_Menu {
 				'title'       => __( 'Top Menu Items Styling', 'customify' ),
 				'description' => __( 'Styling for top level menu items', 'customify' ),
 				'selector'    => array(
-					'normal'        => "{$this->selector} > li > a",
-					'normal_margin' => "{$this->selector} > li",
-					'hover'         => ".header--row:not(.header--transparent) {$this->selector} > li > a:hover, .header--row:not(.header--transparent) {$this->selector} > li.current-menu-item > a, .header--row:not(.header--transparent) {$this->selector} > li.current-menu-ancestor > a, .header--row:not(.header--transparent) {$this->selector} > li.current-menu-parent > a",
+					'normal'        => "{$this->selector} > li > a, {$mobile_selector} > li > a",
+					'normal_margin' => "{$this->selector} > li, {$mobile_selector} > li",
+					'hover'         => ".header--row:not(.header--transparent) {$this->selector} > li > a:hover, .header--row:not(.header--transparent) {$this->selector} > li.current-menu-item > a, .header--row:not(.header--transparent) {$this->selector} > li.current-menu-ancestor > a, .header--row:not(.header--transparent) {$this->selector} > li.current-menu-parent > a, {$mobile_selector} > li > a:hover, {$mobile_selector} > li.current-menu-item > a, {$mobile_selector} > li.current-menu-ancestor > a, {$mobile_selector} > li.current-menu-parent > a",
 				),
 				'css_format'  => 'styling',
 				'fields'      => array(

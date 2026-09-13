@@ -661,5 +661,3 @@ function customify_footer_sidebar_layout_settings( $item_id, $layout_section ) {
 	return array();
 }
 
-
-
