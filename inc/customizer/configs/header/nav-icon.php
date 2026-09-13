@@ -62,11 +62,20 @@ class Customify_Builder_Item_Nav_Icon {
 				'render_callback' => $fn,
 				'title'           => __( 'Label display', 'customify' ),
 				'device_settings' => true,
-				'default'         => array(
-					'desktop' => 1,
-					'tablet'  => 0,
-					'mobile'  => 0,
-				),
+				// Label off by default on fresh installs (>= 0.4.25); existing
+				// sites that never saved this keep showing the label
+				// (AGENTS.md §4.1 — defaults must not change silently).
+				'default'         => ( function_exists( 'customify_is_fresh_install_since' ) && customify_is_fresh_install_since( '0.4.25' ) )
+					? array(
+						'desktop' => 0,
+						'tablet'  => 0,
+						'mobile'  => 0,
+					)
+					: array(
+						'desktop' => 1,
+						'tablet'  => 0,
+						'mobile'  => 0,
+					),
 				'checkbox_label'  => __( 'Show Label', 'customify' ),
 			),
 
