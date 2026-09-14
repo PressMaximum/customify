@@ -683,6 +683,14 @@ class  Customify_Customizer {
 					'css_format' => 'color: {{value}}; text-decoration-color: {{value}};',
 				),
 				array(
+					'name'               => 'row_text_color',
+					'type'               => 'color',
+					'label'              => __( 'Text Color', 'customify' ),
+					'description'        => __( 'Default text and icon color for this header row. Item, Transparent Header, and Sticky Header colors can override it.', 'customify' ),
+					'css_format'         => '--customify-header-row-text-color: {{value}}; color: {{value}}; text-decoration-color: {{value}};',
+					'enabled_by_default' => false,
+				),
+				array(
 					'name'       => 'link_color',
 					'type'       => 'color',
 					'label'      => __( 'Link Color', 'customify' ),

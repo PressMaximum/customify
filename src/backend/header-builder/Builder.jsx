@@ -987,13 +987,33 @@ function BuilderRow( { rowId, rowLabel, cols, device, allItems, onMove, onOpenSe
 	// Derive active columns and grid proportions from col_layout (always use desktop for builder view).
 	let activeCols = COLS;
 	let colsStyle   = {};
+	let colSpans    = [];
 	if ( colLayoutValue ) {
 		// count is global; fr is per-device (fall back to desktop).
 		const count = Math.max( 1, Math.min( 5, colLayoutValue.count || colLayoutValue.desktop?.count || 3 ) );
 		const d     = colLayoutValue.desktop || {};
-		const fr    = Array.isArray( d.fr ) && d.fr.length === count ? d.fr : Array( count ).fill( 1 );
+		const rawFr = Array.isArray( d.fr ) ? d.fr : [];
+		const mixedRows = count === 5 && [ '2-3', '3-2', '2-2-1' ].includes( d.layout )
+			? d.layout
+			: '';
+		// Match the frontend renderer: one track means stacked; fewer tracks
+		// that divide the column count form repeated rows (for example, two
+		// tracks with four columns render as a 2×2 layout).
+		const isIntentional = rawFr.length === 1
+			|| rawFr.length === count
+			|| ( rawFr.length > 1 && rawFr.length < count && count % rawFr.length === 0 );
+		const fr = isIntentional ? rawFr : Array( count ).fill( 1 );
 		activeCols  = ALL_COLS.slice( 0, count );
-		colsStyle   = { display: 'grid', gridTemplateColumns: fr.map( ( v ) => `${ v }fr` ).join( ' ' ) };
+		if ( mixedRows ) {
+			colsStyle = { display: 'grid', gridTemplateColumns: 'repeat(6, minmax(0, 1fr))' };
+			colSpans  = mixedRows === '2-3'
+				? [ 3, 3, 2, 2, 2 ]
+				: mixedRows === '3-2'
+					? [ 2, 2, 2, 2, 2 ]
+					: [ 3, 3, 3, 3, 3 ];
+		} else {
+			colsStyle = { display: 'grid', gridTemplateColumns: fr.map( ( v ) => `${ v }fr` ).join( ' ' ) };
+		}
 	}
 
 	return (
@@ -1025,10 +1045,11 @@ function BuilderRow( { rowId, rowLabel, cols, device, allItems, onMove, onOpenSe
 				<Icon icon={ settings } />
 			</button>
 			<div className="customify-hb__cols" style={ colsStyle }>
-				{ activeCols.map( ( colId ) => (
+				{ activeCols.map( ( colId, index ) => (
 					<DropZone
 						key={ colId }
 						colId={ colId }
+						style={ colSpans[ index ] ? { gridColumn: `span ${ colSpans[ index ] }` } : undefined }
 						rowId={ rowId }
 						device={ device }
 						items={ cols[ colId ] || [] }
@@ -1086,11 +1107,12 @@ function OffCanvasRow( { items, allItems, onMove, onOpenSection, onOpenRowSectio
 // DropZone (column)
 // ---------------------------------------------------------------------------
 
-function DropZone( { colId, rowId, device, items, allItems, onMove, onOpenSection, onOpenPopover } ) {
+function DropZone( { colId, rowId, device, items, allItems, onMove, onOpenSection, onOpenPopover, style } ) {
 	const location = { device, row: rowId, col: colId };
 	return (
 		<DropZoneInner
 			containerClass={ `customify-hb__col customify-hb__col--${ colId }` }
+			style={ style }
 			strategy={ rectSortingStrategy }
 			orientation="horizontal"
 			location={ location }
@@ -1111,7 +1133,7 @@ function DropZone( { colId, rowId, device, items, allItems, onMove, onOpenSectio
 // while a drag is over this column. Chips DO NOT shift — the line is
 // the only visual cue, which keeps the layout stable even when the
 // column wraps to multiple rows.
-function DropZoneInner( { containerClass, strategy, orientation, location, items, allItems, onMove, onOpenSection, onOpenPopover, emptyHint } ) {
+function DropZoneInner( { containerClass, strategy, orientation, location, items, allItems, onMove, onOpenSection, onOpenPopover, emptyHint, style } ) {
 	const containerId = `col::${ location.device }::${ location.row }::${ location.col }`;
 	const itemIds = items.map( ( i ) => `placed::${ i.id }` );
 
@@ -1150,6 +1172,7 @@ function DropZoneInner( { containerClass, strategy, orientation, location, items
 		<SortableContext items={ itemIds } strategy={ strategy }>
 			<div
 				ref={ setNodeRef }
+				style={ style }
 				className={ `${ containerClass }${ isOver ? ' is-drag-over' : '' }` }
 				onClick={ ( e ) => {
 					if ( e.target.closest( '.customify-hb__item' ) ) return;

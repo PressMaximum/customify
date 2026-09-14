@@ -1,38 +1,71 @@
 /**
  * Column layout presets for footer rows.
  * fr: flex-fraction values for grid-template-columns.
+ * layout: optional mixed-row identifier for five-column grids.
+ * rowCols: visual row column counts used by the preset icon only.
  */
 export const PRESETS = {
 	1: [
 		{ fr: [ 1 ] },
 	],
 	2: [
+		// Balanced, moderate splits, strong splits, then stacked.
 		{ fr: [ 1, 1 ] },
+		{ fr: [ 2, 3 ] },
+		{ fr: [ 3, 2 ] },
 		{ fr: [ 1, 2 ] },
 		{ fr: [ 2, 1 ] },
 		{ fr: [ 1, 3 ] },
+		{ fr: [ 3, 1 ] },
+		{ stacked: true },
 	],
 	3: [
+		// Balanced, mirrored edge emphasis, center/group emphasis, stacked.
 		{ fr: [ 1, 1, 1 ] },
-		{ fr: [ 1, 2, 1 ] },
 		{ fr: [ 2, 1, 1 ] },
 		{ fr: [ 1, 1, 2 ] },
-		{ fr: [ 1, 3, 1 ] },
 		{ fr: [ 3, 1, 1 ] },
 		{ fr: [ 1, 1, 3 ] },
+		{ fr: [ 1, 2, 1 ] },
+		{ fr: [ 1, 3, 1 ] },
+		{ fr: [ 2, 2, 1 ] },
+		{ fr: [ 1, 2, 2 ] },
+		{ fr: [ 2, 1, 2 ] },
 		{ stacked: true },
 	],
 	4: [
+		// Balanced, single-column emphasis, symmetric emphasis, wrapped, stacked.
 		{ fr: [ 1, 1, 1, 1 ] },
 		{ fr: [ 2, 1, 1, 1 ] },
+		{ fr: [ 1, 1, 1, 2 ] },
+		{ fr: [ 1, 2, 1, 1 ] },
+		{ fr: [ 1, 1, 2, 1 ] },
+		{ fr: [ 2, 2, 1, 1 ] },
 		{ fr: [ 1, 2, 2, 1 ] },
+		{ fr: [ 1, 1, 2, 2 ] },
+		{ fr: [ 2, 1, 1, 2 ] },
 		// fr shorter than count → grid items wrap to a new row.
-		// fr=[1,1] with 4 items renders a 2×2 grid (50/50 on each row).
 		{ fr: [ 1, 1 ], rows: 2 },
+		{ fr: [ 1, 2 ], rows: 2 },
+		{ fr: [ 2, 1 ], rows: 2 },
 		{ stacked: true },
 	],
 	5: [
+		// Balanced, emphasis variants, mixed-row grids, then stacked.
 		{ fr: [ 1, 1, 1, 1, 1 ] },
+		{ fr: [ 2, 1, 1, 1, 1 ] },
+		{ fr: [ 1, 1, 1, 1, 2 ] },
+		{ fr: [ 1, 2, 1, 1, 1 ] },
+		{ fr: [ 1, 1, 1, 2, 1 ] },
+		{ fr: [ 1, 1, 2, 1, 1 ] },
+		{ fr: [ 2, 2, 1, 1, 1 ] },
+		{ fr: [ 1, 2, 2, 1, 1 ] },
+		{ fr: [ 1, 1, 2, 2, 1 ] },
+		{ fr: [ 1, 1, 1, 2, 2 ] },
+		{ fr: [ 2, 1, 1, 1, 2 ] },
+		{ fr: [ 1, 1 ], layout: '2-3', rowCols: [ 2, 3 ] },
+		{ fr: [ 1, 1, 1 ], layout: '3-2', rowCols: [ 3, 3 ] },
+		{ fr: [ 1, 1 ], layout: '2-2-1', rowCols: [ 2, 2, 2 ] },
 		{ stacked: true },
 	],
 };

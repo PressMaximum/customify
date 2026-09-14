@@ -4209,7 +4209,13 @@ import { attachPopoverChrome } from './popover-chrome';
 					newfs = {};
 					i = 0;
 					_.each(list, function (f) {
-						if (_.isUndefined(fields[f.name]) || fields[f.name]) {
+						var enabledByDefault =
+							_.isUndefined(f.enabled_by_default) ||
+							f.enabled_by_default;
+						var enabled = !_.isUndefined(fields[f.name])
+							? fields[f.name]
+							: enabledByDefault;
+						if (enabled) {
 							newfs[i] = f;
 							i++;
 						}

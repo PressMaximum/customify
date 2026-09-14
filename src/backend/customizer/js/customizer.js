@@ -373,6 +373,22 @@
 		return defaultShowControl.apply(partial, arguments);
 	};
 	// Live preview for footer row col_layout (postMessage transport).
+	function footerColPlacementRules(rowSelector, count, layout) {
+		var spans = layout === '2-3'
+			? [3, 3, 2, 2, 2]
+			: layout === '3-2'
+				? [2, 2, 2, 2, 2]
+				: layout === '2-2-1'
+					? [3, 3, 3, 3, 3]
+					: [];
+		var css = '';
+		for (var i = 0; i < count; i++) {
+			var placement = spans[i] ? 'span ' + spans[i] : 'auto';
+			css += ' ' + rowSelector + ' .row-v2 > .col-v2:nth-child(' + (i + 1) + ') { grid-column: ' + placement + '; }';
+		}
+		return css;
+	}
+
 	function applyFooterColLayout(rowSelector, valueStr) {
 		var data;
 		try {
@@ -426,6 +442,7 @@
 					var paddingM = parseInt(dm.padding, 10) || 0;
 					var rulesM   = rowSelector + ' .row-v2 { display: grid !important; grid-template-columns: 1fr; column-gap: ' + gapM + 'px; }';
 					rulesM      += ' ' + rowSelector + ' .col-v2 { padding-left: ' + paddingM + 'px; padding-right: ' + paddingM + 'px; }';
+					rulesM      += footerColPlacementRules(rowSelector, count, '');
 					css += '@media ' + breakpoints.mobile + ' { ' + rulesM + ' } ';
 				}
 				return;
@@ -450,11 +467,17 @@
 					while (fr.length < count) { fr.push(1); }
 				}
 			}
-			var cols    = fr.map(function(v) { return parseInt(v, 10) + 'fr'; }).join(' ');
+			var mixedRows = count === 5 && ['2-3', '3-2', '2-2-1'].indexOf(d.layout) !== -1
+				? d.layout
+				: '';
+			var cols    = mixedRows
+				? 'repeat(6, minmax(0, 1fr))'
+				: fr.map(function(v) { return parseInt(v, 10) + 'fr'; }).join(' ');
 			var gap     = parseInt(d.gap, 10) || 0;
 			var padding = parseInt(d.padding, 10) || 0;
 			var rules   = rowSelector + ' .row-v2 { display: grid !important; grid-template-columns: ' + cols + '; column-gap: ' + gap + 'px; }';
 			rules      += ' ' + rowSelector + ' .col-v2 { padding-left: ' + padding + 'px; padding-right: ' + padding + 'px; }';
+			rules      += footerColPlacementRules(rowSelector, count, mixedRows);
 			css += breakpoints[device]
 				? '@media ' + breakpoints[device] + ' { ' + rules + ' } '
 				: rules + ' ';
