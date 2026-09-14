@@ -7,7 +7,7 @@ Tags: custom-background, custom-logo, custom-menu, custom-logo, featured-images,
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 5.3
-Stable tag: 0.4.24
+Stable tag: 0.4.25
 
 == Description ==
 
@@ -102,4 +102,3 @@ Source: http://css-tricks.com + Dave Rupert - http://daverupert.com - https://gi
 WP Color Picker Alpha, Copyright kallookoo
 Licensed under the GPLv2 license.
 Source: https://github.com/kallookoo/wp-color-picker-alpha
-
