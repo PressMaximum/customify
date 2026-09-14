@@ -109,6 +109,11 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				"{$transparent_selector}.layout-fullwidth",
 			)
 		);
+		// Keep the row colour inherited. A declaration on the row can never
+		// outrank a colour declared directly by a builder item, regardless of
+		// selector specificity. Native item defaults consume the custom property
+		// in base/_skins.scss, so an empty item colour falls back to this value.
+		$row_text_color_selector = $selector;
 		$skin_mode_selector   = '.header--row-inner.' . str_replace( '_', '-', $section ) . '-inner';
 
 		$fn           = 'customify_customize_render_header';
@@ -201,6 +206,19 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				),
 			),
 
+			// Keep the former standalone value as a hidden fallback. The
+			// Advanced Styling value is emitted later and takes precedence.
+			array(
+				'name'            => $section . '_row_text_color',
+				'type'            => 'color',
+				'section'         => $section,
+				'title'           => __( 'Text Color', 'customify' ),
+				'field_class'     => 'customify--hide',
+				'active_callback' => '__return_false',
+				'selector'        => $row_text_color_selector,
+				'css_format'      => '--customify-header-row-text-color: {{value}}; color: {{value}}; text-decoration-color: {{value}};',
+			),
+
 			array(
 				'name'             => $section . '_styling',
 				'type'             => 'styling',
@@ -209,15 +227,17 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'description'      => sprintf( __( 'Advanced styling for %s', 'customify' ), $section_name ),
 				'live_title_field' => 'title',
 				'selector'         => array(
-					'normal' => $styling_selector,
+					'normal'                => $styling_selector,
+					'normal_row_text_color' => $row_text_color_selector,
 				),
 				'css_format'       => 'styling',
 				'fields'           => array(
 					'normal_fields' => array(
-						'text_color' => false,
-						'link_color' => false,
-						'padding'    => false,
-						'margin'     => false,
+						'text_color'     => false,
+						'row_text_color' => true,
+						'link_color'     => false,
+						'padding'        => false,
+						'margin'         => false,
 					),
 					'hover_fields'  => false,
 				), // disable hover tab and all fields inside.

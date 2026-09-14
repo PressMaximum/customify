@@ -106,7 +106,7 @@ See [`SPEC-customizer-colors.md`](SPEC-customizer-colors.md) §3 for the full co
 
 All typography fields are `typography` composite controls. See [`SPEC-customizer.md`](SPEC-customizer.md) §5.3.
 
-### 2.5 Header builder per-item fields
+### 2.5 Header/footer builder row and per-item fields
 
 Naming is inconsistent across items — historical accident, see [`SPEC-header-footer-builder.md`](SPEC-header-footer-builder.md) §7. Representative examples:
 
@@ -122,6 +122,9 @@ Naming is inconsistent across items — historical accident, see [`SPEC-header-f
 | `primary_menu_style_border_h` | Primary Menu | Bare prefix |
 | `nav_icon_*` | Nav Icon | Bare prefix |
 | `search_icon_*` | Search Icon | Bare prefix |
+| `header_{top\|main\|bottom}_styling.normal.row_text_color` | Header row | Optional row-wide text/icon color inside the existing styling composite |
+| `footer_{row}_col_gap` | Footer row | Responsive slider; accepts the legacy scalar and the new `{ desktop, tablet, mobile }` shape |
+| `footer_{row}_row_padding` | Footer row | Responsive CSS ruler; row IDs include theme and extension-provided rows |
 
 ### 2.6 Header Transparent
 

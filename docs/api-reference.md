@@ -94,6 +94,21 @@ add_filter( 'customify/styling/primary-color', function ( $css ) {
 | `customify/load-icons` | filter | `bool` — enqueue icon fonts? | [`inc/customizer/class-customizer-icons.php:75`](../inc/customizer/class-customizer-icons.php) |
 | `customify/icon_used` | filter | `array` — used icon slugs (for subset loading) | [`inc/customizer/class-customizer-icons.php:80`](../inc/customizer/class-customizer-icons.php) |
 | `customify/customizer/font_icons/font_awesome_icons` | filter | `array` — Font Awesome catalog + metadata | [`inc/customizer/class-customizer-icons.php:943`](../inc/customizer/class-customizer-icons.php) |
+| `customify/svg_icons` | filter | `array` — preset inline-SVG library, `key => { label, source, style, viewbox, body }` | [`inc/icons-svg.php`](../inc/icons-svg.php) |
+| `customify/icon/html` | filter | `string` — rendered icon markup; args `$value`, `$args` | [`inc/template-functions.php`](../inc/template-functions.php) |
+| `customify/icon/svg_allowed_html` | filter | `array` — wp_kses allowlist for pasted SVG | [`inc/template-functions.php`](../inc/template-functions.php) |
+| `customify/icon/svg_max_bytes` | filter | `int` — max accepted pasted-SVG length (default 20480) | [`inc/template-functions.php`](../inc/template-functions.php) |
+
+Full icon-system reference — value shapes, helpers, the `presets` control arg,
+and the install-version gate for modern defaults: [`SPEC-icons.md`](SPEC-icons.md).
+
+Install marker (public API — Customify Pro reads it to keep its own builder-item
+defaults in step): option `customify_installed_version`, helpers
+`customify_get_installed_version()` and `customify_is_fresh_install_since( $version )`
+in [`inc/install-marker.php`](../inc/install-marker.php). Body class
+`customify-header-items-v2` opts a site into the shared header icon+label style and
+carries `--customify-header-icon-size` (20px), the single token every header
+icon+label item sizes from.
 
 ### 2.4 Control internals
 

@@ -10,15 +10,15 @@
  *     in wp-config.php or the `customify_use_starter_templates` filter
  *     (see inc/admin/dashboard-v2.php).
  *
- *   - `boot.importer.active` set by the FameThemes Demo Importer plugin's
+ *   - `boot.importer.active` set by the Customify Starter Sites plugin's
  *     Customify adapter (hooks `customify_dashboard_localize`) →
  *     embed the plugin's React app into this tab. The plugin enqueues
  *     its bundle on `toplevel_page_customify`, exposes
- *     `window.ftDemoImporter.mount(el)` / `unmount(el)`, and skips its
- *     own auto-mount (because `embedded: true`).
+ *     `window.customifyStarterSites.mount(el)` / `unmount(el)`, and skips
+ *     its own auto-mount (because `embedded: true`).
  *
  *   - Otherwise → render the CTA that one-click installs + activates the
- *     FameThemes Demo Importer plugin via WP's /wp/v2/plugins REST
+ *     Customify Starter Sites plugin via WP's /wp/v2/plugins REST
  *     endpoint, then reloads so the tab flips into the embedded mode
  *     above.
  */
@@ -30,8 +30,8 @@ import apiFetch from '@wordpress/api-fetch';
 import { useBoot } from '@pressmaximum/dashboard-kit';
 
 // REST identifier WP uses for a plugin = `{folder}/{file-without-ext}`.
-// FameThemes Demo Importer's main file matches its slug.
-const PLUGIN_SLUG = 'famethemes-demo-importer';
+// Customify Starter Sites' main file matches its slug.
+const PLUGIN_SLUG = 'customify-starter-sites';
 const PLUGIN_ID = `${ PLUGIN_SLUG }/${ PLUGIN_SLUG }`;
 
 export default function StarterTemplates() {
@@ -46,7 +46,7 @@ export default function StarterTemplates() {
 			return undefined;
 		}
 		const el = slotRef.current;
-		const api = typeof window !== 'undefined' ? window.ftDemoImporter : null;
+		const api = typeof window !== 'undefined' ? window.customifyStarterSites : null;
 		if ( ! el || ! api?.mount ) {
 			return undefined;
 		}
@@ -65,7 +65,7 @@ export default function StarterTemplates() {
 			<div className="customify-dashboard-starter-templates is-embedded">
 				<div
 					ref={ slotRef }
-					id="ft-demo-importer-app"
+					id="customify-starter-sites-app"
 					className="customify-dashboard-starter-templates__slot"
 				/>
 			</div>
@@ -128,58 +128,106 @@ function ComingSoon() {
 function InstallCta( { boot } ) {
 	const [ busy, setBusy ] = useState( false );
 	const [ error, setError ] = useState( null );
+	// Install state of the plugin, discovered on mount:
+	//   'checking'      — probing /wp/v2/plugins (initial)
+	//   'not_installed' — needs installing from wordpress.org
+	//   'inactive'      — installed but not activated yet
+	const [ pluginState, setPluginState ] = useState( 'checking' );
 
 	const fallbackUrl =
 		boot?.urls?.starterTemplatesInstall ||
-		'plugin-install.php?tab=search&s=famethemes+demo+importer';
+		'plugin-install.php?tab=search&s=customify+starter+sites';
 
-	const handleClick = async () => {
+	// Probe whether the plugin is installed / active. A 404 (or
+	// rest_plugin_not_found) means it isn't installed — a normal branch,
+	// not an error. If it's already active the whole tab is in embedded
+	// mode and this CTA never renders, so we only distinguish
+	// not-installed vs inactive here.
+	const probeState = async () => {
+		try {
+			const current = await apiFetch( {
+				path: `/wp/v2/plugins/${ PLUGIN_ID }`,
+			} );
+			return current?.status === 'active' ? 'active' : 'inactive';
+		} catch ( e ) {
+			if ( e?.data?.status === 404 || e?.code === 'rest_plugin_not_found' ) {
+				return 'not_installed';
+			}
+			throw e;
+		}
+	};
+
+	useEffect( () => {
+		let cancelled = false;
+		( async () => {
+			try {
+				const state = await probeState();
+				if ( ! cancelled ) {
+					// An 'active' result means the adapter should have
+					// flipped the tab into embedded mode already; treat it
+					// as inactive here so the Activate button still lets the
+					// user recover if the boot flag lagged.
+					setPluginState( state === 'active' ? 'inactive' : state );
+				}
+			} catch ( e ) {
+				if ( ! cancelled ) {
+					setPluginState( 'not_installed' );
+				}
+			}
+		} )();
+		return () => {
+			cancelled = true;
+		};
+	}, [] );
+
+	// Step 1 — install the plugin from wordpress.org (without activating).
+	// On success, move to the 'inactive' state so the Activate button shows.
+	const handleInstall = async () => {
 		setBusy( true );
 		setError( null );
 		try {
-			// 1. Probe current install state. apiFetch throws on 4xx;
-			// a 404 means "not installed" and is a normal branch, not
-			// an error.
-			let current = null;
-			try {
-				current = await apiFetch( {
-					path: `/wp/v2/plugins/${ PLUGIN_ID }`,
-				} );
-			} catch ( e ) {
-				if ( e?.data?.status !== 404 && e?.code !== 'rest_plugin_not_found' ) {
-					throw e;
-				}
-			}
-
-			if ( ! current ) {
-				// 2a. Not installed → install (POST /wp/v2/plugins
-				// pulls the slug from wp.org). Passing `status:
-				// active` makes WP activate as part of the same
-				// request.
-				await apiFetch( {
-					path: '/wp/v2/plugins',
-					method: 'POST',
-					data: { slug: PLUGIN_SLUG, status: 'active' },
-				} );
-			} else if ( current.status !== 'active' ) {
-				// 2b. Installed but not active → activate.
-				await apiFetch( {
-					path: `/wp/v2/plugins/${ PLUGIN_ID }`,
-					method: 'POST',
-					data: { status: 'active' },
-				} );
-			}
-			// 2c. Already active → fall through to reload.
-
-			window.location.reload();
+			await apiFetch( {
+				path: '/wp/v2/plugins',
+				method: 'POST',
+				// No `status: active` — install only; the user activates
+				// with a separate, explicit step below.
+				data: { slug: PLUGIN_SLUG },
+			} );
+			setPluginState( 'inactive' );
 		} catch ( e ) {
-			const msg =
+			setError(
 				e?.message ||
-				__( 'Could not install or activate the plugin.', 'customify' );
-			setError( msg );
+					__( 'Could not install the plugin.', 'customify' ),
+			);
+		} finally {
 			setBusy( false );
 		}
 	};
+
+	// Step 2 — activate the installed plugin, then reload so the tab
+	// re-renders in embedded mode (the plugin only sets
+	// boot.importer.active after a fresh PHP request).
+	const handleActivate = async () => {
+		setBusy( true );
+		setError( null );
+		try {
+			await apiFetch( {
+				path: `/wp/v2/plugins/${ PLUGIN_ID }`,
+				method: 'POST',
+				data: { status: 'active' },
+			} );
+			window.location.reload();
+		} catch ( e ) {
+			setError(
+				e?.message ||
+					__( 'Could not activate the plugin.', 'customify' ),
+			);
+			setBusy( false );
+		}
+	};
+
+	const installing = busy && pluginState === 'not_installed';
+	const activating = busy && pluginState === 'inactive';
 
 	return (
 		<div className="customify-dashboard-starter-templates">
@@ -209,18 +257,43 @@ function InstallCta( { boot } ) {
 							</a>
 						</Notice>
 					) }
-					<Button
-						variant="primary"
-						className="pmdk-hero__cta"
-						onClick={ handleClick }
-						disabled={ busy }
-						isBusy={ busy }
-					>
-						{ busy && <Spinner /> }
-						{ busy
-							? __( 'Activating Starter Templates…', 'customify' )
-							: __( 'Activate Customify Starter Templates', 'customify' ) }
-					</Button>
+
+					{ pluginState === 'checking' && (
+						<Button variant="primary" className="pmdk-hero__cta" disabled isBusy>
+							<Spinner />
+							{ __( 'Checking…', 'customify' ) }
+						</Button>
+					) }
+
+					{ pluginState === 'not_installed' && (
+						<Button
+							variant="primary"
+							className="pmdk-hero__cta"
+							onClick={ handleInstall }
+							disabled={ busy }
+							isBusy={ installing }
+						>
+							{ installing && <Spinner /> }
+							{ installing
+								? __( 'Installing Starter Templates…', 'customify' )
+								: __( 'Activate Customify Starter Templates', 'customify' ) }
+						</Button>
+					) }
+
+					{ pluginState === 'inactive' && (
+						<Button
+							variant="primary"
+							className="pmdk-hero__cta"
+							onClick={ handleActivate }
+							disabled={ busy }
+							isBusy={ activating }
+						>
+							{ activating && <Spinner /> }
+							{ activating
+								? __( 'Activating…', 'customify' )
+								: __( 'Activate plugin', 'customify' ) }
+						</Button>
+					) }
 				</div>
 			</section>
 		</div>

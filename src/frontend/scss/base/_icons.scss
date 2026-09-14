@@ -1,0 +1,192 @@
+/*--------------------------------------------------------------
+## Custom SVG icons — sizing + fit
+--------------------------------------------------------------*/
+//
+// `customify_render_icon()` wraps a user-pasted SVG in
+// `<span class="customify-icon customify-icon--svg">…</span>`. Without
+// constraints an inline `<svg>` renders at its intrinsic size — a 24px
+// viewBox with `width="24"` shows 24×24, but a paste-in from Figma that
+// starts `<svg width="100" height="100">` would blow past the header pill /
+// social slot / cart button and force the row to grow. And existing icon
+// libraries render `<i class="fa fa-heart">` which section icon-size
+// sliders target with `<section-selector> svg` or by font-size on `<i>`;
+// the wrapper has to slot into both paths so a slider written for a
+// font-icon site keeps working when the user switches to a custom SVG.
+//
+// Three constraints, all set on the wrapper (span), not the svg:
+//
+//   1. `display: inline-flex` centres the glyph on the text baseline the
+//      same way a font-icon glyph sits, so the wrapper drops into an
+//      existing font-icon slot with no per-call-site adjustment.
+//
+//   2. Default `width` / `height: 1em` gives the icon the same intrinsic
+//      size as a font glyph rendered at the current `font-size`. Any
+//      section that already sets `font-size` on the icon slot (the button
+//      item's `<i>` for instance) automatically sizes the SVG too.
+//
+//   3. The `svg` child fills 100% of the wrapper and has `max-width` /
+//      `max-height: 100%` as a belt: even if the wrapper's own size gets
+//      overridden to a specific px (from a section-level Icon Size
+//      slider that targets `svg { width: 24px }`), the SVG never
+//      overshoots that box. `preserveAspectRatio` is left to the SVG.
+//
+// Every existing selector — the Header Search Icon Size slider
+// (`body $selector svg`), the Cart icon-size, the Blog author-svg — keeps
+// working because they still match the inner `svg` element. This file only
+// establishes the DEFAULT; sliders continue to win by cascade.
+.customify-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	vertical-align: middle;
+}
+
+.customify-icon--svg {
+	// Wrapper hugs the inner SVG on both axes. Sizing is declared on
+	// the inner <svg> — that way an existing section slider written for
+	// `<section-selector> svg { width: 24px; height: 24px }` still wins
+	// (its selector matches the SVG directly, and the wrapper simply
+	// stretches to fit). If NO slider ever fires, `1em` on the svg gives
+	// it the same scale a font-icon glyph would have at the current
+	// font-size — so a row of mixed font-icon + custom-svg items sits on
+	// one optical baseline without per-call-site CSS.
+	width: auto;
+	height: auto;
+
+	> svg {
+		display: block;
+		width: 1em;
+		height: 1em;
+		// Colour follows currentColor so link/hover/palette rules that
+		// target the icon's parent (or the wrapper itself) tint the
+		// paths automatically — same behaviour as font icons.
+		//
+		// Both `fill` AND `stroke` are pinned here so an icon exported
+		// from Tabler / Iconify / Simple Icons (stroke-based, hardcoded
+		// `stroke="#607d8b"`) picks up the same colour as a filled font
+		// icon next to it in the same row. `fill` is set on the SVG
+		// element itself so children with no explicit fill inherit it;
+		// `stroke` is applied on any descendant that ALREADY carries a
+		// stroke attribute so we don't accidentally paint stroke on a
+		// path that was designed fill-only (which would show as a hairline
+		// outline). `[stroke]` limits the override to the intent lines
+		// the icon author declared, keeping filled icons unaffected.
+		fill: currentColor;
+		[stroke] {
+			stroke: currentColor;
+		}
+	}
+}
+
+// Preset library icons (`{ type: 'svg', icon: '<key>' }`, rendered by
+// customify_get_svg_icon()). They are STROKE glyphs: the `<svg>` carries
+// `fill="none" stroke="currentColor"` as presentation attributes, which a
+// stylesheet beats — so without this rule the `fill: currentColor` default
+// above would flood every outline icon into a solid blob.
+//
+// Higher specificity than the default (class + element vs element alone),
+// so ordering within this file is not load-bearing. The stroke width stays
+// on the element attribute so a site can override it per selector.
+//
+// The selector deliberately does NOT require the wrapper: a preset icon
+// rendered anywhere (a template partial, a Pro module) gets the same
+// treatment from its own class.
+svg.customify-svg-icon {
+	fill: none;
+	stroke: currentColor;
+}
+
+// …except the solid ones. The library ships both paint modes (Lucide/Tabler
+// outlines alongside Tabler-filled, Heroicons-solid and Phosphor glyphs, which
+// are filled paths even when they read as hairlines), and the rule above would
+// blank every one of them into an invisible outline-of-nothing.
+//
+// Two classes deep, so it beats the single-class rule above regardless of
+// source order — `customify_get_svg_icon()` always emits both classes together
+// on a filled entry.
+svg.customify-svg-icon.customify-svg-icon--filled {
+	fill: currentColor;
+	stroke: none;
+}
+
+// …and except the BRAND entries. `'style' => 'brand'` ships payment-method
+// logos (Visa blue, Mastercard's red/orange discs, the Klarna pink card) as
+// the only coloured icons in the library, and BOTH rules above would destroy
+// them: the wrapper rule floods the root with `fill: currentColor`, the
+// preset rule replaces it with `fill: none; stroke: currentColor`, and
+// `[stroke]` would repaint the card rect's hairline.
+//
+// "Leave the paint alone" cannot be written literally in CSS — a declaration
+// always beats a presentation attribute, and no keyword reverts to one. What
+// makes it work is WHERE the colour lives: every element inside a brand entry
+// carries its OWN `fill` attribute, and a declaration on an element always
+// beats a value inherited from its parent. So the root only has to stop
+// imposing anything — `fill: none; stroke: none` on the `<svg>` itself is
+// inherited by nothing, and each path keeps its brand colour.
+//
+// Sizing: a payment mark is a landscape 38×24 card, not a square glyph, so
+// `height: 1em; width: auto` keeps the aspect ratio instead of squashing the
+// card into the 1em box the monochrome presets use.
+//
+// Three classes deep (`svg` + two classes), so it beats every rule above
+// regardless of source order.
+svg.customify-svg-icon.customify-svg-icon--brand {
+	width: auto;
+	height: 1em;
+	fill: none;
+	stroke: none;
+}
+
+// The card background behind the logo. The colour is a stylesheet value (not
+// a per-entry one) so a site can retint every card with one rule; the entries
+// still carry `stroke="#E3E5E8"` as a presentation attribute so the card has
+// a border anywhere the theme stylesheet is absent.
+svg.customify-svg-icon.customify-svg-icon--brand .customify-brand-bg {
+	stroke: #e3e5e8;
+}
+
+/*--------------------------------------------------------------
+## Monochrome mode for brand icons
+--------------------------------------------------------------*/
+//
+// A consumer that wants the payment row to read as one quiet, tonal strip
+// (the usual choice in a dark footer) puts `customify-icons--mono` on an
+// ANCESTOR — the `<ul>` wrapping the row, or the icon's own wrapper `<span>`
+// via `customify_render_icon( $value, array( 'mono' => true ) )`.
+//
+// No `!important` anywhere, and none is needed: the brand colours are
+// PRESENTATION ATTRIBUTES (`fill="#1434CB"`), which sit at the very bottom of
+// the author cascade and lose to any declaration. This is also why a brand
+// entry must never move its colour into a `style=""` attribute — an inline
+// style WOULD beat these rules and the icon would stay coloured.
+//
+// The class name is the mono contract with Customify Pro; it is public API
+// the same way the frontend selectors in AGENTS.md §4.4 are. Do not rename.
+.customify-icons--mono svg.customify-svg-icon.customify-svg-icon--brand,
+.customify-icons--mono svg.customify-svg-icon.customify-svg-icon--brand * {
+	fill: currentColor;
+	stroke: none;
+}
+
+// The card itself drops out and becomes an outline, so a mono row reads as a
+// set of empty cards with the mark punched into them rather than 14 solid
+// slabs. One class deeper than the rule above (which reaches the rect through
+// `*`), so it wins without needing source order.
+.customify-icons--mono svg.customify-svg-icon.customify-svg-icon--brand .customify-brand-bg {
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1;
+}
+
+// Some marks are not a shape on a transparent ground but LETTERFORMS KNOCKED
+// OUT of a coloured plate — JCB's white "JCB" sits in three coloured bars,
+// UnionPay's 银联 in three panels. Flattened to one colour those plates become
+// a solid slab and the logo disappears. The entries tag the plate elements
+// `customify-brand-plate`; dropping them in mono leaves exactly the knocked-out
+// letterforms, which is what a monochrome payment mark should look like.
+//
+// Brand mode never sees this rule, so the plates keep their colours there.
+.customify-icons--mono svg.customify-svg-icon.customify-svg-icon--brand .customify-brand-plate {
+	fill: none;
+}

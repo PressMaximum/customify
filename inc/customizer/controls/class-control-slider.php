@@ -6,7 +6,14 @@ class Customify_Customizer_Control_Slider extends Customify_Customizer_Control_B
 		?>
 		<#
 		if ( ! _.isObject( field.value ) ) {
+			// Preserve legacy scalar slider values when a field gains responsive
+			// support. The responsive renderer assigns the scalar to desktop;
+			// dropping it here would silently reset an existing site's value.
+			var legacyValue = field.value;
 			field.value = { unit: 'px' };
+			if ( ! _.isUndefined( legacyValue ) && ! _.isNull( legacyValue ) && '' !== legacyValue ) {
+				field.value.value = legacyValue;
+			}
 		}
 		var uniqueID = field.name + ( new Date().getTime() );
 

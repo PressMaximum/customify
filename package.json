@@ -1,6 +1,6 @@
 {
     "name": "customify",
-    "version": "0.4.23",
+    "version": "0.4.25",
     "main": "Gruntfile.js",
     "engines": {
         "node": ">= 0.10.0"
@@ -11,6 +11,7 @@
         "@wordpress/scripts": "^32.0.0",
         "autoprefixer": "latest",
         "copy-webpack-plugin": "^14.0.0",
+        "eslint": "^9.39.4",
         "grunt": "^1.6.1",
         "grunt-bumpup": "latest",
         "grunt-contrib-clean": "latest",

@@ -419,8 +419,10 @@ class Customify_Customizer_Auto_CSS
 			$newfs = array();
 			$i     = 0;
 			foreach ($list as $f) {
-				$key = $f['name'];
-				if (!isset($fields[$key]) || $fields[$key]) {
+				$key                = $f['name'];
+				$enabled_by_default = !isset($f['enabled_by_default']) || $f['enabled_by_default'];
+				$enabled            = isset($fields[$key]) ? $fields[$key] : $enabled_by_default;
+				if ($enabled) {
 					$newfs[$key] = $f;
 					if (isset($selectors[$type . '_' . $key])) {
 						$newfs[$key]['selector'] = $selectors[$type . '_' . $key];

@@ -106,6 +106,22 @@ class Customify_Builder_Item_Search_Box {
 			),
 
 			array(
+				'name'            => $this->section . '_icon',
+				'type'            => 'icon',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'label'           => __( 'Search Icon', 'customify' ),
+				'description'     => __( 'Leave empty to use the theme default magnifier. Pick a font icon or paste a Custom SVG to override.', 'customify' ),
+				'default'         => array(
+					'type' => '',
+					'icon' => '',
+					'svg'  => '',
+				),
+				'priority'        => 22,
+			),
+
+			array(
 				'name'            => $this->section . '_icon_size',
 				'type'            => 'slider',
 				'device_settings' => true,
@@ -169,6 +185,7 @@ class Customify_Builder_Item_Search_Box {
 					'normal'            => "{$selector} .search-form-fields",
 					'hover'             => "{$selector} .search-form-fields",
 					'normal_text_color' => "{$selector} .search-form-fields,
+											{$selector} .search-form-fields .search-field,
 											{$selector} .search-form-fields input.search-field::placeholder,
 											.dark-mode {$selector} .search-form-fields .search-field,
 											.dark-mode {$selector} .search-form-fields .search-field::placeholder,
@@ -278,6 +295,13 @@ class Customify_Builder_Item_Search_Box {
 		$form_extra_class = apply_filters( 'customify/builder_item/search-box/form_extra_class', array() );
 		$placeholder = Customify()->get_setting( $this->section . '_placeholder' );
 		$placeholder = sanitize_text_field( $placeholder );
+
+		// User-picked submit icon. Empty falls back to the shipped
+		// magnifier; opt-in only, so existing sites don't change bytes.
+		$icon      = Customify()->get_setting( $this->section . '_icon' );
+		$icon_html = function_exists( 'customify_render_icon' ) ? customify_render_icon( $icon ) : '';
+
+		$default_icon = '<svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21"><path fill="currentColor" fill-rule="evenodd" d="M12.514 14.906a8.264 8.264 0 0 1-4.322 1.21C3.668 16.116 0 12.513 0 8.07 0 3.626 3.668.023 8.192.023c4.525 0 8.193 3.603 8.193 8.047 0 2.033-.769 3.89-2.035 5.307l4.999 5.552-1.775 1.597-5.06-5.62zm-4.322-.843c3.37 0 6.102-2.684 6.102-5.993 0-3.31-2.732-5.994-6.102-5.994S2.09 4.76 2.09 8.07c0 3.31 2.732 5.993 6.102 5.993z"></path></svg>';
 		/**
 		 * Hook: customify/builder_item/search-box/before_html
 		 *
@@ -316,9 +340,7 @@ class Customify_Builder_Item_Search_Box {
 				?>
 			</div>
 			<button type="submit" class="search-submit" aria-label="<?php esc_attr_e( 'Submit Search', 'customify' ) ?>">
-				<svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21">
-					<path fill="currentColor" fill-rule="evenodd" d="M12.514 14.906a8.264 8.264 0 0 1-4.322 1.21C3.668 16.116 0 12.513 0 8.07 0 3.626 3.668.023 8.192.023c4.525 0 8.193 3.603 8.193 8.047 0 2.033-.769 3.89-2.035 5.307l4.999 5.552-1.775 1.597-5.06-5.62zm-4.322-.843c3.37 0 6.102-2.684 6.102-5.993 0-3.31-2.732-5.994-6.102-5.994S2.09 4.76 2.09 8.07c0 3.31 2.732 5.993 6.102 5.993z"></path>
-				</svg>
+				<?php echo '' !== $icon_html ? $icon_html : $default_icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- render_icon is kses-sanitised; default is a literal SVG constant. ?>
 			</button>
 		</form>
 		<?php

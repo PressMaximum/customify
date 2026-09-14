@@ -1,3 +1,14 @@
+= 0.4.25 =
+* NEW: Header builder icon controls now support built-in and custom inline SVG icons, including dedicated menu and cart presets with optional labels.
+* NEW: Brand-coloured payment method icons with an optional monochrome mode.
+* NEW: Expanded Footer Builder column layouts, including mixed multi-row presets, responsive column gaps and row padding controls.
+* IMPROVED: Customify Pro links now use the current product page.
+* FIXED: Header and Footer row styling now previews reliably while preserving item-level color priority.
+* FIXED: Customizer icon panels and responsive device controls now display reliably during setting updates.
+
+= 0.4.24 =
+* IMPROVED: Starter Templates tab is now always shown in the dashboard, with an "Install/Activate plugin" CTA when Customify Starter Sites is not active.
+
 = 0.4.23 =
 * NEW: Search scope setting for search header builder items.
 * NEW: Color pickers can now follow palette tokens so fields update when the palette changes.
@@ -112,7 +123,7 @@
 
 = 0.4.13 =
 * UPDATED: WooCommerce template files.
-* FIXED: Product grid mobile columns not changing. 
+* FIXED: Product grid mobile columns not changing.
 
 = 0.4.12 =
 * FIXED: Fix security issues.

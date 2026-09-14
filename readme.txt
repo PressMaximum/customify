@@ -7,7 +7,7 @@ Tags: custom-background, custom-logo, custom-menu, custom-logo, featured-images,
 Requires at least: 6.0
 Tested up to: 7.0
 Requires PHP: 5.3
-Stable tag: 0.4.23
+Stable tag: 0.4.25
 
 == Description ==
 
@@ -33,7 +33,7 @@ Yes! Customify is a free theme, and always will be.
 = Does Customify have a pro version? =
 It does! Customify has a premium plugin which extends the available options in the theme.
 
-You can learn more about [here](https://pressmaximum.com/customify/pro-upgrade/).
+You can learn more about [here](https://pressmaximum.com/customify/pro/?utm_source=wordpress_org&utm_medium=readme&utm_campaign=faq).
 
 = Where can I find documentation? =
 Customify has extensive documentation you can find [here](https://pressmaximum.com/docs/customify/).
@@ -102,4 +102,3 @@ Source: http://css-tricks.com + Dave Rupert - http://daverupert.com - https://gi
 WP Color Picker Alpha, Copyright kallookoo
 Licensed under the GPLv2 license.
 Source: https://github.com/kallookoo/wp-color-picker-alpha
-

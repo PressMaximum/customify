@@ -96,7 +96,7 @@ function mount() {
 			{
 				id: 'pro',
 				label: __( 'Upgrade to Pro', 'customify' ),
-				href: 'https://pressmaximum.com/customify/pro-upgrade/',
+				href: 'https://pressmaximum.com/customify/pro/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=dashboard_help',
 			},
 		],
 		helpLabels: {

@@ -382,22 +382,37 @@ class Customify_Builder_Item_Social_Icons {
 						array(
 							'type' => '',
 							'icon' => '',
+							'svg'  => '',
 						)
 					);
 
-					if ( $item['url'] && $icon['icon'] ) {
-						echo '<a class="social-' . str_replace(
-							array( ' ', 'fa-fa' ),
-							array(
-								'-',
-								'icon',
-							),
-							esc_attr( $icon['icon'] )
-						) . $shape . '" ' . $rel . 'target="' . esc_attr( $target ) . '" href="' . esc_url( $item['url'] ) . '" aria-label="' . esc_attr( $item['title']) . '">';
+					$is_svg  = ( 'custom-svg' === $icon['type'] && ! empty( $icon['svg'] ) );
+					$has_any = $is_svg || ! empty( $icon['icon'] );
+
+					if ( $item['url'] && $has_any ) {
+						// For font icons the anchor class encodes the icon
+						// name (`social-twitter`, `social-facebook`, …) so
+						// site CSS can style per-brand. Custom SVGs have no
+						// meaningful key to derive from, so the anchor gets
+						// a neutral `social-svg` class instead.
+						$anchor_class = $is_svg
+							? 'social-svg'
+							: str_replace(
+								array( ' ', 'fa-fa' ),
+								array( '-', 'icon' ),
+								esc_attr( $icon['icon'] )
+							);
+						echo '<a class="social-' . $anchor_class . $shape . '" ' . $rel . 'target="' . esc_attr( $target ) . '" href="' . esc_url( $item['url'] ) . '" aria-label="' . esc_attr( $item['title'] ) . '">';
 					}
 
-					if ( $icon['icon'] ) {
-						echo '<i class="social-icon ' . esc_attr( $icon['icon'] ) . '" title="' . esc_attr( $item['title'] ) . '"></i>';
+					if ( $has_any ) {
+						echo customify_render_icon( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- customify_render_icon returns sanitised HTML (customify_sanitize_svg / esc_attr'd font class).
+							$icon,
+							array(
+								'wrapper_class' => 'social-icon',
+								'title'         => $item['title'],
+							)
+						);
 					}
 
 					if ( $item['url'] ) {

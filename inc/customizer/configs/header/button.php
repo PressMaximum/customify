@@ -148,6 +148,7 @@ class Customify_Builder_Item_Button {
 			array(
 				'type' => '',
 				'icon' => '',
+				'svg'  => '',
 			)
 		);
 
@@ -156,9 +157,9 @@ class Customify_Builder_Item_Button {
 			$target = ' target="_blank" ';
 		}
 
-		$icon_html = '';
-		if ( $icon['icon'] ) {
-			$icon_html = '<i class="' . esc_attr( $icon['icon'] ) . '"></i> ';
+		$icon_html = customify_render_icon( $icon );
+		if ( '' !== $icon_html ) {
+			$icon_html .= ' ';
 		}
 		$classes[] = 'is-icon-' . $icon_position;
 		if ( ! $text ) {

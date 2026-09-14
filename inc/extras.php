@@ -16,6 +16,33 @@ function customify_remove_of_sdk_suggestions() {
 
 add_filter( 'themeisle_sdk_recommend_plugin_or_theme', 'customify_remove_of_sdk_suggestions', 100 );
 
+if ( ! function_exists( 'customify_get_pro_url' ) ) {
+	/**
+	 * Single source of truth for the Customify Pro marketing URL.
+	 *
+	 * Every upsell touchpoint (Customizer panels, admin dashboards, panel
+	 * builder) should build its link through this function so the base URL
+	 * only ever needs to change here, while still tagging each placement
+	 * with its own UTM campaign.
+	 *
+	 * @param string $utm_campaign Placement identifier, e.g. 'customizer_top'.
+	 * @param string $utm_medium   UTM medium. Default 'links'.
+	 * @param string $utm_source   UTM source. Default 'theme_dashboard'.
+	 *
+	 * @return string
+	 */
+	function customify_get_pro_url( $utm_campaign, $utm_medium = 'links', $utm_source = 'theme_dashboard' ) {
+		return add_query_arg(
+			array(
+				'utm_source'   => $utm_source,
+				'utm_medium'   => $utm_medium,
+				'utm_campaign' => $utm_campaign,
+			),
+			'https://pressmaximum.com/customify/pro/'
+		);
+	}
+}
+
 /**
  * Filter the output of archive links.
  */

@@ -119,6 +119,14 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 		$selector           = '#cb-row--' . str_replace( '_', '-', $section );
 		$skin_mode_selector = '.footer--row-inner.' . str_replace( '_', '-', $section ) . '-inner';
 
+		// Advanced Styling targets the row's inner wrapper — the same element
+		// `{$section}_background_color` paints and the one carrying the theme's
+		// default vertical padding (`.footer-main .footer--row-inner` etc. in
+		// scss/footer/_footer-common.scss). The `#cb-row--*` id gives this rule
+		// a higher specificity than those class-only defaults, so a user's
+		// padding wins without the SCSS needing `!important` or a default value.
+		$styling_selector = "{$selector} .footer--row-inner";
+
 		$fn = 'customify_customize_render_footer';
 
 		// Explicit per-section priorities so the Customizer sidebar always
@@ -208,24 +216,53 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				'sanitize_callback' => 'customify_sanitize_row_layout',
 			),
 
+			// Per-device gap. Columns stack to a single track on mobile
+			// (`grid-template-columns: 1fr`), so the horizontal gap desktop
+			// wants is not what a phone wants — hence the separate mobile
+			// default of 0 rather than one value shared across breakpoints.
+			//
+			// Legacy data keeps working without a migration: this field
+			// shipped in 0.4.15 storing a flat `{value, unit}` (or a bare
+			// scalar), and `Customizer::get_setting()` falls back to the
+			// whole value whenever `$value[ $device ]` is absent — so a site
+			// that saved 30 before this change still reads 30 on every
+			// device. Only sites that never saved the field pick up the new
+			// per-device defaults.
 			array(
-				'name'        => "{$section}_col_gap",
-				'type'        => 'slider',
-				'section'     => $section,
-				'title'       => __( 'Columns Gap', 'customify' ),
-				'description' => __( 'Default gap between columns. Per-column gap in Column Settings overrides this.', 'customify' ),
-				'selector'    => $selector . ' .row-v2, ' . $selector . ' .col-v2',
-				'css_format'  => 'column-gap: {{value}}; gap: {{value}}',
-				'min'         => 0,
-				'max'         => 100,
-				'default'     => 30,
+				'name'            => "{$section}_col_gap",
+				'type'            => 'slider',
+				'section'         => $section,
+				'device_settings' => true,
+				'title'           => __( 'Columns Gap', 'customify' ),
+				'description'     => __( 'Gap between columns, per device. Per-column gap in Column Settings overrides this.', 'customify' ),
+				'selector'        => $selector . ' .row-v2, ' . $selector . ' .col-v2',
+				'css_format'      => 'column-gap: {{value}}; gap: {{value}}',
+				'min'             => 0,
+				'max'             => 100,
+				'default'         => array(
+					'desktop' => array(
+						'value' => '30',
+					),
+					'tablet'  => array(
+						'value' => '30',
+					),
+					'mobile'  => array(
+						'value' => '0',
+					),
+				),
 			),
 
 			array(
 				'name'               => "{$section}_columns_settings",
 				'type'               => 'columns_settings',
 				'section'            => $section,
-				'priority'           => 999,
+				// Deliberately NO `priority`: this control belongs directly under
+				// Columns Gap, and every sibling here registers at the WP default
+				// (10), so array order decides. It used to carry `priority => 999`
+				// to pin it to the bottom, which left Customify Pro's row fields
+				// — registered at the default priority via the
+				// `customify/builder/footer/rows/section_configs` filter below —
+				// rendering BETWEEN the gap slider and these column controls.
 				'title'              => __( 'Column Settings', 'customify' ),
 				'description'        => __( 'Per-column direction, align, gap and padding.', 'customify' ),
 				'col_layout_setting' => $section . '_col_layout',
@@ -250,6 +287,47 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				'selector'           => $selector,
 				'css_format'         => 'columns_settings',
 				'sanitize_callback'  => 'customify_sanitize_columns_settings',
+			),
+
+			// Row-level padding / margin / border for the whole footer row.
+			// Before this, the only padding a user could reach was per-column
+			// (Column Settings), so matching the row's vertical rhythm meant
+			// editing every column separately. Mirrors `{$section}_styling` on
+			// header rows, but with `padding`/`margin` left ENABLED — the
+			// header disables them because it sizes its rows with `_height`
+			// instead, which footer rows don't have.
+			//
+			// The background + text color groups stay disabled: footer rows
+			// already ship dedicated `{$section}_background_color` and
+			// `{$section}_text_mode` controls, and a second background-color
+			// field writing to the same selector would produce two competing
+			// declarations whose winner depends on field registration order.
+			array(
+				'name'             => "{$section}_styling",
+				'type'             => 'styling',
+				'section'          => $section,
+				'title'            => __( 'Advanced Styling', 'customify' ),
+				/* translators: %s: footer row name, e.g. "Footer Main". */
+				'description'      => sprintf( __( 'Padding, margin and border for %s', 'customify' ), $section_name ),
+				'live_title_field' => 'title',
+				'selector'         => array(
+					'normal' => $styling_selector,
+				),
+				'css_format'       => 'styling',
+				'fields'           => array(
+					'normal_fields' => array(
+						'text_color'    => false,
+						'link_color'    => false,
+						'bg_heading'    => false,
+						'bg_color'      => false,
+						'bg_image'      => false,
+						'bg_cover'      => false,
+						'bg_position'   => false,
+						'bg_repeat'     => false,
+						'bg_attachment' => false,
+					),
+					'hover_fields'  => false, // disable hover tab and all fields inside.
+				),
 			),
 
 		);
@@ -401,6 +479,24 @@ function customify_footer_row_layout_css() {
 		$rows[ "footer_{$row_id}" ] = "#cb-row--footer-{$row_id}";
 	}
 
+	$column_placement_rules = function ( $selector, $count, $layout = '' ) {
+		$spans = array();
+		if ( '2-3' === $layout ) {
+			$spans = array( 3, 3, 2, 2, 2 );
+		} elseif ( '3-2' === $layout ) {
+			$spans = array( 2, 2, 2, 2, 2 );
+		} elseif ( '2-2-1' === $layout ) {
+			$spans = array( 3, 3, 3, 3, 3 );
+		}
+
+		$rules = '';
+		for ( $index = 0; $index < $count; $index++ ) {
+			$placement = isset( $spans[ $index ] ) ? 'span ' . $spans[ $index ] : 'auto';
+			$rules .= ' ' . $selector . ' .row-v2 > .col-v2:nth-child(' . ( $index + 1 ) . ') { grid-column: ' . $placement . '; }';
+		}
+		return $rules;
+	};
+
 	$css = '';
 	foreach ( $rows as $key => $selector ) {
 		$raw = Customify()->get_setting( $key . '_col_layout' );
@@ -430,6 +526,7 @@ function customify_footer_row_layout_css() {
 		// emit extra empty grid tracks (the "col4 still renders after 4→3"
 		// bug). Clamp count to the 1–5 range that matches get_footer_col_keys().
 		$count = isset( $data['count'] ) ? max( 1, min( 5, intval( $data['count'] ) ) ) : 0;
+		$has_larger_mixed_rows = false;
 
 		// Hide column placeholders beyond the active count. Server-side
 		// `render_row()` already skips emitting non-active cols, but in
@@ -455,12 +552,18 @@ function customify_footer_row_layout_css() {
 				// desktop) is treated as the user's choice and rendered below.
 				if ( 'mobile' === $device ) {
 					$rules = $selector . ' .row-v2 { display: grid !important; grid-template-columns: 1fr; }';
+					if ( $has_larger_mixed_rows ) {
+						$rules .= $column_placement_rules( $selector, $count );
+					}
 					$css  .= $media . ' { ' . $rules . ' } ';
 				}
 				continue;
 			}
 
 			$device_data = $data[ $device ];
+			$mixed_rows  = 5 === $count && isset( $device_data['layout'] ) && in_array( $device_data['layout'], array( '2-3', '3-2', '2-2-1' ), true )
+				? $device_data['layout']
+				: '';
 
 			$fr_len = count( $device_data['fr'] );
 
@@ -490,9 +593,17 @@ function customify_footer_row_layout_css() {
 				function ( $v ) { return absint( $v ) . 'fr'; },
 				$fr
 			);
-			$grid_cols = implode( ' ', $fr_parts );
+			$grid_cols = $mixed_rows ? 'repeat(6, minmax(0, 1fr))' : implode( ' ', $fr_parts );
 
 			$rules = $selector . ' .row-v2 { display: grid !important; grid-template-columns: ' . $grid_cols . '; }';
+			if ( $mixed_rows ) {
+				$rules .= $column_placement_rules( $selector, $count, $mixed_rows );
+				$has_larger_mixed_rows = true;
+			} elseif ( $has_larger_mixed_rows ) {
+				// A narrower regular layout must clear spans inherited from a
+				// mixed-row layout configured on a larger breakpoint.
+				$rules .= $column_placement_rules( $selector, $count );
+			}
 			$css  .= $media ? $media . ' { ' . $rules . ' } ' : $rules . ' ';
 		}
 	}
@@ -582,6 +693,3 @@ function customify_footer_sidebar_layout_settings( $item_id, $layout_section ) {
 
 	return array();
 }
-
-
-

@@ -21,7 +21,7 @@ Working on the Customify theme. For end-user install see [`../README.md`](../REA
 ```bash
 git clone git@github.com:PressMaximum/customify.git
 cd customify
-git checkout DEV          # active development branch
+git checkout dev          # active development branch (lowercase - see AGENTS.md CI policy)
 
 composer install          # pulls dashboard-kit into vendor/
 npm install               # pulls JS deps into node_modules/
@@ -44,7 +44,7 @@ Activate the `customify` theme in WP admin → done.
 ## 3. Daily workflow
 
 ```bash
-git pull                  # sync DEV
+git pull                  # sync dev
 composer install          # only if composer.lock changed (kit bumped)
 npm install               # only if package-lock.json changed
 npm run build             # rebuild bundle
