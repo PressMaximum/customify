@@ -80,7 +80,7 @@ Run through this BEFORE invoking any release command. The pre-flight in `grunt r
 
 - [ ] **Clean working tree** — `git status` shows no uncommitted changes (enforced)
 - [ ] **`gh auth status`** returns authenticated (enforced)
-- [ ] **On the right branch** — typically `DEV` for beta, merged to `master` for production
+- [ ] **On the right branch** — typically `dev` (lowercase) for beta, merged to `master` for production
 - [ ] **`master` is up to date** with `origin/master` (for production releases)
 - [ ] **Verification scenarios A / B / C pass** for any change touching CSS output or storage shape — see [`migration-guide.md`](migration-guide.md) §5.2
 - [ ] **`changelog.txt` updated** — entry exists for the version being released (this file is read by the dashboard Changelog tab)

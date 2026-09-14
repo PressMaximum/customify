@@ -352,6 +352,14 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             if ( device !== 'all' ) {
                 if ( _.isObject( value ) && !_.isUndefined( value[ device ] ) ) {
                     get_value =  value[ device ];
+                } else if ( ! _.isObject( value ) ) {
+                    // Mirror PHP get_setting(): a device_settings field whose
+                    // value is still a bare scalar (an unsaved slider default
+                    // such as `10`) applies to every device. Returning null
+                    // here dropped the field's CSS from every live-preview
+                    // regeneration (e.g. Payment Methods spacing vanished as
+                    // soon as any other setting changed).
+                    get_value = value;
                 }
             } else {
                 get_value = value;

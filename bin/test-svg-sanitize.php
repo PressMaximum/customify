@@ -237,15 +237,28 @@ foreach ( $library as $key => $entry ) {
 	// The viewBox may be any SQUARE grid: upstream sets disagree (Lucide and
 	// Tabler draw on 24, Phosphor on 256) and rescaling by hand would mean
 	// editing geometry, which the library deliberately never does.
-	$square = false;
-	if ( preg_match( '/viewBox="0 0 (\d+(?:\.\d+)?) (\d+(?:\.\d+)?)"/', $root, $vb ) ) {
-		$square = ( $vb[1] === $vb[2] );
-	}
+	//
+	// `brand` is the documented exception: a payment mark is a landscape card,
+	// and the whole family shares one 38x24 ratio. It still has to HAVE a
+	// viewBox — without one the icon has no coordinate system and will not
+	// scale at all.
+	$has_viewbox = (bool) preg_match( '/viewBox="0 0 (\d+(?:\.\d+)?) (\d+(?:\.\d+)?)"/', $root, $vb );
+	$square      = $has_viewbox ? ( $vb[1] === $vb[2] ) : false;
+	$grid_ok     = ( 'brand' === $style ) ? $has_viewbox : $square;
 
 	// Paint mode must match the declared style, and a filled entry must carry
 	// the class the frontend override rule keys off — without it the outline
 	// default blanks the glyph.
-	if ( 'filled' === $style ) {
+	//
+	// A `brand` entry is the inverse: it must carry NO root paint whatsoever,
+	// because its colour lives on the body's own elements and a root value
+	// would be inherited by anything that lost its own.
+	if ( 'brand' === $style ) {
+		$paint_ok = false === strpos( $root, 'fill="' )
+			&& false === strpos( $root, 'stroke="' )
+			&& false !== strpos( $root, 'customify-svg-icon--brand' )
+			&& false === strpos( $root, 'customify-svg-icon--filled' );
+	} elseif ( 'filled' === $style ) {
 		$paint_ok = false !== strpos( $root, 'fill="currentColor"' )
 			&& false !== strpos( $root, 'stroke="none"' )
 			&& false !== strpos( $root, 'customify-svg-icon--filled' );
@@ -255,11 +268,41 @@ foreach ( $library as $key => $entry ) {
 			&& false === strpos( $root, 'customify-svg-icon--filled' );
 	}
 
+	// Extra invariants that only make sense for a coloured entry:
+	//
+	//  1. every drawable element declares its own `fill`. The frontend sets
+	//     `fill: none` on the root of every preset icon, and an element with
+	//     no fill of its own would inherit that and vanish.
+	//  2. no `style=""` anywhere. Mono mode repaints brand icons from CSS and
+	//     wins over presentation attributes — but NOT over an inline style,
+	//     which would leave the icon stuck in its brand colours.
+	//  3. a `customify-brand-bg` card rect, the hook the mono rule turns into
+	//     an outline.
+	$brand_ok = true;
+	if ( 'brand' === $style ) {
+		$body      = isset( $entry['body'] ) ? $entry['body'] : '';
+		$drawables = array();
+		preg_match_all( '/<(?:path|circle|rect|ellipse|polygon|polyline|line)\b[^>]*>/i', $body, $drawables );
+
+		$every_filled = true;
+		foreach ( $drawables[0] as $el ) {
+			if ( false === stripos( $el, 'fill=' ) ) {
+				$every_filled = false;
+				break;
+			}
+		}
+
+		$brand_ok = $every_filled
+			&& false === stripos( $body, 'style=' )
+			&& false !== strpos( $body, 'customify-brand-bg' );
+	}
+
 	$checks++;
 	$ok = '' !== $markup
 		&& '' !== $root
-		&& $square
+		&& $grid_ok
 		&& $paint_ok
+		&& $brand_ok
 		&& false === strpos( $root, ' width="' )
 		&& false === strpos( $root, ' height="' )
 		&& false !== strpos( $markup, 'aria-hidden="true"' )
@@ -282,9 +325,41 @@ if ( ! $failures ) {
 		$summary[] = "$n $style";
 	}
 	printf(
-		"PASS  every preset honours the square-viewBox / no-size / paint / a11y contract (%s)\n",
+		"PASS  every preset honours the viewBox / no-size / paint / a11y contract (%s)\n",
 		implode( ', ', $summary )
 	);
+}
+
+// The brand entries are the only coloured markup in the library, and they lean
+// on three things the allowlist could silently eat: the `class` that the mono
+// rule and the card-background rule hook onto, the `<g transform>` that fits an
+// upstream 780x500 logo into the shared 38x24 card, and one `fill="#rrggbb"`
+// per drawn element. A non-empty round trip is not enough — check the
+// round trip is LOSSLESS for all three.
+foreach ( customify_get_svg_icons() as $key => $entry ) {
+	if ( 'brand' !== ( isset( $entry['style'] ) ? $entry['style'] : 'outline' ) ) {
+		continue;
+	}
+
+	$markup = customify_get_svg_icon( $key );
+	$clean  = customify_sanitize_svg( $markup );
+
+	$checks++;
+	$ok = '' !== $clean
+		&& false !== strpos( $clean, 'customify-svg-icon--brand' )
+		&& false !== strpos( $clean, 'customify-brand-bg' )
+		&& substr_count( $clean, 'transform=' ) === substr_count( $markup, 'transform=' )
+		&& substr_count( $clean, 'fill="#' ) === substr_count( $markup, 'fill="#' )
+		&& substr_count( $clean, '<path' ) === substr_count( $markup, '<path' );
+
+	if ( ! $ok ) {
+		$failures++;
+		printf( "FAIL  brand preset '%s' does not survive customify_sanitize_svg() intact\n", $key );
+		printf( "      in : %d paths / %d fills / %d transforms\n", substr_count( $markup, '<path' ), substr_count( $markup, 'fill="#' ), substr_count( $markup, 'transform=' ) );
+		printf( "      out: %d paths / %d fills / %d transforms\n", substr_count( $clean, '<path' ), substr_count( $clean, 'fill="#' ), substr_count( $clean, 'transform=' ) );
+	} else {
+		printf( "PASS  brand preset '%s' survives the sanitiser intact\n", $key );
+	}
 }
 
 $checks++;

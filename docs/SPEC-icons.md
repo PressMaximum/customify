@@ -119,10 +119,21 @@ The path data is **copied verbatim from upstream sets** — nothing in the libra
 | [Tabler](https://tabler.io/icons) (`icons/filled`) | MIT | 24 | fill | The `-filled` solids |
 | [Heroicons](https://heroicons.com) (`heroicons`, `24/solid`) | MIT | 24 | fill | `bag-filled` only |
 | [Phosphor](https://phosphoricons.com) (`@phosphor-icons/core`, `regular`) | MIT | 256 | fill | The rounded, generous silhouettes |
+| [react-payment-logos](https://github.com/iamgutz/react-payment-logos) (`logo` set) | MIT | 780×500 | brand colour | Payment card schemes: Visa, Amex, Discover, Diners, JCB, UnionPay, PayPal |
+| [Simple Icons](https://simpleicons.org) (`simple-icons`) | CC0-1.0 | 24 | brand colour | Payment wallets / gateways: Apple Pay, Google Pay, Stripe, Klarna, Amazon Pay |
 
 Tabler shares Lucide's grid exactly (24×24, stroke 2, round caps), which is why the two mix without a seam. Heroicons is used for one icon because neither Lucide nor Tabler ships a solid shopping bag; Heroicons' **outline** set is deliberately unused — it is drawn for stroke-width 1.5 and reads visibly lighter beside Lucide at 2. Phosphor draws every weight as filled paths on a 256 grid, which is why its glyphs are `filled` entries with their own viewBox even though they read as outlines. Its `thin` weight was tried and dropped — hairlines disappear at header size.
 
 Only the upstream `<svg>` wrapper is discarded during extraction, plus Tabler's transparent `M0 0h24v24H0z` bounding-box path (sprite-build padding) and per-set `class` / `data-slot` hooks.
+
+The two payment sets are handled the same way — path data verbatim, nothing redrawn — with two mechanical adjustments the monochrome sets do not need:
+
+- **Fitting.** The scheme logos are drawn on 780×500 and the wallet marks on 24×24, but the Payment family shares one 38×24 card. Each body is wrapped in a single `<g transform="translate(…) scale(…)">` computed from the artwork's real bounding box. The transform is the only thing added; no coordinate inside `d=""` is touched.
+- **Flattening.** JCB's three bars ship as `<linearGradient>` fills. They are replaced with the solid colour 70 % along each gradient (`#3BA235`, `#095AA3`, `#C10E35`). Flatten gradients rather than widening `customify_sanitize_svg()`'s allowlist — the sanitiser's surface is a security boundary, and a payment logo is not worth growing it.
+
+Two entries are the exception to "nothing is hand-drawn": **`pay-mastercard` and `pay-maestro`**. Their upstream full-colour logos are the legacy wordmark lockups (9 KB and 7 KB of outlined type, illegible at card size), while the modern scheme marks are two overlapping discs plus the lens where they meet — ~270 bytes of `<circle>` + one `<path>`, and correct at 24 px. Colours: Mastercard `#EB001B` / `#F79E1B` with an `#FF5F00` overlap; Maestro `#ED0006` / `#0099DF` with `#6C6BBD`.
+
+> **Trademarks.** Payment marks are trademarks of their owners and appear here purely as *acceptance marks* — the standard "we take these cards" row. The licences above cover the artwork files only; they convey no trademark rights and imply no endorsement.
 
 > **Shopify Dawn is NOT used, despite being the reference look.** Dawn's `LICENSE.md` is not plain MIT: the grant is limited to "themes that integrate or interoperate with Shopify software or services", with all other uses "strictly prohibited". Customify is a GPL WordPress theme on WordPress.org, so shipping Dawn's assets would fall outside that grant *and* break GPL compatibility. Phosphor's `regular` weight gives the same rounded, minimal silhouettes under a licence the project can actually use. Do not re-add Dawn.
 
@@ -130,10 +141,11 @@ Only the upstream `<svg>` wrapper is discarded during extraction, plus Tabler's 
 
 Every entry — including anything filtered in — must honour it, or the set stops reading as one set:
 
-- a **square** `viewBox`, declared per entry (`0 0 24 24`, `0 0 256 256`, …). Upstream sets disagree on grid size and rescaling by hand would mean editing geometry.
+- a **square** `viewBox`, declared per entry (`0 0 24 24`, `0 0 256 256`, …). Upstream sets disagree on grid size and rescaling by hand would mean editing geometry. **`brand` is the one documented exception** — see §5.6.
 - **no `width` / `height` on the root** — CSS sizes the icon
 - `'style' => 'outline'` → rendered `fill="none" stroke="currentColor"`, stroke-width 2, round caps + joins (Lucide's and Tabler's native weight)
 - `'style' => 'filled'` → rendered `fill="currentColor" stroke="none"` **plus the class `customify-svg-icon--filled`**, which the frontend override rule keys off; without it the outline default blanks the glyph
+- `'style' => 'brand'` → rendered with **no root `fill` / `stroke` at all**, plus the class `customify-svg-icon--brand`. Colour lives on the body's own elements. §5.6.
 - `aria-hidden="true"` + `focusable="false"` — icons are decorative; the accessible name comes from the surrounding link or label
 
 `style` is the **paint mode, not the visual weight**: Phosphor's hairline glyphs are `filled` because their geometry is a filled outline, and they still look like the thinnest icons in the set.
@@ -150,6 +162,7 @@ Every entry — including anything filtered in — must honour it, or the set st
 | Account (11) | `user` `user-alt` `user-outline` `user-filled` `user-circle` `user-circle-alt` `user-circle-soft` `user-circle-filled` `user-square` `contact` `id-card` |
 | Wishlist (8) | `heart` `heart-outline` `heart-plus` `heart-filled` `bookmark` `bookmark-filled` `star` `star-filled` |
 | General UI (19) | `search` `menu` `menu-lines` `menu-narrow` `menu-minimal` `menu-deep` `menu-left` `menu-right` `close` `chevron-down` `arrow-right` `external-link` `home` `phone` `mail` `map-pin` `globe` `clock` `calendar` |
+| Payment (14) | `pay-visa` `pay-mastercard` `pay-maestro` `pay-amex` `pay-discover` `pay-diners` `pay-jcb` `pay-unionpay` `pay-paypal` `pay-apple-pay` `pay-google-pay` `pay-stripe` `pay-klarna` `pay-amazon-pay` |
 
 The General UI family is deliberately lean and header-oriented. This is not a replacement icon font — every extra key is one more cell a shop scrolls past to reach the icon it actually wants. Pro's User Icon item reuses `contact` and `id-card`; its Wishlist item reuses the heart pair.
 
@@ -203,6 +216,108 @@ A site that **saved** a value is unaffected either way: the saved value always b
 > **Known ambiguity, deliberately fail-safe.** A site that installed the theme years ago and never customised anything is indistinguishable from a fresh install, and will be stamped as fresh. By construction such a site has only ever rendered defaults, so the exposure is one cosmetic icon on a header nobody configured. Every site that has *any* saved setting is correctly stamped legacy.
 
 `customify_is_fresh_install_since()` is generic on purpose — later items (User Icon, Search) gate the same way instead of inventing a second mechanism. **The option is public API and Pro reads it**, so its builder-item defaults move in step with the theme's.
+
+---
+
+### 5.6 Brand-coloured entries and mono mode
+
+`'style' => 'brand'` is the third paint mode and the only one that carries colour. It exists for the Payment family, whose members are **not glyphs**: a shop needs Visa blue and Mastercard's red/orange discs, not a `currentColor` silhouette. Shopify stores set the expectation, and a monochrome payment row reads as a placeholder next to one.
+
+#### The card
+
+Every brand entry is a **38 × 24 rounded card** — the ISO card ratio rounded to whole units, shared by the whole family so a row of them lines up on one baseline no matter how wide each logo is. The first element in the body is always the card:
+
+```html
+<rect class="customify-brand-bg" x=".5" y=".5" width="37" height="23" rx="3" fill="#FFFFFF" stroke="#E3E5E8"/>
+```
+
+White unless the brand's own badge is coloured (Klarna `#FFB3C7`, Stripe `#635BFF`). The card is what lets a logo drawn for white paper — Amex's blue box, Discover's black wordmark — stay legible in a dark footer, and it is the hook mono mode turns into an outline.
+
+#### Rendered markup
+
+```html
+<span class="customify-icon customify-icon--svg customify-icon--preset">
+  <svg class="customify-svg-icon customify-svg-icon--visa customify-svg-icon--brand"
+       viewBox="0 0 38 24" aria-hidden="true" focusable="false">
+    <rect class="customify-brand-bg" x=".5" y=".5" width="37" height="23" rx="3" fill="#FFFFFF" stroke="#E3E5E8"/>
+    <g transform="translate(3.446 5.65) scale(0.04851)">
+      <path fill="#0E4595" d="…"/><path fill="#F2AE14" d="…"/>
+    </g>
+  </svg>
+</span>
+```
+
+Note what is **absent**: no `fill` or `stroke` on the root. That is the whole rule. An outline entry needs root paint, a filled entry needs root paint, a brand entry must have none — every element inside declares its own `fill`, and a value on the element always beats one inherited from its parent.
+
+#### Why the CSS has to fight back
+
+"Leave the colours alone" cannot be written literally in CSS: a declaration always beats a presentation attribute, and no keyword reverts to one. Two rules already shipped would eat a brand entry — `.customify-icon--svg > svg { fill: currentColor }` from the wrapper, and `svg.customify-svg-icon { fill: none; stroke: currentColor }` from the preset default. The exemption works by making the **root** stop imposing anything, which leaves each path's own `fill` untouched:
+
+```scss
+// src/frontend/scss/base/_icons.scss
+svg.customify-svg-icon.customify-svg-icon--brand {
+	width: auto;          // a card, not a 1em square
+	height: 1em;
+	fill: none;
+	stroke: none;
+}
+svg.customify-svg-icon.customify-svg-icon--brand .customify-brand-bg {
+	stroke: #e3e5e8;      // beats the `[stroke] { stroke: currentColor }` wrapper rule
+}
+```
+
+Three levels deep (`svg` + two classes), so it wins regardless of source order. `src/backend/customizer/scss/_control.scss` mirrors both rules twice — once for `.customify--icon-suggested-item`, once for `.customify--list-svg-icons` — so the Suggested row and the picker grid preview exactly what the front end paints, card ratio included.
+
+#### Mono mode — the class contract with Pro
+
+A consumer that wants the row to read as one quiet tonal strip puts **`customify-icons--mono` on an ANCESTOR** of the icons — normally the `<ul>`:
+
+```scss
+.customify-icons--mono svg.customify-svg-icon.customify-svg-icon--brand,
+.customify-icons--mono svg.customify-svg-icon.customify-svg-icon--brand * {
+	fill: currentColor;
+	stroke: none;
+}
+.customify-icons--mono svg.customify-svg-icon.customify-svg-icon--brand .customify-brand-bg {
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1;
+}
+.customify-icons--mono svg.customify-svg-icon.customify-svg-icon--brand .customify-brand-plate {
+	fill: none;
+}
+```
+
+**No `!important` anywhere, and none is needed** — the brand colours are presentation attributes, which sit at the bottom of the author cascade. The corollary is a hard rule for entry authors: **never put a brand colour in a `style=""` attribute.** An inline style would beat these rules and the icon would stay coloured in mono. `bin/test-svg-sanitize.php` fails any brand entry containing `style=`.
+
+`customify-brand-plate` handles the marks that are **letterforms knocked out of a coloured plate** — JCB's white "JCB" in three bars, UnionPay's 银联 in three panels. Flattened to one colour those plates become a solid slab and the logo disappears; dropping them in mono leaves exactly the letterforms. Marks that are inherently two-tone discs (Diners Club, and the Mastercard / Maestro pair) flatten to their silhouette — that is the correct monochrome reading of those marks, not a bug.
+
+`customify-icons--mono`, `customify-svg-icon--brand`, `customify-brand-bg` and `customify-brand-plate` are **public selectors** ([`../AGENTS.md`](../AGENTS.md) §4.4) agreed with Customify Pro. Do not rename them.
+
+#### Pro-facing usage
+
+A Pro item rendering a whole row sets the class once on the list:
+
+```php
+$icons = array( 'pay-visa', 'pay-mastercard', 'pay-amex', 'pay-paypal' );
+$mono  = (bool) $this->get_setting( 'payment_methods_mono' );
+
+echo '<ul class="customify-payment-methods' . ( $mono ? ' customify-icons--mono' : '' ) . '">';
+foreach ( $icons as $key ) {
+    echo '<li>' . customify_render_icon( array( 'type' => 'svg', 'icon' => $key ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- theme-authored markup.
+}
+echo '</ul>';
+```
+
+For a single icon there is a shortcut — `mono` puts the class on the wrapper `<span>`, which is an ancestor of the `<svg>` just the same:
+
+```php
+customify_render_icon( array( 'type' => 'svg', 'icon' => 'pay-visa' ), array( 'mono' => true ) );
+```
+
+Both spellings are equivalent; prefer the `<ul>` for a row (one class instead of N wrappers). The flag is harmless on font icons and monochrome presets — the mono rules only match `--brand` entries.
+
+Sizing is inherited: the card is `height: 1em`, so the row's `font-size` sets the logo height and `width: auto` keeps each card's ratio. Do not set `width` on the `<svg>`.
 
 ---
 
@@ -268,6 +383,7 @@ Sizing lives on the markup, not on per-call-site CSS:
 - `svg.customify-svg-icon { fill: none; stroke: currentColor }` — higher specificity, so preset stroke glyphs are not flooded solid by the `fill` default above.
 - `svg.customify-svg-icon.customify-svg-icon--filled { fill: currentColor; stroke: none }` — two classes deep, so the solid entries beat that outline default regardless of source order. The Customizer picker mirrors both rules (grid cells and Suggested cells) so a preview matches what the site renders.
 - `[stroke] { stroke: currentColor }` on descendants — a pasted Tabler/Iconify icon with a hardcoded `stroke="#607d8b"` tints with the theme palette instead.
+- `svg.customify-svg-icon.customify-svg-icon--brand { width: auto; height: 1em; fill: none; stroke: none }` — the brand-coloured payment cards escape every rule above and keep their 38×24 ratio. Full contract, including `customify-icons--mono`, in §5.6.
 
 ### 9.1 Cross-item size parity
 

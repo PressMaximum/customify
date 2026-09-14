@@ -109,3 +109,84 @@ svg.customify-svg-icon.customify-svg-icon--filled {
 	fill: currentColor;
 	stroke: none;
 }
+
+// …and except the BRAND entries. `'style' => 'brand'` ships payment-method
+// logos (Visa blue, Mastercard's red/orange discs, the Klarna pink card) as
+// the only coloured icons in the library, and BOTH rules above would destroy
+// them: the wrapper rule floods the root with `fill: currentColor`, the
+// preset rule replaces it with `fill: none; stroke: currentColor`, and
+// `[stroke]` would repaint the card rect's hairline.
+//
+// "Leave the paint alone" cannot be written literally in CSS — a declaration
+// always beats a presentation attribute, and no keyword reverts to one. What
+// makes it work is WHERE the colour lives: every element inside a brand entry
+// carries its OWN `fill` attribute, and a declaration on an element always
+// beats a value inherited from its parent. So the root only has to stop
+// imposing anything — `fill: none; stroke: none` on the `<svg>` itself is
+// inherited by nothing, and each path keeps its brand colour.
+//
+// Sizing: a payment mark is a landscape 38×24 card, not a square glyph, so
+// `height: 1em; width: auto` keeps the aspect ratio instead of squashing the
+// card into the 1em box the monochrome presets use.
+//
+// Three classes deep (`svg` + two classes), so it beats every rule above
+// regardless of source order.
+svg.customify-svg-icon.customify-svg-icon--brand {
+	width: auto;
+	height: 1em;
+	fill: none;
+	stroke: none;
+}
+
+// The card background behind the logo. The colour is a stylesheet value (not
+// a per-entry one) so a site can retint every card with one rule; the entries
+// still carry `stroke="#E3E5E8"` as a presentation attribute so the card has
+// a border anywhere the theme stylesheet is absent.
+svg.customify-svg-icon.customify-svg-icon--brand .customify-brand-bg {
+	stroke: #e3e5e8;
+}
+
+/*--------------------------------------------------------------
+## Monochrome mode for brand icons
+--------------------------------------------------------------*/
+//
+// A consumer that wants the payment row to read as one quiet, tonal strip
+// (the usual choice in a dark footer) puts `customify-icons--mono` on an
+// ANCESTOR — the `<ul>` wrapping the row, or the icon's own wrapper `<span>`
+// via `customify_render_icon( $value, array( 'mono' => true ) )`.
+//
+// No `!important` anywhere, and none is needed: the brand colours are
+// PRESENTATION ATTRIBUTES (`fill="#1434CB"`), which sit at the very bottom of
+// the author cascade and lose to any declaration. This is also why a brand
+// entry must never move its colour into a `style=""` attribute — an inline
+// style WOULD beat these rules and the icon would stay coloured.
+//
+// The class name is the mono contract with Customify Pro; it is public API
+// the same way the frontend selectors in AGENTS.md §4.4 are. Do not rename.
+.customify-icons--mono svg.customify-svg-icon.customify-svg-icon--brand,
+.customify-icons--mono svg.customify-svg-icon.customify-svg-icon--brand * {
+	fill: currentColor;
+	stroke: none;
+}
+
+// The card itself drops out and becomes an outline, so a mono row reads as a
+// set of empty cards with the mark punched into them rather than 14 solid
+// slabs. One class deeper than the rule above (which reaches the rect through
+// `*`), so it wins without needing source order.
+.customify-icons--mono svg.customify-svg-icon.customify-svg-icon--brand .customify-brand-bg {
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1;
+}
+
+// Some marks are not a shape on a transparent ground but LETTERFORMS KNOCKED
+// OUT of a coloured plate — JCB's white "JCB" sits in three coloured bars,
+// UnionPay's 银联 in three panels. Flattened to one colour those plates become
+// a solid slab and the logo disappears. The entries tag the plate elements
+// `customify-brand-plate`; dropping them in mono leaves exactly the knocked-out
+// letterforms, which is what a monochrome payment mark should look like.
+//
+// Brand mode never sees this rule, so the plates keep their colours there.
+.customify-icons--mono svg.customify-svg-icon.customify-svg-icon--brand .customify-brand-plate {
+	fill: none;
+}

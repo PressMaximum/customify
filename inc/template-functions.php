@@ -1096,8 +1096,12 @@ if ( ! function_exists( 'customify_render_icon' ) ) {
 	 * @param array|string $value    Icon value from Customify()->get_setting()
 	 *                               or a repeater row.
 	 * @param array        $args     Optional: `wrapper_class` (extra classes on
-	 *                               `<i>` for font icons) and `title` (title
-	 *                               attribute on the wrapper).
+	 *                               `<i>` for font icons), `title` (title
+	 *                               attribute on the wrapper) and `mono`
+	 *                               (bool — add `customify-icons--mono` to the
+	 *                               wrapper so a brand-coloured preset, i.e. a
+	 *                               payment logo, paints in `currentColor`
+	 *                               instead of its brand colours).
 	 *
 	 * @return string HTML, or empty string when there is nothing to render.
 	 */
@@ -1115,8 +1119,19 @@ if ( ! function_exists( 'customify_render_icon' ) ) {
 			array(
 				'wrapper_class' => '',
 				'title'         => '',
+				'mono'          => false,
 			)
 		);
+
+		// Monochrome mode for the brand-coloured preset entries (payment
+		// logos). The CSS contract puts `customify-icons--mono` on an
+		// ANCESTOR of the `<svg>` so a consumer rendering a whole row can set
+		// it once on the `<ul>`; this flag is the single-icon shortcut, and
+		// puts the same class on the wrapper `<span>`. Harmless on every
+		// other icon kind — the mono rules only match `--brand` entries.
+		if ( ! empty( $args['mono'] ) ) {
+			$args['wrapper_class'] = trim( 'customify-icons--mono ' . $args['wrapper_class'] );
+		}
 
 		$title_attr = '' !== $args['title'] ? ' title="' . esc_attr( $args['title'] ) . '"' : '';
 		$html       = '';
