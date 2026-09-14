@@ -26,7 +26,7 @@ function DeviceSwitcher( { device, onChange } ) {
 	);
 }
 
-function LayoutSvg( { fr, stacked, count, rows } ) {
+function LayoutSvg( { fr, stacked, count, rows, rowCols } ) {
 	const W   = 48;
 	const H   = 30;
 	const GAP = 2;
@@ -38,6 +38,40 @@ function LayoutSvg( { fr, stacked, count, rows } ) {
 		const rects     = Array.from( { length: bars }, ( _, i ) => (
 			<rect key={ i } x={ 0 } y={ 2 + i * ( barH + GAP ) } width={ W } height={ Math.max( barH, 1 ) } rx={ 2 } />
 		) );
+		return (
+			<svg width={ W } height={ H } viewBox={ `0 0 ${ W } ${ H }` } fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+				{ rects }
+			</svg>
+		);
+	}
+
+	if ( Array.isArray( rowCols ) && rowCols.length ) {
+		const validRows = rowCols.filter( ( columns ) => columns > 0 );
+		const totalGY   = GAP * ( validRows.length - 1 );
+		const rowH      = ( H - 4 - totalGY ) / validRows.length;
+		const rects     = [];
+		let itemIndex   = 0;
+
+		validRows.forEach( ( columns, rowIndex ) => {
+			const totalGX = GAP * ( columns - 1 );
+			const width   = ( W - totalGX ) / columns;
+			const y       = 2 + rowIndex * ( rowH + GAP );
+
+			for ( let columnIndex = 0; columnIndex < columns && itemIndex < count; columnIndex++ ) {
+				rects.push(
+					<rect
+						key={ itemIndex }
+						x={ columnIndex * ( width + GAP ) }
+						y={ y }
+						width={ Math.max( width, 1 ) }
+						height={ Math.max( rowH, 1 ) }
+						rx={ 2 }
+					/>
+				);
+				itemIndex++;
+			}
+		} );
+
 		return (
 			<svg width={ W } height={ H } viewBox={ `0 0 ${ W } ${ H }` } fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 				{ rects }
@@ -84,11 +118,15 @@ function parseValue( raw ) {
 		const globalGap     = parsed.gap     ?? 0;
 		const globalPadding = parsed.padding ?? 0;
 
-		const parseDevice = ( d, def ) => ( {
-			fr:      ( d?.fr || def.fr ).map( ( v ) => parseInt( v, 10 ) || 1 ),
-			gap:     parseInt( d?.gap     ?? globalGap,     10 ) || 0,
-			padding: parseInt( d?.padding ?? globalPadding, 10 ) || 0,
-		} );
+		const parseDevice = ( d, def ) => {
+			const layout = count === 5 && [ '2-3', '3-2', '2-2-1' ].includes( d?.layout ) ? d.layout : '';
+			return {
+				fr:      ( d?.fr || def.fr ).map( ( v ) => parseInt( v, 10 ) || 1 ),
+				gap:     parseInt( d?.gap     ?? globalGap,     10 ) || 0,
+				padding: parseInt( d?.padding ?? globalPadding, 10 ) || 0,
+				...( layout ? { layout } : {} ),
+			};
+		};
 
 		return {
 			count,
@@ -154,6 +192,7 @@ export default function RowLayout( { settingKey } ) {
 	const count      = value.count || 1;
 	const deviceData = value[ device ] || { fr: Array( count ).fill( 1 ) };
 	const fr         = deviceData.fr || Array( count ).fill( 1 );
+	const layout     = deviceData.layout || '';
 	const presets    = PRESETS[ count ] || [ { fr: Array( count ).fill( 1 ) } ];
 
 	const commit = ( newValue ) => {
@@ -188,13 +227,16 @@ export default function RowLayout( { settingKey } ) {
 		[ 'desktop', 'tablet', 'mobile' ].forEach( ( dev ) => {
 			const cur = value[ dev ] || { fr: [], gap: 0, padding: 0 };
 			if ( dev === 'mobile' && dev !== device ) {
-				next[ dev ] = cur;
+				next[ dev ] = { ...cur };
+				if ( n !== 5 ) delete next[ dev ].layout;
 				return;
 			}
-			next[ dev ] = {
+			const resized = {
 				...cur,
 				fr: dev === device ? newFr : resizeFr( cur.fr, n ),
 			};
+			if ( dev === device || n !== 5 ) delete resized.layout;
+			next[ dev ] = resized;
 		} );
 
 		commit( next );
@@ -202,7 +244,13 @@ export default function RowLayout( { settingKey } ) {
 
 	const handlePreset = ( preset ) => {
 		const newFr = preset.stacked ? [ 1 ] : preset.fr;
-		commit( { ...value, [ device ]: { ...deviceData, fr: newFr } } );
+		const nextDevice = { ...deviceData, fr: newFr };
+		if ( preset.layout ) {
+			nextDevice.layout = preset.layout;
+		} else {
+			delete nextDevice.layout;
+		}
+		commit( { ...value, [ device ]: nextDevice } );
 	};
 
 	return (
@@ -236,12 +284,16 @@ export default function RowLayout( { settingKey } ) {
 				<div className="cb-row-layout__preset-grid">
 					{ presets.map( ( preset, idx ) => {
 						const isStacked = !! preset.stacked;
-						const active    = isStacked
-							? fr.length === 1
-							: JSON.stringify( fr ) === JSON.stringify( preset.fr );
+						const active    = preset.layout
+							? layout === preset.layout
+							: ! layout && ( isStacked
+								? fr.length === 1
+								: JSON.stringify( fr ) === JSON.stringify( preset.fr ) );
 						const title     = isStacked
 							? 'stacked'
-							: preset.rows
+							: preset.layout
+								? preset.layout.split( '-' ).join( ' + ' )
+								: preset.rows
 								? `${ preset.rows }×${ preset.fr.length } (${ preset.fr.join( ':' ) })`
 								: preset.fr.join( ':' );
 						return (
@@ -257,6 +309,7 @@ export default function RowLayout( { settingKey } ) {
 									stacked={ isStacked }
 									count={ count }
 									rows={ preset.rows }
+									rowCols={ preset.rowCols }
 								/>
 							</button>
 						);

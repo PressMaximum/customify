@@ -479,6 +479,24 @@ function customify_footer_row_layout_css() {
 		$rows[ "footer_{$row_id}" ] = "#cb-row--footer-{$row_id}";
 	}
 
+	$column_placement_rules = function ( $selector, $count, $layout = '' ) {
+		$spans = array();
+		if ( '2-3' === $layout ) {
+			$spans = array( 3, 3, 2, 2, 2 );
+		} elseif ( '3-2' === $layout ) {
+			$spans = array( 2, 2, 2, 2, 2 );
+		} elseif ( '2-2-1' === $layout ) {
+			$spans = array( 3, 3, 3, 3, 3 );
+		}
+
+		$rules = '';
+		for ( $index = 0; $index < $count; $index++ ) {
+			$placement = isset( $spans[ $index ] ) ? 'span ' . $spans[ $index ] : 'auto';
+			$rules .= ' ' . $selector . ' .row-v2 > .col-v2:nth-child(' . ( $index + 1 ) . ') { grid-column: ' . $placement . '; }';
+		}
+		return $rules;
+	};
+
 	$css = '';
 	foreach ( $rows as $key => $selector ) {
 		$raw = Customify()->get_setting( $key . '_col_layout' );
@@ -508,6 +526,7 @@ function customify_footer_row_layout_css() {
 		// emit extra empty grid tracks (the "col4 still renders after 4→3"
 		// bug). Clamp count to the 1–5 range that matches get_footer_col_keys().
 		$count = isset( $data['count'] ) ? max( 1, min( 5, intval( $data['count'] ) ) ) : 0;
+		$has_larger_mixed_rows = false;
 
 		// Hide column placeholders beyond the active count. Server-side
 		// `render_row()` already skips emitting non-active cols, but in
@@ -533,12 +552,18 @@ function customify_footer_row_layout_css() {
 				// desktop) is treated as the user's choice and rendered below.
 				if ( 'mobile' === $device ) {
 					$rules = $selector . ' .row-v2 { display: grid !important; grid-template-columns: 1fr; }';
+					if ( $has_larger_mixed_rows ) {
+						$rules .= $column_placement_rules( $selector, $count );
+					}
 					$css  .= $media . ' { ' . $rules . ' } ';
 				}
 				continue;
 			}
 
 			$device_data = $data[ $device ];
+			$mixed_rows  = 5 === $count && isset( $device_data['layout'] ) && in_array( $device_data['layout'], array( '2-3', '3-2', '2-2-1' ), true )
+				? $device_data['layout']
+				: '';
 
 			$fr_len = count( $device_data['fr'] );
 
@@ -568,9 +593,17 @@ function customify_footer_row_layout_css() {
 				function ( $v ) { return absint( $v ) . 'fr'; },
 				$fr
 			);
-			$grid_cols = implode( ' ', $fr_parts );
+			$grid_cols = $mixed_rows ? 'repeat(6, minmax(0, 1fr))' : implode( ' ', $fr_parts );
 
 			$rules = $selector . ' .row-v2 { display: grid !important; grid-template-columns: ' . $grid_cols . '; }';
+			if ( $mixed_rows ) {
+				$rules .= $column_placement_rules( $selector, $count, $mixed_rows );
+				$has_larger_mixed_rows = true;
+			} elseif ( $has_larger_mixed_rows ) {
+				// A narrower regular layout must clear spans inherited from a
+				// mixed-row layout configured on a larger breakpoint.
+				$rules .= $column_placement_rules( $selector, $count );
+			}
 			$css  .= $media ? $media . ' { ' . $rules . ' } ' : $rules . ' ';
 		}
 	}
@@ -660,4 +693,3 @@ function customify_footer_sidebar_layout_settings( $item_id, $layout_section ) {
 
 	return array();
 }
-
