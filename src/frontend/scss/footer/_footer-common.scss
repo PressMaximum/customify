@@ -81,13 +81,17 @@
 // General footer skin mode colors.
 .footer--row-inner {
 	&.light-mode {
-		color: var(--customify-row-text-color, #{$dark_color});
+		--customify-footer-link: var(--customify-footer-link-color, var(--customify-footer-text-color, #{$color_link}));
+		--customify-footer-link-hover: var(--customify-footer-link-color, var(--customify-footer-text-color, #{$color_link_hover}));
+		color: var(--customify-footer-text-color, #{$dark_color});
 		.product_list_widget li {
 			border-color: $dark_color_border;
 		}
 	}
 	&.dark-mode {
-		color: var(--customify-row-text-color, #{$light_color});
+		--customify-footer-link: var(--customify-footer-link-color, var(--customify-footer-text-color, #{$light_color_link}));
+		--customify-footer-link-hover: var(--customify-footer-link-color, var(--customify-footer-text-color, #{$light_color_link_hover}));
+		color: var(--customify-footer-text-color, #{$light_color});
 		.product_list_widget li {
 			border-color: $light_color_border;
 		}
@@ -95,6 +99,16 @@
 		table th {
 			background: $dark_color_border;
 		}
+	}
+}
+
+// Match the global element selector's specificity while keeping the rule
+// footer-only. Builder-item and block color classes therefore remain stronger.
+:where(.footer--row) a {
+	color: var(--customify-footer-link, #{$color_link});
+	&:hover,
+	&:focus {
+		color: var(--customify-footer-link-hover, #{$color_link_hover});
 	}
 }
 
