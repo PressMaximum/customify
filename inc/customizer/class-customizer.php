@@ -691,6 +691,20 @@ class  Customify_Customizer {
 					'enabled_by_default' => false,
 				),
 				array(
+					'name'               => 'footer_row_text_color',
+					'type'               => 'color',
+					'label'              => __( 'Text Color', 'customify' ),
+					'css_format'         => '--customify-footer-row-text-color: {{value}}; color: {{value}}; text-decoration-color: {{value}};',
+					'enabled_by_default' => false,
+				),
+				array(
+					'name'               => 'footer_row_link_color',
+					'type'               => 'color',
+					'label'              => __( 'Link Color', 'customify' ),
+					'css_format'         => '--customify-footer-row-link-color: {{value}};',
+					'enabled_by_default' => false,
+				),
+				array(
 					'name'       => 'link_color',
 					'type'       => 'color',
 					'label'      => __( 'Link Color', 'customify' ),
