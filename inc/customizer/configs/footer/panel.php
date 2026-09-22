@@ -126,6 +126,11 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 		// a higher specificity than those class-only defaults, so a user's
 		// padding wins without the SCSS needing `!important` or a default value.
 		$styling_selector = "{$selector} .footer--row-inner";
+		// Put the text color on the outer row so it remains an inherited
+		// fallback. Builder items that declare their own color therefore keep
+		// priority, while the inner row and native items consume the custom
+		// property from the footer skin styles.
+		$row_text_color_selector = $selector;
 
 		$fn = 'customify_customize_render_footer';
 
@@ -297,34 +302,39 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 			// header disables them because it sizes its rows with `_height`
 			// instead, which footer rows don't have.
 			//
-			// The background + text color groups stay disabled: footer rows
-			// already ship dedicated `{$section}_background_color` and
-			// `{$section}_text_mode` controls, and a second background-color
-			// field writing to the same selector would produce two competing
-			// declarations whose winner depends on field registration order.
+			// Background controls stay disabled because footer rows already ship
+			// the dedicated `{$section}_background_color` setting. Text and link
+			// colors are exposed through additive nested values in
+			// `{$section}_styling`; empty values preserve the existing Skin Mode
+			// output and existing saved styling arrays remain valid without a
+			// migration.
 			array(
 				'name'             => "{$section}_styling",
 				'type'             => 'styling',
 				'section'          => $section,
 				'title'            => __( 'Advanced Styling', 'customify' ),
 				/* translators: %s: footer row name, e.g. "Footer Main". */
-				'description'      => sprintf( __( 'Padding, margin and border for %s', 'customify' ), $section_name ),
+				'description'      => sprintf( __( 'Text and link color, padding, margin and border for %s', 'customify' ), $section_name ),
 				'live_title_field' => 'title',
 				'selector'         => array(
-					'normal' => $styling_selector,
+					'normal'                       => $styling_selector,
+					'normal_footer_row_text_color' => $row_text_color_selector,
+					'normal_footer_row_link_color' => $row_text_color_selector,
 				),
 				'css_format'       => 'styling',
 				'fields'           => array(
 					'normal_fields' => array(
-						'text_color'    => false,
-						'link_color'    => false,
-						'bg_heading'    => false,
-						'bg_color'      => false,
-						'bg_image'      => false,
-						'bg_cover'      => false,
-						'bg_position'   => false,
-						'bg_repeat'     => false,
-						'bg_attachment' => false,
+						'text_color'           => false,
+						'footer_row_text_color' => true,
+						'footer_row_link_color' => true,
+						'link_color'           => false,
+						'bg_heading'           => false,
+						'bg_color'             => false,
+						'bg_image'             => false,
+						'bg_cover'             => false,
+						'bg_position'          => false,
+						'bg_repeat'            => false,
+						'bg_attachment'        => false,
 					),
 					'hover_fields'  => false, // disable hover tab and all fields inside.
 				),
