@@ -1131,7 +1131,7 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 		if ( slotKey ) {
 			var \$tokenRow = \$('<div class=\"customify-color-tokenrow\"></div>');
 			var \$token = \$('<input type=\"text\" class=\"customify-color-token\" readonly />')
-				.val('var(--customify-' + slotKey + ')');
+				.val('var(--customify-' + slotKey + ', ' + currentVal + ')');
 			\$token.on('focus', function(){ this.select(); });
 			\$token.on('click', function(e){ e.stopPropagation(); this.select(); });
 			\$tokenRow.append(\$token);
