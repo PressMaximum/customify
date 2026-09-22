@@ -491,12 +491,15 @@ class Customify_WC {
 
 	function show_shop_title( $show = true ) {
 
-		if ( $this->is_shop_pages()  || is_product_category()) {
+		if ( $this->is_shop_pages() || is_product_taxonomy() ) {
 			$disable = get_theme_mod( '_customify_wc_show_page_title' );
-			if ( !$disable ) {
+			if ( ! $disable ) {
 				$show = false;
 			} else {
-				$show = true;
+				// The WooCommerce title is the inline page title. Respect the
+				// resolved Page Header mode so Cover, Titlebar, and Hide do not
+				// leave a duplicate or unexpected heading on product archives.
+				$show = customify_is_post_title_display();
 			}
 		}
 
