@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.4.25\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2026-09-19 05:18:28+00:00\n"
+"POT-Creation-Date: 2026-09-14 08:26:54+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -212,7 +212,7 @@ msgstr ""
 msgid "Copy now"
 msgstr ""
 
-#: inc/admin/dashboard.php:316 inc/customizer/class-customizer.php:1361
+#: inc/admin/dashboard.php:316 inc/customizer/class-customizer.php:1347
 msgid "Logo & Site Identity"
 msgstr ""
 
@@ -380,7 +380,7 @@ msgstr ""
 msgid "Take advantage of the Blog Pro module to show off your posts in any layouts."
 msgstr ""
 
-#: inc/admin/dashboard.php:714 inc/customizer/configs/footer/panel.php:315
+#: inc/admin/dashboard.php:714 inc/customizer/configs/footer/panel.php:309
 #: inc/customizer/configs/header/panel.php:226
 msgid "Advanced Styling"
 msgstr ""
@@ -669,12 +669,12 @@ msgstr ""
 #: inc/customizer/class-customizer.php:632
 #: inc/customizer/class-customizer.php:643
 #: inc/customizer/class-customizer.php:655
-#: inc/customizer/class-customizer.php:762
-#: inc/customizer/class-customizer.php:779
-#: inc/customizer/class-customizer.php:799
-#: inc/customizer/class-customizer.php:816
-#: inc/customizer/class-customizer.php:836
-#: inc/customizer/class-customizer.php:931
+#: inc/customizer/class-customizer.php:748
+#: inc/customizer/class-customizer.php:765
+#: inc/customizer/class-customizer.php:785
+#: inc/customizer/class-customizer.php:802
+#: inc/customizer/class-customizer.php:822
+#: inc/customizer/class-customizer.php:917
 #: inc/customizer/configs/header/social-icons.php:273
 #: inc/customizer/configs/layouts.php:398
 #: inc/customizer/configs/layouts.php:421
@@ -710,8 +710,8 @@ msgstr ""
 #: inc/compatibility/woocommerce/config/single-product.php:164
 #: inc/compatibility/woocommerce/config/single-product.php:187
 #: inc/customizer/configs/blogs.php:29 inc/customizer/configs/blogs.php:36
-#: inc/customizer/configs/footer/panel.php:164
-#: inc/customizer/configs/footer/panel.php:688
+#: inc/customizer/configs/footer/panel.php:159
+#: inc/customizer/configs/footer/panel.php:678
 #: inc/customizer/configs/header/panel.php:135
 #: inc/customizer/configs/page-header.php:231
 msgid "Layout"
@@ -725,7 +725,7 @@ msgstr ""
 msgid "Content Layout"
 msgstr ""
 
-#: inc/class-metabox.php:67 inc/customizer/configs/footer/panel.php:171
+#: inc/class-metabox.php:67 inc/customizer/configs/footer/panel.php:166
 #: inc/customizer/configs/header/panel.php:142
 #: inc/customizer/configs/layouts.php:51
 #: inc/customizer/configs/page-header.php:238
@@ -752,7 +752,7 @@ msgstr ""
 msgid "Default - inside main content"
 msgstr ""
 
-#: inc/class-metabox.php:90 inc/customizer/class-customizer.php:764
+#: inc/class-metabox.php:90 inc/customizer/class-customizer.php:750
 #: inc/customizer/configs/page-header.php:37
 #: inc/customizer/configs/page-header.php:508
 msgid "Cover"
@@ -1771,8 +1771,8 @@ msgstr ""
 
 #: inc/customizer/class-customizer.php:647
 #: inc/customizer/class-customizer.php:659
-#: inc/customizer/class-customizer.php:837
-#: inc/customizer/class-customizer.php:932
+#: inc/customizer/class-customizer.php:823
+#: inc/customizer/class-customizer.php:918
 #: inc/customizer/configs/header/social-icons.php:185
 #: inc/customizer/configs/header/social-icons.php:274
 msgid "None"
@@ -1801,14 +1801,13 @@ msgid "Hover"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:682
-#: inc/customizer/class-customizer.php:900
+#: inc/customizer/class-customizer.php:886
 #: inc/customizer/configs/header/nav-icon.php:106
 #: inc/customizer/configs/header/social-icons.php:196
 msgid "Color"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:688
-#: inc/customizer/class-customizer.php:696
 #: inc/customizer/configs/header/panel.php:215
 msgid "Text Color"
 msgstr ""
@@ -1819,231 +1818,230 @@ msgid ""
 "and Sticky Header colors can override it."
 msgstr ""
 
-#: inc/customizer/class-customizer.php:703
-#: inc/customizer/class-customizer.php:710
-#: inc/customizer/class-customizer.php:906
+#: inc/customizer/class-customizer.php:696
+#: inc/customizer/class-customizer.php:892
 msgid "Link Color"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:724
+#: inc/customizer/class-customizer.php:710
 #: inc/customizer/configs/header/panel.php:460
 msgid "Margin"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:737
+#: inc/customizer/class-customizer.php:723
 #: inc/customizer/configs/header/social-icons.php:158
 msgid "Padding"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:743
-#: inc/customizer/class-customizer.php:912
+#: inc/customizer/class-customizer.php:729
+#: inc/customizer/class-customizer.php:898
 msgid "Background"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:749
-#: inc/customizer/class-customizer.php:917
-#: inc/customizer/configs/footer/panel.php:211
+#: inc/customizer/class-customizer.php:735
+#: inc/customizer/class-customizer.php:903
+#: inc/customizer/configs/footer/panel.php:206
 #: inc/customizer/configs/header/social-icons.php:221
 #: inc/customizer/configs/header/social-icons.php:237
 msgid "Background Color"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:755
+#: inc/customizer/class-customizer.php:741
 #: inc/customizer/configs/page-header.php:498
 msgid "Background Image"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:763
+#: inc/customizer/class-customizer.php:749
 #: inc/customizer/configs/page-header.php:507
 #: inc/customizer/controls/class-control-css-ruler.php:21
 #: inc/style-guide-template.php:528
 msgid "Auto"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:765
+#: inc/customizer/class-customizer.php:751
 #: inc/customizer/configs/page-header.php:509
 msgid "Contain"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:768
+#: inc/customizer/class-customizer.php:754
 #: inc/customizer/configs/header/social-icons.php:144
 #: inc/customizer/configs/page-header.php:512
 msgid "Size"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:775
+#: inc/customizer/class-customizer.php:761
 #: inc/customizer/configs/page-header.php:520
 msgid "Position"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:780
+#: inc/customizer/class-customizer.php:766
 #: inc/customizer/configs/page-header.php:525
 msgid "Center"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:781
+#: inc/customizer/class-customizer.php:767
 #: inc/customizer/configs/page-header.php:526
 msgid "Top Left"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:782
+#: inc/customizer/class-customizer.php:768
 #: inc/customizer/configs/page-header.php:527
 msgid "Top Right"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:783
+#: inc/customizer/class-customizer.php:769
 #: inc/customizer/configs/page-header.php:528
 msgid "Top Center"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:784
+#: inc/customizer/class-customizer.php:770
 #: inc/customizer/configs/page-header.php:529
 msgid "Bottom Left"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:785
+#: inc/customizer/class-customizer.php:771
 #: inc/customizer/configs/page-header.php:530
 msgid "Bottom Center"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:786
+#: inc/customizer/class-customizer.php:772
 #: inc/customizer/configs/page-header.php:531
 msgid "Bottom Right"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:793
+#: inc/customizer/class-customizer.php:779
 #: inc/customizer/configs/page-header.php:539
 msgid "Repeat"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:800
+#: inc/customizer/class-customizer.php:786
 #: inc/customizer/configs/page-header.php:546
 msgid "No repeat"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:801
+#: inc/customizer/class-customizer.php:787
 #: inc/customizer/configs/page-header.php:547
 msgid "Repeat horizontal"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:802
+#: inc/customizer/class-customizer.php:788
 #: inc/customizer/configs/page-header.php:548
 msgid "Repeat vertical"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:810
+#: inc/customizer/class-customizer.php:796
 #: inc/customizer/configs/page-header.php:557
 msgid "Attachment"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:817
+#: inc/customizer/class-customizer.php:803
 #: inc/customizer/configs/page-header.php:564
 msgid "Scroll"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:818
+#: inc/customizer/class-customizer.php:804
 #: inc/customizer/configs/page-header.php:565
 msgid "Fixed"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:826
-#: inc/customizer/class-customizer.php:923
+#: inc/customizer/class-customizer.php:812
+#: inc/customizer/class-customizer.php:909
 #: inc/customizer/configs/header/social-icons.php:259
 msgid "Border"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:833
-#: inc/customizer/class-customizer.php:928
+#: inc/customizer/class-customizer.php:819
+#: inc/customizer/class-customizer.php:914
 #: inc/customizer/configs/header/social-icons.php:270
 msgid "Border Style"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:838
-#: inc/customizer/class-customizer.php:933
+#: inc/customizer/class-customizer.php:824
+#: inc/customizer/class-customizer.php:919
 #: inc/customizer/configs/header/social-icons.php:275
 msgid "Solid"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:839
-#: inc/customizer/class-customizer.php:934
+#: inc/customizer/class-customizer.php:825
+#: inc/customizer/class-customizer.php:920
 #: inc/customizer/configs/header/social-icons.php:276
 msgid "Dotted"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:840
-#: inc/customizer/class-customizer.php:935
+#: inc/customizer/class-customizer.php:826
+#: inc/customizer/class-customizer.php:921
 #: inc/customizer/configs/header/social-icons.php:277
 msgid "Dashed"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:841
-#: inc/customizer/class-customizer.php:936
+#: inc/customizer/class-customizer.php:827
+#: inc/customizer/class-customizer.php:922
 #: inc/customizer/configs/header/social-icons.php:278
 msgid "Double"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:842
-#: inc/customizer/class-customizer.php:937
+#: inc/customizer/class-customizer.php:828
+#: inc/customizer/class-customizer.php:923
 #: inc/customizer/configs/header/social-icons.php:279
 msgid "Ridge"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:843
-#: inc/customizer/class-customizer.php:938
+#: inc/customizer/class-customizer.php:829
+#: inc/customizer/class-customizer.php:924
 #: inc/customizer/configs/header/social-icons.php:280
 msgid "Inset"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:844
-#: inc/customizer/class-customizer.php:939
+#: inc/customizer/class-customizer.php:830
+#: inc/customizer/class-customizer.php:925
 #: inc/customizer/configs/header/social-icons.php:281
 msgid "Outset"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:852
-#: inc/customizer/class-customizer.php:946
+#: inc/customizer/class-customizer.php:838
+#: inc/customizer/class-customizer.php:932
 #: inc/customizer/configs/header/social-icons.php:290
 msgid "Border Width"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:867
-#: inc/customizer/class-customizer.php:958
+#: inc/customizer/class-customizer.php:853
+#: inc/customizer/class-customizer.php:944
 #: inc/customizer/configs/header/menus.php:109
 #: inc/customizer/configs/header/social-icons.php:303
 msgid "Border Color"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:878
-#: inc/customizer/class-customizer.php:965
+#: inc/customizer/class-customizer.php:864
+#: inc/customizer/class-customizer.php:951
 #: inc/customizer/configs/header/social-icons.php:312
 msgid "Border Radius"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:890
-#: inc/customizer/class-customizer.php:976
+#: inc/customizer/class-customizer.php:876
+#: inc/customizer/class-customizer.php:962
 msgid "Box Shadow"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:1413
+#: inc/customizer/class-customizer.php:1399
 msgid "General Options"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:1428
+#: inc/customizer/class-customizer.php:1414
 #: inc/customizer/configs/layouts.php:21
 msgid "Layouts"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:1440
+#: inc/customizer/class-customizer.php:1426
 #: inc/customizer/configs/single-blog-post.php:78
 #: inc/customizer/configs/typography.php:282
 msgid "Content"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:1451
+#: inc/customizer/class-customizer.php:1437
 msgid "Plugins"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:1469
+#: inc/customizer/class-customizer.php:1455
 msgid "Core"
 msgstr ""
 
@@ -2390,19 +2388,19 @@ msgstr ""
 msgid "Footer Top"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:170
+#: inc/customizer/configs/footer/panel.php:165
 #: inc/customizer/configs/header/panel.php:141
 #: inc/customizer/configs/page-header.php:237
 msgid "Full width - Contained"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:172
+#: inc/customizer/configs/footer/panel.php:167
 #: inc/customizer/configs/header/panel.php:143
 #: inc/customizer/configs/page-header.php:239
 msgid "Contained"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:181
+#: inc/customizer/configs/footer/panel.php:176
 #: inc/customizer/configs/header/panel.php:152
 msgid ""
 "Layout <code>Full width - Contained</code> and <code>Full Width</code> will "
@@ -2411,39 +2409,39 @@ msgid ""
 "<code>Framed</code>"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:193
+#: inc/customizer/configs/footer/panel.php:188
 #: inc/customizer/configs/header/panel.php:195
 #: inc/customizer/configs/header/panel.php:310
 msgid "Skin Mode"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:220
+#: inc/customizer/configs/footer/panel.php:215
 msgid "Columns Layout"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:241
+#: inc/customizer/configs/footer/panel.php:236
 msgid "Columns Gap"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:242
+#: inc/customizer/configs/footer/panel.php:237
 msgid ""
 "Gap between columns, per device. Per-column gap in Column Settings "
 "overrides this."
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:271
+#: inc/customizer/configs/footer/panel.php:266
 #: inc/customizer/configs/header/panel.php:251
 msgid "Column Settings"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:272
+#: inc/customizer/configs/footer/panel.php:267
 #: inc/customizer/configs/header/panel.php:252
 msgid "Per-column direction, align, gap and padding."
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:317
+#: inc/customizer/configs/footer/panel.php:311
 #. translators: %s: footer row name, e.g. "Footer Main".
-msgid "Text and link color, padding, margin and border for %s"
+msgid "Padding, margin and border for %s"
 msgstr ""
 
 #: inc/customizer/configs/footer/templates.php:16

@@ -1,20 +1,8 @@
 // Skin mode
 
-.dark-mode,
-.light-mode {
-	// Resolve row colors once. Each skin only overrides the defaults below.
-	--customify-row-text-color: var(--customify-header-row-text-color, var(--customify-footer-row-text-color, var(--customify-row-default-text-color, currentColor)));
-	--customify-row-link-color: var(--customify-header-row-text-color, var(--customify-footer-row-link-color, var(--customify-footer-row-text-color, var(--customify-row-default-link-color, #{$color_link}))));
-	--customify-row-link-hover-color: var(--customify-header-row-text-color, var(--customify-footer-row-link-color, var(--customify-footer-row-text-color, var(--customify-row-default-link-hover-color, #{$color_link_hover}))));
-}
-
 .dark-mode {
-	--customify-row-default-text-color: #{$light_color};
-	--customify-row-default-link-color: #{$light_color_link};
-	--customify-row-default-link-hover-color: #{$light_color_link_hover};
-
 	.header--row & {
-		color: var(--customify-row-text-color, #{$light_color});
+		color: var(--customify-header-row-text-color, #{$light_color});
 		background: $dark_bg;
 	}
 
@@ -28,13 +16,13 @@
 					> a {
 						&:hover,
 						&:focus {
-							color: var(--customify-row-link-hover-color, #{$light_color_link_hover});
+							color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 						}
 					}
 					&.current-menu-item,
 					&.current-menu-ancestor {
 						> a {
-							color: var(--customify-row-link-hover-color, #{$light_color_link_hover});
+							color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 						}
 					}
 				}
@@ -45,7 +33,7 @@
 	// Site identity
 	.site-title,
 	.site-title a {
-		color: var(--customify-row-link-hover-color, #{$light_color_link_hover});
+		color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 	}
 
 	.customify-builder-social-icons.color-custom li a,
@@ -53,19 +41,19 @@
 	.menu-mobile-toggle,
 	.nav-menu > li > a,
 	.item--html a {
-		color: var(--customify-row-link-color, #{$light_color_link});
+		color: var(--customify-header-row-text-color, #{$light_color_link});
 		&:hover {
-			color: var(--customify-row-link-hover-color, #{$light_color_link_hover});
+			color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 		}
 	}
 
 	.cart-item-link {
-		color: var(--customify-row-link-color, #{$light_color_link});
+		color: var(--customify-header-row-text-color, #{$light_color_link});
 		.cart-icon {
-			color: var(--customify-row-link-hover-color, #{$light_color_link_hover});
+			color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 		}
 		&:hover {
-			color: var(--customify-row-link-hover-color, #{$light_color_link_hover});
+			color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 		}
 	}
 
@@ -74,19 +62,19 @@
 		.search-form-fields {
 			background: white(0.03);
 			border-color: $light_color_border;
-			color: var(--customify-row-link-color, #{$light_color_link});
+			color: var(--customify-header-row-text-color, #{$light_color_link});
 			
 			.search-field{
-				color: var(--customify-row-link-color, #{$light_color_link});
+				color: var(--customify-header-row-text-color, #{$light_color_link});
 				&::placeholder {
-					color: var(--customify-row-link-color, #{$light_color_link});
+					color: var(--customify-header-row-text-color, #{$light_color_link});
 				}
 			}
 		}
 		.search-submit {
-			color: var(--customify-row-link-color, #{$light_color_link});
+			color: var(--customify-header-row-text-color, #{$light_color_link});
 			&:hover {
-				color: var(--customify-row-link-hover-color, #{$light_color_link_hover});
+				color: var(--customify-header-row-text-color, #{$light_color_link_hover});
 			}
 		}
 	}
@@ -112,12 +100,8 @@
 }
 
 .light-mode {
-	--customify-row-default-text-color: #{$dark_color};
-	--customify-row-default-link-color: #{$dark_color_link};
-	--customify-row-default-link-hover-color: #{$dark_color_link_hover};
-
 	.header--row & {
-		color: var(--customify-row-text-color, #{$dark_color});
+		color: var(--customify-header-row-text-color, #{$dark_color});
 		background: $light_bg;
 	}
 
@@ -131,13 +115,13 @@
 					> a {
 						&:hover,
 						&:focus {
-							color: var(--customify-row-link-hover-color, #{$dark_color_link_hover});
+							color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
 						}
 					}
 					&.current-menu-item,
 					&.current-menu-ancestor {
 						> a {
-							color: var(--customify-row-link-hover-color, #{$dark_color_link_hover});
+							color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
 						}
 					}
 				}
@@ -148,7 +132,7 @@
 	// Site identity
 	.site-title,
 	.site-title a {
-		color: var(--customify-row-link-hover-color, #{$dark_color_link_hover});
+		color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
 	}
 
 	.customify-builder-social-icons.color-custom li a,
@@ -156,19 +140,19 @@
 	.menu-mobile-toggle,
 	.item--html a,
 	.nav-menu > li > a {
-		color: var(--customify-row-link-color, #{$dark_color_link});
+		color: var(--customify-header-row-text-color, #{$dark_color_link});
 		&:hover {
-			color: var(--customify-row-link-hover-color, #{$dark_color_link_hover});
+			color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
 		}
 	}
 
 	.cart-item-link {
-		color: var(--customify-row-link-color, #{$dark_color_link});
+		color: var(--customify-header-row-text-color, #{$dark_color_link});
 		.cart-icon {
-			color: var(--customify-row-link-hover-color, #{$dark_color_link_hover});
+			color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
 		}
 		&:hover {
-			color: var(--customify-row-link-hover-color, #{$dark_color_link_hover});
+			color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
 		}
 	}
 }

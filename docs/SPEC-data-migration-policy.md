@@ -123,8 +123,6 @@ Naming is inconsistent across items — historical accident, see [`SPEC-header-f
 | `nav_icon_*` | Nav Icon | Bare prefix |
 | `search_icon_*` | Search Icon | Bare prefix |
 | `header_{top\|main\|bottom}_styling.normal.row_text_color` | Header row | Optional row-wide text/icon color inside the existing styling composite |
-| `footer_{top\|main\|bottom}_styling.normal.footer_row_text_color` | Footer row | Optional inherited text/link/icon color; an empty value preserves the existing Skin Mode output |
-| `footer_{top\|main\|bottom}_styling.normal.footer_row_link_color` | Footer row | Optional inherited link color; an empty value falls back to row text color and Skin Mode, while explicit builder-item and block colors retain priority |
 | `footer_{row}_col_gap` | Footer row | Responsive slider; accepts the legacy scalar and the new `{ desktop, tablet, mobile }` shape |
 | `footer_{row}_row_padding` | Footer row | Responsive CSS ruler; row IDs include theme and extension-provided rows |
 

@@ -233,16 +233,13 @@ a.plain_color {
     color: currentColor;
 }
 
-// Footer row colors flow through the existing global link declarations.
-// Core block link styles use their own, more specific selectors and therefore
-// keep priority without any block-specific exceptions here.
 a {
-    color: var(--customify-row-link-color, #{$color_link});
+    color: $color_link;
     text-decoration: none;
     transition: all 0.14s ease-out;
     &:hover,
     &:focus {
-        color: var(--customify-row-link-hover-color, #{$color_link_hover});
+        color: $color_link_hover;
     }
     &:hover,
     &:active {
