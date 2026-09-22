@@ -41,9 +41,47 @@ import { attachPopoverChrome } from './popover-chrome';
 			var parentContainer = $(
 				"#sub-accordion-section-" + section.params.section
 			);
-			parentContainer
-				.children(".section-meta")
-				.after(section.headContainer);
+			if ( "bottom" === section.params.customify_placement ) {
+				var placementControlId =
+					"customize-control-" + section.id + "-placement";
+				var placementControl = $("#" + placementControlId);
+
+				section.headContainer.addClass(
+					"customify-section-placement-source"
+				);
+
+				if (!placementControl.length) {
+					placementControl = $("<li>", {
+						id: placementControlId,
+						class:
+							"customize-control customify-section-link-control"
+					});
+
+					$("<button>", {
+						type: "button",
+						class: "customify-section-link",
+						"aria-controls":
+							"sub-accordion-section-" + section.id
+					})
+						.text(section.params.title)
+						.on("click", function (event) {
+							event.preventDefault();
+							section.expand();
+						})
+						.appendTo(placementControl);
+				}
+
+				placementControl
+					.toggle(section.active())
+					.appendTo(parentContainer);
+			} else {
+				section.headContainer.removeClass(
+					"customify-section-placement-source"
+				);
+				parentContainer
+					.children(".section-meta")
+					.after(section.headContainer);
+			}
 		});
 
 		// Reflow panels
@@ -169,8 +207,56 @@ import { attachPopoverChrome } from './popover-chrome';
 			var section = this;
 			section.expanded.bind(function (expanded) {
 				var parent = api.section(section.params.section);
+				var parentNode;
+				var restoreParentPosition;
+				if (!parent) {
+					return;
+				}
 				if (expanded) {
 					parent.contentContainer.addClass("current-section-parent");
+				} else if (
+					"bottom" === section.params.customify_placement
+				) {
+					// Parent expansion collapses this nested section before the
+					// parent's `open` class is added. Keep the parent on the left
+					// until that class exists so both panes animate without a gap.
+					parentNode = parent.contentContainer.get(0);
+					restoreParentPosition = function () {
+						if (!parent.contentContainer.hasClass("open")) {
+							return;
+						}
+
+						parent.contentContainer.removeClass(
+							"current-section-parent"
+						);
+						section.contentContainer.removeClass(
+							"customify-section-returning"
+						);
+						if (section.customifyParentPositionObserver) {
+							section.customifyParentPositionObserver.disconnect();
+							section.customifyParentPositionObserver = null;
+						}
+					};
+
+					if (parent.contentContainer.hasClass("open")) {
+						restoreParentPosition();
+					} else if (window.MutationObserver && parentNode) {
+						if (section.customifyParentPositionObserver) {
+							section.customifyParentPositionObserver.disconnect();
+						}
+						section.customifyParentPositionObserver =
+							new window.MutationObserver(restoreParentPosition);
+						section.customifyParentPositionObserver.observe(parentNode, {
+							attributes: true,
+							attributeFilter: ["class"]
+						});
+					} else {
+						_.defer(function () {
+							parent.contentContainer.removeClass(
+								"current-section-parent"
+							);
+						});
+					}
 				} else {
 					parent.contentContainer.removeClass(
 						"current-section-parent"
@@ -182,12 +268,39 @@ import { attachPopoverChrome } from './popover-chrome';
 				.find(".customize-section-back")
 				.off("click keydown")
 				.on("click keydown", function (event) {
+					var parent;
+					var sidebarContent;
+
 					if (api.utils.isKeydownButNotEnterEvent(event)) {
 						return;
 					}
 					event.preventDefault(); // Keep this AFTER the key filter above
-					if (section.expanded()) {
-						api.section(section.params.section).expand();
+					parent = api.section(section.params.section);
+					if (section.expanded() && parent) {
+						sidebarContent = section.contentContainer.closest(
+							".wp-full-overlay-sidebar-content"
+						);
+						if (
+							"bottom" === section.params.customify_placement
+						) {
+							// Hold the nested pane in place while core prepares the
+							// parent. Both panes start moving when the parent opens.
+							section.contentContainer.addClass(
+								"customify-section-returning"
+							);
+						}
+						parent.expand({
+							completeCallback: function () {
+								// Core focuses the parent Back button while the
+								// nested panes are still transitioning. Reset the
+								// horizontal position after both panes settle so the
+								// restored parent is not clipped on the left.
+								sidebarContent.scrollLeft(0);
+								section.contentContainer.removeClass(
+									"customify-section-returning"
+								);
+							}
+						});
 					}
 				});
 		},
@@ -202,6 +315,12 @@ import { attachPopoverChrome } from './popover-chrome';
 
 			_sectionEmbed.call(this);
 			var section = this;
+			if ( "bottom" === section.params.customify_placement ) {
+				section.headContainer.addClass(
+					"customify-section-placement-source"
+				);
+				return;
+			}
 			var parentContainer = $(
 				"#sub-accordion-section-" + this.params.section
 			);

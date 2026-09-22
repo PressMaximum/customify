@@ -509,6 +509,113 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
 Customify_Customize_Layout_Builder()->register_builder( 'header', new Customify_Builder_Header() );
 
 /**
+ * Add off-canvas override controls declared by header item fields.
+ *
+ * Item configs opt in by adding an `offcanvas` key to an existing field. The
+ * value may be `true`, or an array of config values that replace the cloned
+ * field values (most commonly `selector` and `css_format`). The optional
+ * `group` and `group_title` values visually divide larger off-canvas sections
+ * without changing the setting data. The original field remains unchanged, so
+ * an empty cloned setting preserves the item's existing rendering behavior.
+ *
+ * @param array  $config  Header item Customizer config.
+ * @param string $item_id Header builder item ID.
+ * @param string $section Customizer section ID.
+ * @return array
+ */
+if ( ! function_exists( 'customify_header_add_offcanvas_item_settings' ) ) {
+	function customify_header_add_offcanvas_item_settings( $config, $item_id, $section ) {
+		if ( ! is_array( $config ) || ! $item_id || ! $section ) {
+			return $config;
+		}
+
+		$offcanvas_fields = array();
+
+		foreach ( $config as $index => $field ) {
+			if ( ! is_array( $field ) || empty( $field['offcanvas'] ) ) {
+				continue;
+			}
+
+			$offcanvas = true === $field['offcanvas'] ? array() : $field['offcanvas'];
+			unset( $config[ $index ]['offcanvas'] );
+
+			if ( ! is_array( $offcanvas ) || empty( $field['name'] ) || empty( $field['type'] ) ) {
+				continue;
+			}
+
+			$clone = $field;
+			unset( $clone['offcanvas'] );
+
+			$group       = isset( $offcanvas['group'] ) ? sanitize_key( $offcanvas['group'] ) : '';
+			$group_title = isset( $offcanvas['group_title'] ) ? $offcanvas['group_title'] : '';
+			unset( $offcanvas['group'], $offcanvas['group_title'] );
+
+			$clone['name']        = $field['name'] . '_offcanvas';
+			$clone['section']     = $section . '_offcanvas';
+			$clone['default']     = null;
+			$clone['description'] = null;
+
+			// An override field controls CSS only unless it explicitly supplies
+			// its own render callback. Reusing the base callback would refresh the
+			// whole item even though its content did not change.
+			unset( $clone['render'], $clone['render_callback'], $clone['required'] );
+
+			foreach ( $offcanvas as $key => $value ) {
+				$clone[ $key ] = $value;
+			}
+
+			$offcanvas_fields[] = array(
+				'field'       => $clone,
+				'group'       => $group,
+				'group_title' => $group_title,
+			);
+		}
+
+		if ( empty( $offcanvas_fields ) ) {
+			return $config;
+		}
+
+		$normalized_item_id = str_replace( '-', '_', sanitize_key( $item_id ) );
+		$offcanvas_section  = $section . '_offcanvas';
+
+		$config[] = array(
+			'name'                => $offcanvas_section,
+			'type'                => 'section',
+			'section'             => $section,
+			'title'               => __( 'Off-canvas', 'customify' ),
+			'priority'            => 1000,
+			'customify_placement' => 'bottom',
+		);
+
+		$group_ids = array_unique( array_filter( wp_list_pluck( $offcanvas_fields, 'group' ) ) );
+		$priority  = 10;
+		$groups    = array();
+
+		foreach ( $offcanvas_fields as $offcanvas_field ) {
+			$group = $offcanvas_field['group'];
+			if ( count( $group_ids ) > 1 && $group && ! isset( $groups[ $group ] ) ) {
+				$config[] = array(
+					'name'     => 'header_' . $normalized_item_id . '_offcanvas_' . $group . '_heading',
+					'type'     => 'heading',
+					'section'  => $offcanvas_section,
+					'title'    => $offcanvas_field['group_title'],
+					'priority' => $priority,
+				);
+				$groups[ $group ] = true;
+				$priority += 10;
+			}
+
+			$field             = $offcanvas_field['field'];
+			$field['priority'] = $priority;
+			$config[]          = $field;
+			$priority         += 10;
+		}
+
+		return $config;
+	}
+}
+
+/**
  * Check whether a specific item ID is present anywhere in the v2 header builder layout.
  *
  * Used as active_callback for element sections so they only appear in the
