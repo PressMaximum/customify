@@ -169,9 +169,17 @@ if ( ! function_exists( 'customify_search_get_request_tax_filters' ) ) {
 	 *               request carries no taxonomy filter.
 	 */
 	function customify_search_get_request_tax_filters() {
+		static $cache = null;
+
+		if ( null !== $cache ) {
+			return $cache;
+		}
+
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read only query vars on a public search request.
 		if ( empty( $_GET ) ) {
-			return array();
+			$cache = array();
+
+			return $cache;
 		}
 
 		$vars = array( 'cat' );
@@ -197,6 +205,12 @@ if ( ! function_exists( 'customify_search_get_request_tax_filters' ) ) {
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
+		if ( empty( $filters ) ) {
+			$cache = array();
+
+			return $cache;
+		}
+
 		ksort( $filters );
 
 		/**
@@ -207,8 +221,34 @@ if ( ! function_exists( 'customify_search_get_request_tax_filters' ) ) {
 		 * @param array $filters Query var => value.
 		 */
 		$filters = apply_filters( 'customify/search/tax_filters', $filters );
+		$cache   = is_array( $filters ) ? $filters : array();
 
-		return is_array( $filters ) ? $filters : array();
+		return $cache;
+	}
+}
+
+if ( ! function_exists( 'customify_search_request_has_product_tax_filter' ) ) {
+	/**
+	 * Whether the request includes a public product-taxonomy query var.
+	 *
+	 * @since 0.4.26
+	 *
+	 * @return bool
+	 */
+	function customify_search_request_has_product_tax_filter() {
+		$filters = customify_search_get_request_tax_filters();
+
+		if ( empty( $filters ) ) {
+			return false;
+		}
+
+		foreach ( get_object_taxonomies( 'product', 'objects' ) as $taxonomy ) {
+			if ( ! empty( $taxonomy->public ) && ! empty( $taxonomy->query_var ) && is_string( $taxonomy->query_var ) && isset( $filters[ $taxonomy->query_var ] ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }
 
@@ -692,8 +732,7 @@ if ( ! function_exists( 'customify_search_tabs' ) ) {
 		$all_args = array( 's' => urlencode( $term ) );
 
 		// Every tab keeps the taxonomy filter the visitor searched with.
-		$filter_args = array_map( 'rawurlencode', $filters );
-		$all_args    = array_merge( $all_args, $filter_args );
+		$all_args = array_merge( $all_args, $filters );
 
 		// With a default scope armed, a bare `?s=term` would be redirected back
 		// into that scope the moment the All tab is clicked - the bypass marker
@@ -735,7 +774,7 @@ if ( ! function_exists( 'customify_search_tabs' ) ) {
 							's'         => urlencode( $term ),
 							'post_type' => $slug,
 						),
-						$filter_args
+						$filters
 					),
 					home_url( '/' )
 				),
@@ -1434,12 +1473,14 @@ if ( ! function_exists( 'customify_search_is_wc_scoped' ) ) {
 			return false;
 		}
 
-		// A search filtered by a product taxonomy (`?s=term&product_cat=x`,
-		// no post_type) is routed to woocommerce.php as a TAXONOMY archive by
-		// WooCommerce's template loader - it needs the same injected chrome.
-		// Only reachable with a product taxonomy query var in the URL.
-		if ( ! is_post_type_archive( 'product' ) && ! ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) ) {
-			return false;
+		if ( ! is_post_type_archive( 'product' ) ) {
+			// A search filtered by a product taxonomy (`?s=term&product_cat=x`,
+			// no post_type) is routed to woocommerce.php as a taxonomy archive.
+			// Require the public query var in the request as well: a plugin-added
+			// tax query must not change an otherwise unfiltered search page.
+			if ( ! function_exists( 'is_product_taxonomy' ) || ! is_product_taxonomy() || ! customify_search_request_has_product_tax_filter() ) {
+				return false;
+			}
 		}
 
 		// search.php renders its own heading and tabs; only the WooCommerce
@@ -1447,6 +1488,46 @@ if ( ! function_exists( 'customify_search_is_wc_scoped' ) ) {
 		return 'search.php' !== basename( customify_search_current_template() );
 	}
 }
+
+if ( ! function_exists( 'customify_search_maybe_redirect_single_wc_tax_result' ) ) {
+	/**
+	 * Preserve WooCommerce's single-result redirect on product-taxonomy searches.
+	 *
+	 * WooCommerce only performs its redirect when `is_post_type_archive()` is
+	 * true. A search carrying `product_cat` but no explicit `post_type` is a
+	 * product taxonomy archive instead, even though the taxonomy limits every
+	 * result to products.
+	 *
+	 * @since 0.4.26
+	 */
+	function customify_search_maybe_redirect_single_wc_tax_result() {
+		if ( ! Customify()->is_woocommerce_active() || ! is_search() || is_post_type_archive( 'product' ) ) {
+			return;
+		}
+
+		if ( ! function_exists( 'is_product_taxonomy' ) || ! is_product_taxonomy() || ! customify_search_request_has_product_tax_filter() ) {
+			return;
+		}
+
+		global $wp_query;
+
+		if ( ! is_a( $wp_query, 'WP_Query' ) || 1 !== absint( $wp_query->found_posts ) ) {
+			return;
+		}
+
+		if ( ! apply_filters( 'woocommerce_redirect_single_search_result', true ) ) {
+			return;
+		}
+
+		$product = function_exists( 'wc_get_product' ) ? wc_get_product( $wp_query->post ) : false;
+
+		if ( $product && $product->is_visible() ) {
+			wp_safe_redirect( get_permalink( $product->get_id() ), 302 );
+			exit;
+		}
+	}
+}
+add_action( 'template_redirect', 'customify_search_maybe_redirect_single_wc_tax_result', 11 );
 
 if ( ! function_exists( 'customify_search_template_region_swap' ) ) {
 	/**
