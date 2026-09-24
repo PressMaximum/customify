@@ -726,8 +726,13 @@ class Customify_Dashboard
 				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/multiple-headers/',
 			),
 			array(
-				'name' => __('Mega Menu', 'customify'),
-				'desc' => __('Create mega menu for your sites that need more space for navigation.', 'customify'),
+				'name' => __('Mega menu (Legacy)', 'customify'),
+				'desc' => __('The classic mega menu: layout-based panels configured in Appearance > Menus.', 'customify'),
+				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/mega-menu/',
+			),
+			array(
+				'name' => __('Mega menu (Blocks Editor)', 'customify'),
+				'desc' => __('Rich mega menu panels built in the block editor with Blocksify.', 'customify'),
 				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/mega-menu/',
 			),
 			array(

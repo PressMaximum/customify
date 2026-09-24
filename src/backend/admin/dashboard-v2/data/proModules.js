@@ -62,8 +62,14 @@ export function useProModules() {
 		},
 		{
 			id: 'mega-menu',
-			name: __( 'Mega Menu', 'customify' ),
-			description: __( 'Mega-menu navigation with more space and visual hierarchy.', 'customify' ),
+			name: __( 'Mega menu (Legacy)', 'customify' ),
+			description: __( 'The classic mega menu: layout-based panels configured in Appearance > Menus.', 'customify' ),
+			docHref: DOCS_BASE + 'mega-menu/',
+		},
+		{
+			id: 'mega-menu-blocksify',
+			name: __( 'Mega menu (Blocks Editor)', 'customify' ),
+			description: __( 'Rich mega menu panels built in the block editor with Blocksify.', 'customify' ),
 			docHref: DOCS_BASE + 'mega-menu/',
 		},
 		{
