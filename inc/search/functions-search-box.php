@@ -56,6 +56,8 @@ if ( ! function_exists( 'customify_search_box_cat_filter_enabled' ) ) {
 	 * Also the feature flag Customify Pro reads to keep its legacy dropdown
 	 * out of the form.
 	 *
+	 * @since 0.4.26
+	 *
 	 * @return bool
 	 */
 	function customify_search_box_cat_filter_enabled() {
@@ -71,6 +73,8 @@ if ( ! function_exists( 'customify_search_box_get_cat_taxonomies' ) ) {
 	 * are attached to at least one searchable post type. Post formats and
 	 * WooCommerce shipping classes are left out - they are not a way anybody
 	 * browses a catalogue.
+	 *
+	 * @since 0.4.26
 	 *
 	 * @return WP_Taxonomy[] Keyed by taxonomy slug.
 	 */
@@ -107,6 +111,8 @@ if ( ! function_exists( 'customify_search_box_get_cat_taxonomy_choices' ) ) {
 	/**
 	 * Select choices for the "Taxonomy" setting.
 	 *
+	 * @since 0.4.26
+	 *
 	 * @return array Slug => "Product categories (Products)" style label.
 	 */
 	function customify_search_box_get_cat_taxonomy_choices() {
@@ -137,6 +143,8 @@ if ( ! function_exists( 'customify_search_box_get_default_cat_taxonomy' ) ) {
 	/**
 	 * Default taxonomy of the category dropdown.
 	 *
+	 * @since 0.4.26
+	 *
 	 * @return string `product_cat` on WooCommerce sites, `category` otherwise.
 	 */
 	function customify_search_box_get_default_cat_taxonomy() {
@@ -147,6 +155,8 @@ if ( ! function_exists( 'customify_search_box_get_default_cat_taxonomy' ) ) {
 if ( ! function_exists( 'customify_search_box_get_cat_taxonomy' ) ) {
 	/**
 	 * Resolve the configured, still valid taxonomy of the dropdown.
+	 *
+	 * @since 0.4.26
 	 *
 	 * @return string Taxonomy slug, empty string when none is usable.
 	 */
@@ -172,6 +182,8 @@ if ( ! function_exists( 'customify_search_box_get_cat_terms' ) ) {
 	 *
 	 * @param string $taxonomy Taxonomy slug.
 	 *
+	 * @since 0.4.26
+	 *
 	 * @return array[] List of `array( 'term' => WP_Term, 'depth' => int )`.
 	 */
 	function customify_search_box_get_cat_terms( $taxonomy ) {
@@ -181,7 +193,7 @@ if ( ! function_exists( 'customify_search_box_get_cat_terms' ) ) {
 
 		/**
 		 * Filter the maximum number of terms the "top level" and "all" modes
-		 * list. Hand-picked terms are never capped here.
+		 * list, including hand-picked terms.
 		 *
 		 * @since 0.4.26
 		 *
@@ -199,6 +211,7 @@ if ( ! function_exists( 'customify_search_box_get_cat_terms' ) ) {
 
 		if ( 'selected' === $source ) {
 			$ids = customify_term_picker_sanitize_ids( Customify()->get_setting( 'search_box_cat_terms' ) );
+			$ids = array_slice( $ids, 0, $max );
 
 			if ( $ids ) {
 				$terms = get_terms(
@@ -254,8 +267,17 @@ if ( ! function_exists( 'customify_search_box_get_cat_terms' ) ) {
 			return $list;
 		}
 
-		// "all": walk the tree depth first so children follow their parent.
-		$terms = get_terms( $base );
+		// "all": fetch no more than the output cap, then walk the available
+		// portion of the tree depth first so children follow their parent.
+		$terms = get_terms(
+			array_merge(
+				$base,
+				array(
+					'hierarchical' => false,
+					'number'       => $max,
+				)
+			)
+		);
 
 		if ( ! is_array( $terms ) || empty( $terms ) ) {
 			return array();
@@ -307,6 +329,8 @@ if ( ! function_exists( 'customify_search_box_get_cat_dropdown' ) ) {
 	 *
 	 * @param string $item_id Builder item id.
 	 *
+	 * @since 0.4.26
+	 *
 	 * @return string HTML, empty string when the dropdown should not render.
 	 */
 	function customify_search_box_get_cat_dropdown( $item_id = 'search_box' ) {
@@ -332,6 +356,8 @@ if ( ! function_exists( 'customify_search_box_build_cat_dropdown' ) ) {
 	 * Uncached worker of customify_search_box_get_cat_dropdown().
 	 *
 	 * @param string $item_id Builder item id.
+	 *
+	 * @since 0.4.26
 	 *
 	 * @return string HTML, empty string when the dropdown should not render.
 	 */
@@ -409,6 +435,8 @@ if ( ! function_exists( 'customify_search_box_cat_dropdown' ) ) {
 	 * Print the category dropdown of a search item (see the getter above).
 	 *
 	 * @param string $item_id Builder item id.
+	 *
+	 * @since 0.4.26
 	 */
 	function customify_search_box_cat_dropdown( $item_id = 'search_box' ) {
 		$html = customify_search_box_get_cat_dropdown( $item_id );
@@ -429,6 +457,8 @@ if ( ! function_exists( 'customify_search_box_form_classes' ) ) {
 	 *
 	 * @param string[] $classes Classes from the `form_extra_class` filter.
 	 * @param string   $item_id Builder item id.
+	 *
+	 * @since 0.4.26
 	 *
 	 * @return string[] Untouched while both features are at their defaults.
 	 */
@@ -472,7 +502,10 @@ if ( ! function_exists( 'customify_search_box_enqueue_submit_script' ) ) {
 	 * Re-enabled on `pageshow` so a back navigation finds it usable.
 	 *
 	 * Attached to the footer theme script, and only once a dropdown was
-	 * printed - pages without one get no extra bytes.
+	 * printed. The Customizer preview attaches it up front while the opt-in
+	 * switch is enabled, so a later partial refresh can safely replace the form.
+	 *
+	 * @since 0.4.26
 	 */
 	function customify_search_box_enqueue_submit_script() {
 		static $done = false;
@@ -485,21 +518,23 @@ if ( ! function_exists( 'customify_search_box_enqueue_submit_script' ) ) {
 
 		wp_add_inline_script(
 			'customify-themejs',
-			'(function(){var s=".cfy-search-box__cat-select";document.addEventListener("submit",function(e){var f=e.target;if(!f||!f.querySelectorAll){return;}var l=f.querySelectorAll(s);for(var i=0;i<l.length;i++){if(!l[i].value||!l[i].offsetParent){l[i].disabled=true;}}},true);window.addEventListener("pageshow",function(){var l=document.querySelectorAll(s);for(var i=0;i<l.length;i++){l[i].disabled=false;}});})();'
+			'(function(){var s=".cfy-search-box__cat-select";document.addEventListener("submit",function(e){var f=e.target;if(!f||!f.querySelectorAll){return;}var l=f.querySelectorAll(s);for(var i=0;i<l.length;i++){if(!l[i].value||!l[i].getClientRects().length){l[i].disabled=true;(function(c){window.setTimeout(function(){c.disabled=false;},0);})(l[i]);}}},true);window.addEventListener("pageshow",function(){var l=document.querySelectorAll(s);for(var i=0;i<l.length;i++){l[i].disabled=false;}});})();'
 		);
 	}
 }
 
 if ( ! function_exists( 'customify_search_box_preview_submit_script' ) ) {
 	/**
-	 * Load the submit helper up front in the Customizer preview, where the
-	 * dropdown can be switched on through a partial refresh that never
-	 * reaches the footer scripts.
+	 * Load the submit helper up front in the Customizer preview, where later
+	 * dropdown setting changes use partial refreshes that never reach the
+	 * footer scripts.
+	 *
+	 * @since 0.4.26
 	 */
 	function customify_search_box_preview_submit_script() {
-		if ( is_customize_preview() ) {
+		if ( is_customize_preview() && customify_search_box_cat_filter_enabled() ) {
 			customify_search_box_enqueue_submit_script();
 		}
 	}
 }
-add_action( 'wp_enqueue_scripts', 'customify_search_box_preview_submit_script', 20 );
+add_action( 'wp_enqueue_scripts', 'customify_search_box_preview_submit_script', 100 );

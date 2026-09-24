@@ -105,14 +105,12 @@ class Customify_Builder_Item_Search_Box {
 			),
 
 			array(
-				'name'            => $this->section . '_cat_filter',
-				'type'            => 'checkbox',
-				'section'         => $this->section,
-				'selector'        => "$selector",
-				'render_callback' => $fn,
-				'default'         => '',
-				'checkbox_label'  => __( 'Show a category dropdown in the search form', 'customify' ),
-				'priority'        => 13,
+				'name'           => $this->section . '_cat_filter',
+				'type'           => 'checkbox',
+				'section'        => $this->section,
+				'default'        => '',
+				'checkbox_label' => __( 'Show a category dropdown in the search form', 'customify' ),
+				'priority'       => 13,
 			),
 
 			array(
