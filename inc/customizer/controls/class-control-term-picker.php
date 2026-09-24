@@ -39,6 +39,8 @@ class Customify_Customizer_Control_Term_Picker extends Customify_Customizer_Cont
 
 	/**
 	 * Pass the picker data to the JS template.
+	 *
+	 * @since 0.4.26
 	 */
 	public function to_json() {
 		parent::to_json();
@@ -56,6 +58,8 @@ class Customify_Customizer_Control_Term_Picker extends Customify_Customizer_Cont
 
 	/**
 	 * Taxonomy the saved IDs belong to.
+	 *
+	 * @since 0.4.26
 	 *
 	 * @return string
 	 */
@@ -81,6 +85,8 @@ class Customify_Customizer_Control_Term_Picker extends Customify_Customizer_Cont
 
 	/**
 	 * Underscore template, compiled by customifyField.add().
+	 *
+	 * @since 0.4.26
 	 */
 	public static function field_template() {
 		echo '<script type="text/html" id="tmpl-field-customify-term_picker">';

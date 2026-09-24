@@ -35,6 +35,8 @@ if ( ! function_exists( 'customify_term_picker_sanitize_ids' ) ) {
 	 *
 	 * @param mixed $value Raw value.
 	 *
+	 * @since 0.4.26
+	 *
 	 * @return int[] Unique, positive term IDs in their original order.
 	 */
 	function customify_term_picker_sanitize_ids( $value ) {
@@ -80,6 +82,8 @@ if ( ! function_exists( 'customify_term_picker_sanitize_setting' ) ) {
 	 *
 	 * @param mixed $value Posted value.
 	 *
+	 * @since 0.4.26
+	 *
 	 * @return int[]
 	 */
 	function customify_term_picker_sanitize_setting( $value ) {
@@ -92,6 +96,8 @@ if ( ! function_exists( 'customify_term_picker_term_label' ) ) {
 	 * Plain text label of a term for the picker: ancestor path + count.
 	 *
 	 * @param WP_Term $term Term object.
+	 *
+	 * @since 0.4.26
 	 *
 	 * @return string E.g. "Clothing › Jackets (12)". Entities decoded - the
 	 *                picker escapes on output.
@@ -131,12 +137,15 @@ if ( ! function_exists( 'customify_term_picker_get_choices' ) ) {
 	 * @param int[]  $ids      Term IDs.
 	 * @param string $taxonomy Taxonomy the IDs must belong to.
 	 *
+	 * @since 0.4.26
+	 *
 	 * @return array[] List of `array( 'id' => int, 'text' => string )`.
 	 */
 	function customify_term_picker_get_choices( $ids, $taxonomy ) {
-		$ids = customify_term_picker_sanitize_ids( $ids );
+		$ids    = customify_term_picker_sanitize_ids( $ids );
+		$object = is_string( $taxonomy ) ? get_taxonomy( $taxonomy ) : false;
 
-		if ( empty( $ids ) || ! is_string( $taxonomy ) || ! taxonomy_exists( $taxonomy ) ) {
+		if ( empty( $ids ) || ! $object || empty( $object->public ) || empty( $object->query_var ) || ! is_string( $object->query_var ) ) {
 			return array();
 		}
 
@@ -173,6 +182,8 @@ if ( ! function_exists( 'customify_term_picker_ajax_search' ) ) {
 	 *
 	 * Request: `nonce`, `taxonomy`, optional `q` (search) and `page` (1 based).
 	 * Response: Select2's `{ results: [ { id, text } ], pagination: { more } }`.
+	 *
+	 * @since 0.4.26
 	 */
 	function customify_term_picker_ajax_search() {
 		check_ajax_referer( 'customify_term_picker', 'nonce' );
@@ -181,14 +192,14 @@ if ( ! function_exists( 'customify_term_picker_ajax_search' ) ) {
 			wp_send_json_error( 'Forbidden', 403 );
 		}
 
-		$taxonomy = isset( $_REQUEST['taxonomy'] ) ? sanitize_key( wp_unslash( $_REQUEST['taxonomy'] ) ) : '';
-		$search   = isset( $_REQUEST['q'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['q'] ) ) : '';
-		$page     = isset( $_REQUEST['page'] ) ? max( 1, absint( $_REQUEST['page'] ) ) : 1;
+		$taxonomy = isset( $_POST['taxonomy'] ) ? sanitize_key( wp_unslash( $_POST['taxonomy'] ) ) : '';
+		$search   = isset( $_POST['q'] ) ? sanitize_text_field( wp_unslash( $_POST['q'] ) ) : '';
+		$page     = isset( $_POST['page'] ) ? max( 1, absint( $_POST['page'] ) ) : 1;
 		$object   = get_taxonomy( $taxonomy );
 
-		// Only public taxonomies: these are the ones whose terms already show
-		// up on the front end, so listing them discloses nothing new.
-		if ( ! $object || empty( $object->public ) ) {
+		// Only public taxonomies with a usable query var: these are the ones
+		// whose terms can be submitted by a front-end filter.
+		if ( ! $object || empty( $object->public ) || empty( $object->query_var ) || ! is_string( $object->query_var ) ) {
 			wp_send_json_error( 'Invalid taxonomy', 400 );
 		}
 
@@ -196,6 +207,7 @@ if ( ! function_exists( 'customify_term_picker_ajax_search' ) ) {
 		$args     = array(
 			'taxonomy'               => $taxonomy,
 			'hide_empty'             => false,
+			'hierarchical'           => false,
 			'number'                 => $per_page + 1, // One extra row tells whether another page exists.
 			'offset'                 => ( $page - 1 ) * $per_page,
 			'orderby'                => 'name',

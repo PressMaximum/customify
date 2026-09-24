@@ -136,6 +136,7 @@ export function initTermPicker( $fieldsArea ) {
 		},
 		ajax: {
 			url: $select.attr( 'data-ajax-url' ),
+			type: 'POST',
 			dataType: 'json',
 			delay: 250,
 			data( params ) {
