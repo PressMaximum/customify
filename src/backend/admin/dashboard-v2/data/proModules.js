@@ -1,7 +1,8 @@
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
-const DOCS_BASE = 'https://pressmaximum.com/docs/customify/customify-pro-modules/';
+const DOCS_BASE =
+	'https://pressmaximum.com/docs/customify/customify-pro-modules/';
 
 /**
  * Pro module catalogue rendered on the Welcome tab. Two shapes:
@@ -14,86 +15,134 @@ const DOCS_BASE = 'https://pressmaximum.com/docs/customify/customify-pro-modules
  * (returning the PRO shape sourced from window.customifyDashboard.proModules
  * / a REST endpoint).
  *
- * @return {Array<object>}
+ * @return {Array<object>} Catalogue rows, in display order.
  */
 export function useProModules() {
 	const base = [
 		{
 			id: 'header-sticky',
 			name: __( 'Header Sticky', 'customify' ),
-			description: __( 'Let your header stay accessible as users scroll.', 'customify' ),
+			description: __(
+				'Let your header stay accessible as users scroll.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'header-sticky/',
 		},
 		{
 			id: 'header-footer-booster',
 			name: __( 'Header & Footer Builder Booster', 'customify' ),
-			description: __( 'More header/footer builder items + advanced styling.', 'customify' ),
+			description: __(
+				'More header/footer builder items + advanced styling.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'advanced-header-footer-builder/',
 		},
 		{
 			id: 'scroll-to-top',
 			name: __( 'Scroll to Top', 'customify' ),
-			description: __( 'Animated scroll-to-top button for a better UX.', 'customify' ),
+			description: __(
+				'Animated scroll-to-top button for a better UX.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'scroll-to-top/',
 		},
 		{
 			id: 'blog-pro',
 			name: __( 'Blog Pro', 'customify' ),
-			description: __( 'Multiple post layouts for richer blog presentations.', 'customify' ),
+			description: __(
+				'Multiple post layouts for richer blog presentations.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'blog-pro/',
 		},
 		{
 			id: 'advanced-styling',
 			name: __( 'Advanced Styling', 'customify' ),
-			description: __( 'Layout + typography control for page header title and cover.', 'customify' ),
+			description: __(
+				'Layout + typography control for page header title and cover.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'advanced-styling/',
 		},
 		{
 			id: 'portfolio',
 			name: __( 'Portfolio', 'customify' ),
-			description: __( 'Showcase your best projects in beautiful layouts.', 'customify' ),
+			description: __(
+				'Showcase your best projects in beautiful layouts.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'portfolio/',
 		},
 		{
 			id: 'multiple-headers',
 			name: __( 'Multiple Headers', 'customify' ),
-			description: __( 'Unique headers per page, post, archive, or WooCommerce page.', 'customify' ),
+			description: __(
+				'Unique headers per page, post, archive, or WooCommerce page.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'multiple-headers/',
 		},
 		{
 			id: 'mega-menu',
-			name: __( 'Mega Menu', 'customify' ),
-			description: __( 'Mega-menu navigation with more space and visual hierarchy.', 'customify' ),
+			name: __( 'Mega menu (Legacy)', 'customify' ),
+			description: __(
+				'The classic mega menu: layout-based panels configured in Appearance > Menus.',
+				'customify'
+			),
+			docHref: DOCS_BASE + 'mega-menu/',
+		},
+		{
+			id: 'mega-menu-blocksify',
+			name: __( 'Mega menu (Blocks Editor)', 'customify' ),
+			description: __(
+				'Rich mega menu panels built in the block editor with Blocksify.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'mega-menu/',
 		},
 		{
 			id: 'multilingual',
 			name: __( 'Multilingual Integration', 'customify' ),
-			description: __( 'WPML support plus a built-in language-switcher header item.', 'customify' ),
+			description: __(
+				'WPML support plus a built-in language-switcher header item.',
+				'customify'
+			),
 			docHref: DOCS_BASE,
 		},
 		{
 			id: 'custom-fonts',
 			name: __( 'Custom Fonts', 'customify' ),
-			description: __( 'Upload and use self-hosted fonts across your site.', 'customify' ),
+			description: __(
+				'Upload and use self-hosted fonts across your site.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'custom-fonts/',
 		},
 		{
 			id: 'typekit',
 			name: __( 'Typekit', 'customify' ),
-			description: __( 'Use Adobe Typekit fonts on your Customify site.', 'customify' ),
+			description: __(
+				'Use Adobe Typekit fonts on your Customify site.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'typekit-fonts/',
 		},
 		{
 			id: 'hooks',
 			name: __( 'Customify Hooks', 'customify' ),
-			description: __( 'Add custom hook scripts without touching theme files.', 'customify' ),
+			description: __(
+				'Add custom hook scripts without touching theme files.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'customify-hooks/',
 		},
 		{
 			id: 'woocommerce-booster',
 			name: __( 'WooCommerce Booster', 'customify' ),
-			description: __( 'Creative control of style + layout options for your shop.', 'customify' ),
+			description: __(
+				'Creative control of style + layout options for your shop.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'woocommerce-booster/',
 			subModules: [
 				'single-product-layouts',
@@ -105,35 +154,50 @@ export function useProModules() {
 		{
 			id: 'single-product-layouts',
 			name: __( 'Single Product Layouts', 'customify' ),
-			description: __( 'Multiple beautiful single-product layouts.', 'customify' ),
+			description: __(
+				'Multiple beautiful single-product layouts.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'woocommerce-single-product-layouts/',
 			parent: 'woocommerce-booster',
 		},
 		{
 			id: 'off-canvas-filter',
 			name: __( 'Off Canvas Filter', 'customify' ),
-			description: __( 'Off-canvas product filter for shop and archive pages.', 'customify' ),
+			description: __(
+				'Off-canvas product filter for shop and archive pages.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'woocommerce-off-canvas-filter/',
 			parent: 'woocommerce-booster',
 		},
 		{
 			id: 'gallery-slider',
 			name: __( 'Product Gallery Slider', 'customify' ),
-			description: __( 'Slider for the WooCommerce product gallery.', 'customify' ),
+			description: __(
+				'Slider for the WooCommerce product gallery.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'woocommerce-product-gallery-slider/',
 			parent: 'woocommerce-booster',
 		},
 		{
 			id: 'quick-view',
 			name: __( 'Quick View', 'customify' ),
-			description: __( 'Modal quick-view for product listings.', 'customify' ),
+			description: __(
+				'Modal quick-view for product listings.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'woocommerce-quick-view/',
 			parent: 'woocommerce-booster',
 		},
 		{
 			id: 'infinity-scroll',
 			name: __( 'Infinity Scroll', 'customify' ),
-			description: __( 'Auto-load the next posts/products as the reader nears the bottom.', 'customify' ),
+			description: __(
+				'Auto-load the next posts/products as the reader nears the bottom.',
+				'customify'
+			),
 			docHref: DOCS_BASE + 'infinity-scroll/',
 		},
 	];
