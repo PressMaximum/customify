@@ -5,6 +5,7 @@ import { observeAndMount as observeAndMountColumnsSettings } from './controls/co
 import { setupTypographyControl } from './typography-control';
 import { setupTypographyPresets } from './typography-presets';
 import { attachPopoverChrome } from './popover-chrome';
+import { initTermPicker } from './controls/term-picker';
 
 (function (api) {
 	// Extends our custom "example-1" section.
@@ -1802,6 +1803,9 @@ import { attachPopoverChrome } from './popover-chrome';
 					break;
 				case "css_ruler":
 					control.initCSSRuler($fieldsArea, cb);
+					break;
+				case "term_picker":
+					initTermPicker($fieldsArea);
 					break;
 			}
 			if (field.type !== "hidden") {

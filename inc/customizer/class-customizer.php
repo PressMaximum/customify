@@ -1134,6 +1134,8 @@ class  Customify_Customizer {
 
 			'repeater',
 
+			'term_picker',
+
 			'pro',
 		);
 

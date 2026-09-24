@@ -518,6 +518,8 @@ class Customify
 			// Functions which enhance the theme by hooking into WordPress.
 			'/inc/customizer/class-customizer.php',
 			// Customizer additions.
+			'/inc/customizer/term-picker.php',
+			// Term picker control runtime (AJAX search + value sanitizer).
 			'/inc/panel-builder/class-panel-builder.php',
 			// Panel builder additions.
 			'/inc/blog/class-related-posts.php',
