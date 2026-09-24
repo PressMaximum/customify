@@ -531,6 +531,8 @@ class Customify
 			'/inc/blog/functions-posts-layout.php',
 			// Search results framework (mixed content cards, type tabs, counts).
 			'/inc/search/functions-search.php',
+			// Header Search Box: opt-in category dropdown + style preset.
+			'/inc/search/functions-search-box.php',
 			// Block editor enhancements (block styles, patterns category).
 			'/inc/admin/block-styles.php',
 			// Block editor Page Settings panel (also registers meta for REST API).

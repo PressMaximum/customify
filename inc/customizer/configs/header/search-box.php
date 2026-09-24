@@ -80,6 +80,126 @@ class Customify_Builder_Item_Search_Box {
 			),
 
 			array(
+				'name'            => $this->section . '_style',
+				'type'            => 'select',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'title'           => __( 'Style', 'customify' ),
+				'description'     => __( 'Pill: a rounded field with the submit button inside it.', 'customify' ),
+				'default'         => '',
+				'choices'         => array(
+					''     => __( 'Default', 'customify' ),
+					'pill' => __( 'Pill', 'customify' ),
+				),
+				'priority'        => 12,
+			),
+
+			// Category dropdown - opt-in, see inc/search/functions-search-box.php.
+			array(
+				'name'     => $this->section . '_cat_heading',
+				'type'     => 'heading',
+				'section'  => $this->section,
+				'title'    => __( 'Category Dropdown', 'customify' ),
+				'priority' => 13,
+			),
+
+			array(
+				'name'            => $this->section . '_cat_filter',
+				'type'            => 'checkbox',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'default'         => '',
+				'checkbox_label'  => __( 'Show a category dropdown in the search form', 'customify' ),
+				'priority'        => 13,
+			),
+
+			array(
+				'name'            => $this->section . '_cat_taxonomy',
+				'type'            => 'select',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'title'           => __( 'Taxonomy', 'customify' ),
+				'default'         => function_exists( 'customify_search_box_get_default_cat_taxonomy' ) ? customify_search_box_get_default_cat_taxonomy() : 'category',
+				'choices'         => function_exists( 'customify_search_box_get_cat_taxonomy_choices' ) ? customify_search_box_get_cat_taxonomy_choices() : array(),
+				'required'        => array( $this->section . '_cat_filter', '==', '1' ),
+				'priority'        => 13,
+			),
+
+			array(
+				'name'            => $this->section . '_cat_source',
+				'type'            => 'select',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'title'           => __( 'Terms to list', 'customify' ),
+				'default'         => 'selected',
+				'choices'         => array(
+					'selected' => __( 'Selected terms', 'customify' ),
+					'top'      => __( 'All top-level terms', 'customify' ),
+					'all'      => __( 'All terms, nested', 'customify' ),
+				),
+				'required'        => array( $this->section . '_cat_filter', '==', '1' ),
+				'priority'        => 13,
+			),
+
+			array(
+				'name'              => $this->section . '_cat_terms',
+				'type'              => 'term_picker',
+				'section'           => $this->section,
+				'selector'          => "$selector",
+				'render_callback'   => $fn,
+				'title'             => __( 'Selected terms', 'customify' ),
+				'description'       => __( 'Search and pick the terms to list, in order. Leave empty to list the top-level terms.', 'customify' ),
+				'default'           => array(),
+				'sanitize_callback' => 'customify_term_picker_sanitize_setting',
+				'taxonomy_setting'  => $this->section . '_cat_taxonomy',
+				'required'          => array(
+					array( $this->section . '_cat_filter', '==', '1' ),
+					array( $this->section . '_cat_source', '==', 'selected' ),
+				),
+				'priority'          => 13,
+			),
+
+			array(
+				'name'            => $this->section . '_cat_hide_empty',
+				'type'            => 'checkbox',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'default'         => 1,
+				'checkbox_label'  => __( 'Hide empty terms', 'customify' ),
+				'required'        => array( $this->section . '_cat_filter', '==', '1' ),
+				'priority'        => 13,
+			),
+
+			array(
+				'name'            => $this->section . '_cat_all_text',
+				'type'            => 'text',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'label'           => __( '"All" option text', 'customify' ),
+				'default'         => __( 'All categories', 'customify' ),
+				'required'        => array( $this->section . '_cat_filter', '==', '1' ),
+				'priority'        => 13,
+			),
+
+			array(
+				'name'            => $this->section . '_cat_hide_mobile',
+				'type'            => 'checkbox',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'default'         => 1,
+				'checkbox_label'  => __( 'Hide the dropdown on tablet and mobile', 'customify' ),
+				'required'        => array( $this->section . '_cat_filter', '==', '1' ),
+				'priority'        => 13,
+			),
+
+			array(
 				'name'            => $this->section . '_width',
 				'type'            => 'slider',
 				'device_settings' => true,
@@ -293,6 +413,10 @@ class Customify_Builder_Item_Search_Box {
 	 */
 	function render() {
 		$form_extra_class = apply_filters( 'customify/builder_item/search-box/form_extra_class', array() );
+		// Opt-in style preset / category dropdown classes; a no-op by default.
+		if ( function_exists( 'customify_search_box_form_classes' ) ) {
+			$form_extra_class = customify_search_box_form_classes( $form_extra_class, $this->id );
+		}
 		$placeholder = Customify()->get_setting( $this->section . '_placeholder' );
 		$placeholder = sanitize_text_field( $placeholder );
 
@@ -325,6 +449,11 @@ class Customify_Builder_Item_Search_Box {
 				// Scope the form to a single content type when configured.
 				if ( function_exists( 'customify_search_scope_hidden_input' ) ) {
 					customify_search_scope_hidden_input( $this->id );
+				}
+
+				// Opt-in category dropdown; prints nothing while it is off.
+				if ( function_exists( 'customify_search_box_cat_dropdown' ) ) {
+					customify_search_box_cat_dropdown( $this->id );
 				}
 				?>
 

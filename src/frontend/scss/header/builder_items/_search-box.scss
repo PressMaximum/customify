@@ -1,0 +1,265 @@
+/**
+ * Header Search Box - opt-in category dropdown + "Pill" style preset.
+ *
+ * Every selector below requires a class the Search Box item only prints when
+ * the matching Customizer option is on (inc/search/functions-search-box.php):
+ *
+ *   .cfy-search-box                  - either feature is on
+ *   .cfy-search-box--has-cat         - the category dropdown rendered
+ *   .cfy-search-box--cat-hide-mobile - "Hide the dropdown on tablet and mobile"
+ *   .cfy-search-box--pill            - Style: Pill
+ *
+ * A site on the default settings therefore matches none of these rules.
+ *
+ * Specificity budget
+ * ------------------
+ * The item's Customizer fields (width, height, input styling, icon styling)
+ * print as inline CSS AFTER this stylesheet at (0,2,0) and up. Paint rules
+ * here stay at (0,2,0) / (0,3,0), so they beat the defaults in _search.scss
+ * by source order and still lose to anything the site owner set. Only the
+ * pill submit button's geometry goes higher (0,4,0): "Icon Position" always
+ * prints `margin-left: -40px` at (0,3,1), which would push the round button
+ * out of the pill.
+ *
+ * Customify Pro's WooCommerce Booster adds `body.woo_bootster_search` on
+ * every page and moves the search box chrome from `.search-form-fields` to
+ * the form (see the `.woo_bootster_search` block in _search.scss); the
+ * `.woo_bootster_search` rules at the end re-apply the pill on top of that.
+ */
+
+$cfy-search-pill-height: 50px;
+$cfy-search-pill-submit: 42px;
+$cfy-search-pill-gap: 4px;
+$cfy-search-pill-border: 1.5px;
+
+.cfy-search-box {
+	// Palette tokens, so the dark header row variant only swaps values.
+	// `currentcolor` resolves where the variable is used, i.e. against the
+	// header row's text color - light rows get a dark tint, dark rows a
+	// light one.
+	--cfy-search-box-bg: color-mix(in srgb, currentcolor 6%, transparent);
+	--cfy-search-box-bg-focus: var(--customify-base, #fff);
+	--cfy-search-box-border-focus: color-mix(in srgb, currentcolor 65%, transparent);
+	--cfy-search-box-divider: color-mix(in srgb, currentcolor 22%, transparent);
+}
+
+.dark-mode .cfy-search-box {
+	--cfy-search-box-bg-focus: color-mix(in srgb, currentcolor 12%, transparent);
+}
+
+// Category dropdown -----------------------------------------------------------
+
+.cfy-search-box--has-cat {
+
+	.search-form-fields {
+		display: flex;
+		align-items: center;
+	}
+
+	.search-field {
+		flex: 1 1 auto;
+		width: auto;
+		min-width: 0;
+	}
+}
+
+// (0,2,0): beats `.header-search-form label { flex-basis: 100% }` and the
+// global `label` text color, so the dropdown follows the field's color
+// (header row skin, "Input Styling" text color).
+.cfy-search-box .cfy-search-box__cat {
+	position: relative;
+	color: inherit;
+	display: flex;
+	flex: 0 1 auto;
+	align-items: center;
+	align-self: stretch;
+	max-width: 45%;
+	margin: 0;
+	padding-inline-start: 0.9em;
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset-block: 25%;
+		inset-inline-end: 0;
+		width: 1px;
+		background: var(--cfy-search-box-divider);
+	}
+}
+
+// (0,2,0): beats the bare `select` rules in base/_forms.scss (border, inset
+// shadow, background arrow, fixed height).
+.cfy-search-box .cfy-search-box__cat-select {
+	flex: 0 1 auto;
+	width: auto;
+	max-width: 100%;
+	height: auto;
+	min-height: 0;
+	margin: 0;
+	padding-block: 0;
+	padding-inline: 0 2.1em;
+	overflow: hidden;
+	border: 0;
+	border-radius: 0;
+	background: none;
+	box-shadow: none;
+	color: inherit;
+	font: inherit;
+	font-size: 0.93em;
+	font-weight: 600;
+	line-height: 1.3;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	cursor: pointer;
+	appearance: none;
+
+	&:focus {
+		outline: none;
+		box-shadow: none;
+	}
+
+	&:focus-visible {
+		text-decoration: underline;
+	}
+}
+
+.cfy-search-box__cat-icon {
+	position: absolute;
+	inset-inline-end: 0.7em;
+	width: 14px;
+	height: 14px;
+	pointer-events: none;
+}
+
+@media screen and (max-width: 1024px) {
+
+	.cfy-search-box--cat-hide-mobile .cfy-search-box__cat {
+		display: none;
+	}
+}
+
+// Pill style ------------------------------------------------------------------
+
+.cfy-search-box--pill {
+
+	.search-form-fields {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		height: $cfy-search-pill-height;
+		padding-block: 0;
+		padding-inline: 0 ($cfy-search-pill-submit + $cfy-search-pill-gap * 2);
+		border: $cfy-search-pill-border solid transparent;
+		border-radius: 999px;
+		background-color: var(--cfy-search-box-bg);
+		box-shadow: none;
+		transition: border-color 0.2s ease, background-color 0.2s ease;
+
+		&:focus-within {
+			border-color: var(--cfy-search-box-border-focus);
+			background-color: var(--cfy-search-box-bg-focus);
+		}
+	}
+
+	.search-field {
+		flex: 1 1 auto;
+		width: auto;
+		min-width: 0;
+		height: 100%;
+		padding-block: 0;
+		padding-inline: 1.15em 0.5em;
+
+		&::-webkit-search-cancel-button {
+			display: none;
+		}
+	}
+
+	.cfy-search-box__cat {
+		padding-inline-start: 1.25em;
+
+		&::after {
+			inset-block: 14px;
+		}
+	}
+
+	// Paint at (0,2,0) / (0,3,0) so "Icon Styling" (0,3,1) still wins.
+	.search-submit {
+		background-color: transparent;
+
+		&:hover,
+		&:focus-visible {
+			background-color: var(--customify-primary, #0e7c7b);
+			color: var(--customify-on-primary, #fff);
+		}
+	}
+}
+
+// Dark header rows: base/_skins.scss paints `.search-form-fields` at (0,3,0).
+.dark-mode .cfy-search-box--pill .search-form-fields {
+	border-color: transparent;
+	background-color: var(--cfy-search-box-bg);
+
+	&:focus-within {
+		border-color: var(--cfy-search-box-border-focus);
+		background-color: var(--cfy-search-box-bg-focus);
+	}
+}
+
+// Geometry of the round submit button, sitting inside the pill's end.
+.header-search_box-item .header-search-form.cfy-search-box--pill .search-submit {
+	display: inline-flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	width: $cfy-search-pill-submit;
+	height: $cfy-search-pill-submit;
+	min-height: 0;
+	margin-block: 0;
+	margin-inline: (-($cfy-search-pill-submit + $cfy-search-pill-gap + $cfy-search-pill-border)) 0;
+	padding: 0;
+	border-radius: 50%;
+	line-height: 0;
+}
+
+// Customify Pro (WooCommerce Booster) -----------------------------------------
+
+.woo_bootster_search .header-search_box-item {
+	// Pro's legacy box is drawn on the form; with the category dropdown in the
+	// default style the fields still have to share that row.
+	.cfy-search-box--has-cat .search-field {
+		flex: 1 1 auto;
+		width: auto;
+		min-width: 0;
+	}
+
+	.cfy-search-box--pill {
+		height: auto;
+		overflow: visible;
+		border: 0;
+		border-radius: 0;
+		background: none;
+		box-shadow: none;
+		line-height: inherit;
+
+		.search-form-fields {
+			height: $cfy-search-pill-height;
+			min-height: 0;
+			border: $cfy-search-pill-border solid transparent;
+			background-color: var(--cfy-search-box-bg);
+
+			&:focus-within {
+				border-color: var(--cfy-search-box-border-focus);
+				background-color: var(--cfy-search-box-bg-focus);
+			}
+		}
+
+		.search-field {
+			height: 100%;
+		}
+	}
+}
+
+// Pro's dark row rule paints the field itself with `!important`.
+.woo_bootster_search .dark-mode .header-search_box-item .cfy-search-box--pill .search-field {
+	background-color: transparent !important;
+}
