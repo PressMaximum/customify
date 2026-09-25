@@ -1,0 +1,182 @@
+/**
+ * Header item: Wishlist (`wc_wishlist_counter`) — heart icon + count badge.
+ *
+ * A new item, so it follows the shared header icon+label definition
+ * (docs/SPEC-icons.md §9.2) directly instead of behind the
+ * `.customify-header-items-v2` gate: no existing site has this item, so
+ * nothing already rendered can change. Everything is scoped under
+ * `.item--wc_wishlist_counter`.
+ *
+ * Markup (config/header/wishlist.php):
+ *   .item--wc_wishlist_counter[.has-items]
+ *     [.wishlist-counter--hide-zero | .wishlist-counter--show-zero]
+ *     a.wishlist-counter-link.link-meta
+ *       span.wishlist-counter-icon > (svg|i) + span.wishlist-counter-count
+ *       span.wishlist-counter-label
+ */
+// Mixins first: _vars calls white()/black(), defined in _mixins (same order
+// as style.scss).
+@import "../utils/mixins";
+@import "../utils/vars";
+
+.item--wc_wishlist_counter {
+	position: relative;
+
+	.wishlist-counter-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 0.875em;
+		font-weight: 500;
+		line-height: 1.2;
+		letter-spacing: 0;
+		text-decoration: none;
+	}
+
+	.wishlist-counter-icon {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		line-height: 0;
+		font-size: 1.3em;
+
+		// Seeded from the shared header icon token so the heart matches the
+		// Search and Cart glyphs (20px on 0.4.25+ installs, 18px otherwise).
+		// Kept at (0,1,0)-ish so the Icon Size slider's generated
+		// `.builder-header-wc_wishlist_counter-item .wishlist-counter-icon`
+		// (0,2,0) wins.
+		--customify-wishlist-icon-size: var(--customify-header-icon-size, 18px);
+
+		> svg,
+		.customify-icon--svg > svg {
+			width: var(--customify-wishlist-icon-size);
+			height: var(--customify-wishlist-icon-size);
+		}
+
+		i {
+			width: 1.3em;
+			height: 1.3em;
+			display: block;
+			position: relative;
+
+			&::before {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
+		}
+	}
+
+	.wishlist-counter-count {
+		position: absolute;
+		top: -6px;
+		right: 0;
+		transform: translate(50%, 0);
+		box-sizing: border-box;
+		min-width: 16px;
+		height: 16px;
+		padding: 0 4px;
+		display: block;
+		border-radius: 999px;
+		background: $color_secondary;
+		color: var(--customify-btn-on-secondary, #fff);
+		box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+		font-size: 11px;
+		font-weight: 600;
+		font-style: normal;
+		line-height: 16px;
+		letter-spacing: 0;
+		text-align: center;
+		text-transform: none;
+
+		// Not filled yet (cache-safe markup) — nothing to show.
+		&:empty {
+			display: none;
+		}
+	}
+
+	// "Hide Counter When Empty": the JS adds `has-items` only for a count > 0.
+	&.wishlist-counter--hide-zero:not(.has-items) .wishlist-counter-count {
+		display: none;
+	}
+
+	// Counter always on: an empty badge (plugin cleared it, or not filled
+	// yet) reads as zero without writing into the plugin-owned element.
+	&.wishlist-counter--show-zero .wishlist-counter-count:empty {
+		display: block;
+
+		&::before {
+			content: "0";
+		}
+	}
+
+	// Per-device "Show Label".
+	@include for_device(mobile) {
+
+		.wishlist-counter-mobile-hide {
+			display: none;
+		}
+	}
+
+	@include for_device(tablet) {
+
+		.wishlist-counter-tablet-hide {
+			display: none;
+		}
+	}
+
+	@include for_device(desktop) {
+
+		.wishlist-counter-desktop-hide {
+			display: none;
+		}
+	}
+}
+
+// In a builder row the wrapper must be a flex box, not a block: as a block
+// the inline-flex link sits on the wrapper's text line (strut + descender)
+// and the heart rides ~3px above the Search / Menu icons. Same fix as the
+// cart (header/builder_items/_icon_label_items.scss "row alignment"); the
+// off-canvas panel aligns items with text-align, so it is left alone.
+.row-v2 .item--wc_wishlist_counter {
+	display: flex;
+	align-items: center;
+}
+
+// Row skins: same colour source as the Search icon / Cart link, with the
+// glyph inheriting the label colour (SPEC-icons.md §9.2 "Colour"). Base
+// colours first, hovers after (no-descending-specificity).
+.light-mode .item--wc_wishlist_counter .wishlist-counter-link {
+	color: var(--customify-header-row-text-color, #{$dark_color_link});
+}
+
+.dark-mode .item--wc_wishlist_counter .wishlist-counter-link {
+	color: var(--customify-header-row-text-color, #{$light_color_link});
+}
+
+// Mobile off-canvas panel.
+.header-menu-sidebar.light-mode .item--wc_wishlist_counter .wishlist-counter-link {
+	color: $dark_color_link;
+}
+
+.header-menu-sidebar.dark-mode .item--wc_wishlist_counter .wishlist-counter-link {
+	color: $light_color_link;
+}
+
+.light-mode .item--wc_wishlist_counter .wishlist-counter-link:hover {
+	color: var(--customify-header-row-text-color, #{$dark_color_link_hover});
+}
+
+.dark-mode .item--wc_wishlist_counter .wishlist-counter-link:hover {
+	color: var(--customify-header-row-text-color, #{$light_color_link_hover});
+}
+
+.header-menu-sidebar.light-mode .item--wc_wishlist_counter .wishlist-counter-link:hover {
+	color: $dark_color_link_hover;
+}
+
+.header-menu-sidebar.dark-mode .item--wc_wishlist_counter .wishlist-counter-link:hover {
+	color: $light_color_link_hover;
+}
