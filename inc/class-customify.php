@@ -518,6 +518,8 @@ class Customify
 			// Functions which enhance the theme by hooking into WordPress.
 			'/inc/customizer/class-customizer.php',
 			// Customizer additions.
+			'/inc/customizer/term-picker.php',
+			// Term picker control runtime (AJAX search + value sanitizer).
 			'/inc/panel-builder/class-panel-builder.php',
 			// Panel builder additions.
 			'/inc/blog/class-related-posts.php',
@@ -529,6 +531,8 @@ class Customify
 			'/inc/blog/functions-posts-layout.php',
 			// Search results framework (mixed content cards, type tabs, counts).
 			'/inc/search/functions-search.php',
+			// Header Search Box: opt-in category dropdown.
+			'/inc/search/functions-search-box.php',
 			// Block editor enhancements (block styles, patterns category).
 			'/inc/admin/block-styles.php',
 			// Block editor Page Settings panel (also registers meta for REST API).
