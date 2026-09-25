@@ -159,4 +159,37 @@ every declaration inside is written to stand on its own.
 			top: 0;
 		}
 	}
+
+	// ------------------------------------------------------- row alignment
+	// The cart wrapper has to be a flex box, not a block. `.cart-item-link`
+	// is `inline-flex` (above), and an inline-level box inside a block sits
+	// on a text line: the link rests on the baseline of the wrapper's
+	// inherited line-height (16px × 1.618 ≈ 26px) with the strut's descender
+	// space left underneath it. Where the Cart / subtotal labels are hidden
+	// (mobile), the link is a bare 20px glyph and the wrapper ~27px tall, so
+	// the row centred the wrapper and the bag sat ~3.5px above the Search,
+	// Menu and User icons; with labels shown the drift was under a pixel.
+	// Search avoids this with `.item--search_icon { line-height: 0 }` and
+	// Pro's User Icon with `.user-icon-item { display: inline-flex }`.
+
+	// As a flex container the wrapper has no line box and the link is
+	// centred on the cross axis. `.cart-dropdown-box` is absolutely
+	// positioned and keeps this box (`position: relative`) as its
+	// containing block. Scoped to builder rows (`.row-v2`), where the
+	// wrapper is already a shrink-to-fit flex item of `.item--inner`; the
+	// off-canvas panel aligns its items with `text-align`, which a flex
+	// wrapper would ignore, so it is left alone.
+	.row-v2 .item--wc_cart {
+		display: flex;
+		align-items: center;
+	}
+
+	// The Search Icon prints an empty `<span class="arrow-down">` after the
+	// glyph (config/header/search-icon.php; nothing styles or scripts it).
+	// Inside the `inline-flex` link above it is a flex item, so the 8px
+	// `gap` was added after the magnifier: its box grew to 28px with the
+	// glyph pushed to the left edge, doubling the space on its right.
+	.search-icon .arrow-down {
+		display: none;
+	}
 }
