@@ -318,13 +318,39 @@ class Customify_WC_Wishlist {
 	}
 
 	/**
+	 * Whether the front-end needs anything from this layer on this request:
+	 * a supported plugin is active AND the `wc_wishlist_counter` item is
+	 * placed in the saved header layout. The Customizer preview always
+	 * qualifies (with an active provider), because the item can be dropped
+	 * into the header live, before the layout is saved.
+	 *
+	 * @return bool
+	 */
+	public function is_in_use() {
+		if ( ! $this->get_active_provider() ) {
+			return false;
+		}
+		if ( is_customize_preview() ) {
+			return true;
+		}
+
+		return function_exists( 'customify_header_builder_has_item' ) && customify_header_builder_has_item( 'wc_wishlist_counter' );
+	}
+
+	/**
 	 * Front-end settings, merged into the localized `Customify_JS` object.
+	 * Added only when the item is in use (see is_in_use()), so sites without
+	 * a wishlist plugin or without the item print nothing extra.
 	 *
 	 * @param array $args Customify_JS settings.
 	 *
 	 * @return array
 	 */
 	public function js_settings( $args ) {
+		if ( ! $this->is_in_use() ) {
+			return $args;
+		}
+
 		$provider = $this->get_active_provider();
 		$remote   = $provider && is_callable( $provider['count'] ) && class_exists( 'WC_AJAX' );
 		$events   = array(
