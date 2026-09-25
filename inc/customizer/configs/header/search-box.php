@@ -336,7 +336,7 @@ class Customify_Builder_Item_Search_Box {
 				'description' => __( 'Search input styling', 'customify' ),
 				'selector'    => array(
 					'normal'            => "{$selector} .search-form-fields",
-					'hover'             => "{$selector} .search-form-fields",
+					'hover'             => "{$selector} .search-form-fields:hover",
 					'normal_text_color' => "{$selector} .search-form-fields,
 											{$selector} .search-form-fields .search-field,
 											{$selector} .search-form-fields input.search-field::placeholder,
