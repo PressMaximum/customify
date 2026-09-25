@@ -79,22 +79,6 @@ class Customify_Builder_Item_Search_Box {
 				'priority'        => 12,
 			),
 
-			array(
-				'name'            => $this->section . '_style',
-				'type'            => 'select',
-				'section'         => $this->section,
-				'selector'        => "$selector",
-				'render_callback' => $fn,
-				'title'           => __( 'Style', 'customify' ),
-				'description'     => __( 'Pill: a rounded field with the submit button inside it.', 'customify' ),
-				'default'         => '',
-				'choices'         => array(
-					''     => __( 'Default', 'customify' ),
-					'pill' => __( 'Pill', 'customify' ),
-				),
-				'priority'        => 12,
-			),
-
 			// Category dropdown - opt-in, see inc/search/functions-search-box.php.
 			array(
 				'name'     => $this->section . '_cat_heading',
@@ -195,6 +179,56 @@ class Customify_Builder_Item_Search_Box {
 				'checkbox_label'  => __( 'Hide the dropdown on tablet and mobile', 'customify' ),
 				'required'        => array( $this->section . '_cat_filter', '==', '1' ),
 				'priority'        => 13,
+			),
+
+			// Dropdown look. The select inherits the field's colour and font,
+			// so these stay empty (no CSS) unless the site owner sets them.
+			array(
+				'name'            => $this->section . '_cat_divider',
+				'type'            => 'checkbox',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'default'         => 1,
+				'checkbox_label'  => __( 'Show a divider between the dropdown and the input', 'customify' ),
+				'required'        => array( $this->section . '_cat_filter', '==', '1' ),
+				'priority'        => 13,
+			),
+
+			array(
+				'name'       => $this->section . '_cat_divider_color',
+				'type'       => 'color',
+				'section'    => $this->section,
+				'selector'   => "{$selector} .cfy-search-box .cfy-search-box__cat::after",
+				'css_format' => 'background-color: {{value}};',
+				'title'      => __( 'Divider Color', 'customify' ),
+				'required'   => array(
+					array( $this->section . '_cat_filter', '==', '1' ),
+					array( $this->section . '_cat_divider', '==', '1' ),
+				),
+				'priority'   => 13,
+			),
+
+			array(
+				'name'       => $this->section . '_cat_color',
+				'type'       => 'color',
+				'section'    => $this->section,
+				'selector'   => "{$selector} .cfy-search-box .cfy-search-box__cat",
+				'css_format' => 'color: {{value}};',
+				'title'      => __( 'Dropdown Text Color', 'customify' ),
+				'required'   => array( $this->section . '_cat_filter', '==', '1' ),
+				'priority'   => 13,
+			),
+
+			array(
+				'name'       => $this->section . '_cat_typography',
+				'type'       => 'typography',
+				'section'    => $this->section,
+				'selector'   => "{$selector} .cfy-search-box .cfy-search-box__cat-select",
+				'css_format' => 'typography',
+				'label'      => __( 'Dropdown Typography', 'customify' ),
+				'required'   => array( $this->section . '_cat_filter', '==', '1' ),
+				'priority'   => 13,
 			),
 
 			array(
@@ -344,6 +378,42 @@ class Customify_Builder_Item_Search_Box {
 				'priority'        => 40,
 			),
 
+			// Focus state of the box that draws the Input Styling chrome.
+			// That box differs by setup: `.search-form-fields` on its own, the
+			// form itself once Customify Pro's WooCommerce Booster is active
+			// (it adds `body.woo_bootster_search` and moves the border, radius,
+			// shadow and background onto the form - see the Booster rules in
+			// _search.scss). Each selector matches only its own case, so the
+			// focus look lands on the same box the resting look is drawn on.
+			// Empty by default: the theme's built-in focus border stays as is.
+			array(
+				'name'        => $this->section . '_input_focus_styling',
+				'type'        => 'styling',
+				'section'     => $this->section,
+				'css_format'  => 'styling',
+				'title'       => __( 'Input Focus Styling', 'customify' ),
+				'description' => __( 'Applied while the search input or the category dropdown has focus.', 'customify' ),
+				'selector'    => array(
+					'normal' => "body:not(.woo_bootster_search) {$selector} .search-form-fields:focus-within, .woo_bootster_search {$selector} .header-search-form:focus-within",
+				),
+				'fields'      => array(
+					'normal_fields' => array(
+						'text_color'    => false,
+						'link_color'    => false,
+						'margin'        => false,
+						'padding'       => false,
+						'bg_image'      => false,
+						'bg_cover'      => false,
+						'bg_position'   => false,
+						'bg_repeat'     => false,
+						'bg_attachment' => false,
+						'border_radius' => false,
+					),
+					'hover_fields'  => false,
+				),
+				'priority'    => 41,
+			),
+
 			array(
 				'name'        => $this->section . '_icon_styling',
 				'type'        => 'styling',
@@ -411,7 +481,7 @@ class Customify_Builder_Item_Search_Box {
 	 */
 	function render() {
 		$form_extra_class = apply_filters( 'customify/builder_item/search-box/form_extra_class', array() );
-		// Opt-in style preset / category dropdown classes; a no-op by default.
+		// Opt-in category dropdown classes; a no-op by default.
 		if ( function_exists( 'customify_search_box_form_classes' ) ) {
 			$form_extra_class = customify_search_box_form_classes( $form_extra_class, $this->id );
 		}

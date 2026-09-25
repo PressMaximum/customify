@@ -1,5 +1,5 @@
 = 0.4.26 =
-* NEW: Opt-in category dropdown for the header Search Box - pick the taxonomy and the terms to list - plus a new "Pill" style.
+* NEW: Opt-in category dropdown for the header Search Box - pick the taxonomy and the terms to list. New Search Box settings: Input Focus Styling, plus dropdown text color, typography and divider.
 * FIXED: Search results tabs, result counts and the refine form now keep a category filter carried in the URL.
 
 = 0.4.25 =

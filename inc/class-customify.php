@@ -531,7 +531,7 @@ class Customify
 			'/inc/blog/functions-posts-layout.php',
 			// Search results framework (mixed content cards, type tabs, counts).
 			'/inc/search/functions-search.php',
-			// Header Search Box: opt-in category dropdown + style preset.
+			// Header Search Box: opt-in category dropdown.
 			'/inc/search/functions-search-box.php',
 			// Block editor enhancements (block styles, patterns category).
 			'/inc/admin/block-styles.php',

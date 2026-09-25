@@ -1,10 +1,10 @@
 <?php
 /**
- * Header Search Box item: opt-in category dropdown and style preset.
+ * Header Search Box item: opt-in category dropdown.
  *
- * Both features are OFF by default and every function below returns early
- * (or hands its input back untouched) while they are, so a site that never
- * enables them renders the Search Box byte for byte as before.
+ * The feature is OFF by default and every function below returns early (or
+ * hands its input back untouched) while it is, so a site that never enables
+ * it renders the Search Box byte for byte as before.
  *
  * Category dropdown (`search_box_cat_filter`)
  * -------------------------------------------
@@ -35,11 +35,12 @@
  * customify_search_box_cat_filter_enabled() and stays out of the form while
  * this dropdown is on, so the two never stack.
  *
- * Style preset (`search_box_style`)
- * ---------------------------------
- * "pill" adds a modifier class to the form; the look lives in
- * src/frontend/scss/header/builder_items/_search-box.scss and matches nothing
- * without that class.
+ * Look: the dropdown sits inside `.search-form-fields` and inherits the box
+ * drawn by the item's existing Customizer fields (height, Input Styling,
+ * Input Focus Styling). Its own stylesheet
+ * (src/frontend/scss/header/builder_items/_search-box.scss) is structural
+ * only; colours and type come from `inherit` / `currentColor` or from the
+ * optional Dropdown Text Color / Typography / Divider Color fields.
  *
  * @package customify
  * @since   0.4.26
@@ -460,7 +461,7 @@ if ( ! function_exists( 'customify_search_box_form_classes' ) ) {
 	 *
 	 * @since 0.4.26
 	 *
-	 * @return string[] Untouched while both features are at their defaults.
+	 * @return string[] Untouched while the category dropdown is off.
 	 */
 	function customify_search_box_form_classes( $classes, $item_id = 'search_box' ) {
 		if ( 'search_box' !== $item_id ) {
@@ -470,15 +471,15 @@ if ( ! function_exists( 'customify_search_box_form_classes' ) ) {
 		$classes = is_array( $classes ) ? $classes : array();
 		$extra   = array();
 
-		if ( 'pill' === Customify()->get_setting( 'search_box_style' ) ) {
-			$extra[] = 'cfy-search-box--pill';
-		}
-
 		if ( '' !== customify_search_box_get_cat_dropdown( $item_id ) ) {
 			$extra[] = 'cfy-search-box--has-cat';
 
 			if ( Customify()->get_setting( 'search_box_cat_hide_mobile' ) ) {
 				$extra[] = 'cfy-search-box--cat-hide-mobile';
+			}
+
+			if ( ! Customify()->get_setting( 'search_box_cat_divider' ) ) {
+				$extra[] = 'cfy-search-box--cat-no-divider';
 			}
 		}
 
