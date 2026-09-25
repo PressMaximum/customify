@@ -180,3 +180,70 @@
 .header-menu-sidebar.dark-mode .item--wc_wishlist_counter .wishlist-counter-link:hover {
 	color: $light_color_link_hover;
 }
+
+// ==========================================================================
+// Wishlist PAGE tables — TI WooCommerce Wishlist + YITH WooCommerce Wishlist.
+// This file ships in build/css/frontend/woocommerce.css, which the theme
+// enqueues on every front-end page (Customify_WC::add_css), so it is present
+// on the wishlist page even though that is a normal page, not a WC page. It
+// loads BEFORE the plugins' own stylesheets: every rule below is scoped to the
+// plugin's wishlist markup and only neutralises a theme default that leaks
+// into it. The global button scope (base/_forms.scss) is left untouched.
+// ==========================================================================
+
+// --- TI WooCommerce Wishlist (templates/ti-wishlist.php) -------------------
+
+// Remove (×): `<button type="submit" name="tinvwl-remove">` is an unclassed
+// submit button, so it is inside the theme button scope. TI's resting skin
+// (`.tinv-wishlist .product-remove button`, 0,2,1) beats the theme's resting
+// fill, but TI has no hover/focus rule in its default ("theme style") mode,
+// so the theme's `button:is([type="submit"]…):hover/:focus` (0,2,1, later
+// file) takes over: white icon + a 13% white tint on TI's #f7f7f7 circle —
+// the × disappears. Keep TI's own look instead, with TI's own hover shade
+// (assets/css/theme.css). Colours stay at (0,3,1) so a TI custom-style hover
+// rule of the same weight still wins (TI's CSS loads after this file); the
+// theme's tint layer is `…:not(.menu-mobile-toggle, .search-submit):hover`
+// (0,3,1, later file), so dropping it needs the extra `td` (0,3,2).
+.tinv-wishlist .product-remove button:hover,
+.tinv-wishlist .product-remove button:focus,
+.tinv-wishlist .product-remove button:active {
+	color: #000;
+	background-color: #dad8da;
+}
+
+.tinv-wishlist td.product-remove button:hover {
+	background-image: none;
+}
+
+// Row / footer action buttons carry `.button`, so they get the theme's
+// `line-height: 2.5em`: fine for one line, but the row "Add to Cart" wraps in
+// TI's fixed 135px column and each wrapped line is then 2.5em tall (77px
+// button). Keep the row action on one line (the auto-layout column grows to
+// fit) and give every table button a text line-height, so any label that does
+// wrap (long translations in the footer) stays compact. `min-height: 2.6em`
+// from the theme keeps the resting height unchanged.
+.tinv-wishlist .tinvwl-table-manage-list .button {
+	line-height: 1.25;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+.tinv-wishlist .tinvwl-table-manage-list .product-action .button {
+	white-space: nowrap;
+}
+
+// Footer "Actions" select: TI pins it at 38px, next to 2.6em theme buttons —
+// match the button height so the input group lines up.
+.tinv-wishlist .tinvwl-input-group .form-control {
+	height: 2.6em;
+}
+
+// --- YITH WooCommerce Wishlist (templates/wishlist-view*.php) --------------
+
+// With "Add to cart" style = Textual link, YITH strips `.button` from the
+// loop add-to-cart anchor, but the theme's bare `.add_to_cart_button` rule
+// (compatibility/wc/_wc-elements.scss) still paints the secondary fill behind
+// link-coloured text. Only a real button gets that fill here.
+.wishlist_table .product-add-to-cart a.add_to_cart_button:not(.button) {
+	background-color: transparent;
+}
