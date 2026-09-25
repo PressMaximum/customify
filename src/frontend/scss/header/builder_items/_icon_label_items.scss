@@ -27,17 +27,17 @@ every declaration inside is written to stand on its own.
 	// THE header icon size. Every icon+label item resolves its glyph size
 	// from this one token, so tuning the whole row is a one-line change
 	// here rather than an edit per item partial.
-	//
+
 	// Declared on the v2 scope (the body class) and read through
 	// `var(--customify-header-icon-size, 18px)` at each use site, which is
 	// what keeps legacy sites safe: a site without the body class never
 	// sees the token, falls back to 18px, and renders exactly what it
 	// rendered before the token existed.
-	//
+
 	// Read by:
 	//   • .search-icon svg          — header/builder_items/_search.scss
 	//   • --customify-cart-icon-size — compatibility/wc/_wc-cart.scss
-	//
+
 	// Both read it at their ORIGINAL selector specificity, so the per-item
 	// Icon Size sliders still win: the token sets the default, never the
 	// override. Do not re-declare the size under this scope at higher
@@ -80,7 +80,9 @@ every declaration inside is written to stand on its own.
 		// casing of a header label.
 		text-transform: none;
 
-		// The old per-span margins are subsumed by `gap`.
+		// The old per-span margins are subsumed by `gap`. (Lint: the list
+		// above mixes item selectors; only `margin` is set here.)
+		// stylelint-disable-next-line no-descending-specificity
 		> span {
 			margin: 0;
 		}
@@ -107,22 +109,22 @@ every declaration inside is written to stand on its own.
 	// ---------------------------------------------------------------- colour
 	// The cart glyph must be the same colour as its own label, and as the
 	// Search and Pro User glyphs beside it.
-	//
+
 	// base/_skins.scss deliberately paints it in the HOVER colour instead —
 	// `.light-mode .cart-item-link .cart-icon { color: black(0.8) }` while the
 	// link itself is `black(0.55)` (dark mode: 0.99 against 0.79). That was a
 	// design choice back when the cart was the only icon+label item in the
 	// row; with Search and User next to it, it just reads as a darker cart.
-	//
+
 	// `inherit` rather than re-stating a colour, so all four states keep
 	// working for free: base and `:hover` both cascade from `.cart-item-link`,
 	// which the skins already colour, and any palette/Customizer colour a site
 	// sets on the link flows straight through.
-	//
+
 	// The skin rules are `(0,3,0)`; prefixing with the v2 body class makes
 	// these `(0,4,0)`, which is the minimum that wins. The `.header-menu-sidebar`
 	// pair covers the same item inside the mobile off-canvas panel.
-	//
+
 	// Cart → Icon Styling (Advanced Styling) is unaffected: it generates
 	// `… .cart-icon i, … .cart-icon svg { color: … }`, targeting the glyph
 	// element itself, and an explicit colour on the child always beats
@@ -135,13 +137,16 @@ every declaration inside is written to stand on its own.
 	}
 
 	// Icon slot: no line box of its own, so the glyph centres on the flex
-	// cross-axis instead of on a text baseline it doesn't share.
+	// cross-axis instead of on a text baseline it doesn't share. (Lint:
+	// the colour rule above only sets `color`, so order does not matter.)
+	// stylelint-disable-next-line no-descending-specificity
 	.item--wc_cart .cart-icon,
 	.item--search_icon .search-icon > svg,
 	.item--search_box .search-icon > svg {
 		line-height: 0;
 	}
 
+	// stylelint-disable-next-line no-descending-specificity
 	.item--wc_cart .cart-icon {
 		// `inline-flex` replaces `inline-block` so the icon box hugs the
 		// glyph exactly — an inline-block leaves descender space under the
@@ -158,5 +163,38 @@ every declaration inside is written to stand on its own.
 		i {
 			top: 0;
 		}
+	}
+
+	// ------------------------------------------------------- row alignment
+	// The cart wrapper has to be a flex box, not a block. `.cart-item-link`
+	// is `inline-flex` (above), and an inline-level box inside a block sits
+	// on a text line: the link rests on the baseline of the wrapper's
+	// inherited line-height (16px × 1.618 ≈ 26px) with the strut's descender
+	// space left underneath it. Where the Cart / subtotal labels are hidden
+	// (mobile), the link is a bare 20px glyph and the wrapper ~27px tall, so
+	// the row centred the wrapper and the bag sat ~3.5px above the Search,
+	// Menu and User icons; with labels shown the drift was under a pixel.
+	// Search avoids this with `.item--search_icon { line-height: 0 }` and
+	// Pro's User Icon with `.user-icon-item { display: inline-flex }`.
+
+	// As a flex container the wrapper has no line box and the link is
+	// centred on the cross axis. `.cart-dropdown-box` is absolutely
+	// positioned and keeps this box (`position: relative`) as its
+	// containing block. Scoped to builder rows (`.row-v2`), where the
+	// wrapper is already a shrink-to-fit flex item of `.item--inner`; the
+	// off-canvas panel aligns its items with `text-align`, which a flex
+	// wrapper would ignore, so it is left alone.
+	.row-v2 .item--wc_cart {
+		display: flex;
+		align-items: center;
+	}
+
+	// The Search Icon prints an empty `<span class="arrow-down">` after the
+	// glyph (config/header/search-icon.php; nothing styles or scripts it).
+	// Inside the `inline-flex` link above it is a flex item, so the 8px
+	// `gap` was added after the magnifier: its box grew to 28px with the
+	// glyph pushed to the left edge, doubling the space on its right.
+	.search-icon .arrow-down {
+		display: none;
 	}
 }

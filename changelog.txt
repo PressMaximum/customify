@@ -3,6 +3,7 @@
 * NEW: The header Search Box placeholder can rotate several phrases - separate them with | (e.g. Search sofas|Search rugs); shared leading words stay in place while the rest slides.
 * FIXED: Search results tabs, result counts and the refine form now keep a category filter carried in the URL.
 * FIXED: The Search Box "Input Styling" hover values now apply on hover only, instead of overriding the normal state.
+* FIXED: Header Shopping Cart icon sat higher than the other header icons on mobile (v2 header item style), and the Search Icon carried extra space after its glyph.
 
 = 0.4.25 =
 * IMPROVED: The Pro modules list now names the two mega menu modules "Mega menu (Legacy)" and "Mega menu (Blocks Editor)".
