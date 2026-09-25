@@ -163,6 +163,14 @@
 	position: relative;
 }
 
+// The positioned fields box above would otherwise paint over the submit
+// button, which "Icon Position" pulls back over the box with a negative
+// margin: the input then takes the clicks and hover meant for the button.
+.cfy-search-box--ph-rotate .search-submit {
+	position: relative;
+	z-index: 2;
+}
+
 .cfy-search-box__ph {
 	display: none;
 }
