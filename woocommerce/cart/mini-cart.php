@@ -10,9 +10,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-do_action( 'woocommerce_before_mini_cart' ); ?>
+do_action( 'woocommerce_before_mini_cart' );
+
+// Shared by the header dropdown, drawer, and refreshed mini-cart fragments.
+do_action( 'customify/cart/content/before' ); ?>
 
 <?php if ( WC()->cart && ! WC()->cart->is_empty() ) : ?>
+
+	<?php do_action( 'customify/cart/items/before' ); ?>
 
 	<ul class="woocommerce-mini-cart cart_list <?php echo esc_attr( $args['list_class'] ); ?>">
 		<?php
@@ -86,17 +91,30 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
 		?>
 	</ul>
 
+	<?php do_action( 'customify/cart/items/after' ); ?>
+
 	<?php do_action( 'woocommerce_widget_shopping_cart_before_buttons' ); ?>
 
 	<div class="wc-mini-cart-footer">
+		<?php do_action( 'customify/cart/subtotal/before' ); ?>
 		<p class="woocommerce-mini-cart__total total"><?php _e( 'Subtotal', 'customify' ); ?>: <?php echo WC()->cart->get_cart_subtotal(); ?></p>
+		<?php
+		do_action( 'customify/cart/subtotal/after' );
+		do_action( 'customify/cart/buttons/before' );
+		?>
 		<p class="woocommerce-mini-cart__buttons buttons"><?php do_action( 'woocommerce_widget_shopping_cart_buttons' ); ?></p>
+		<?php do_action( 'customify/cart/buttons/after' ); ?>
 	</div>
 
 <?php else : ?>
 
+	<?php do_action( 'customify/cart/empty/before' ); ?>
 	<p class="woocommerce-mini-cart__empty-message"><?php _e( 'No products in the cart.', 'customify' ); ?></p>
+	<?php do_action( 'customify/cart/empty/after' ); ?>
 
 <?php endif; ?>
 
-<?php do_action( 'woocommerce_after_mini_cart' ); ?>
+<?php
+do_action( 'customify/cart/content/after' );
+do_action( 'woocommerce_after_mini_cart' );
+?>
