@@ -1,3 +1,6 @@
+= 0.4.27 =
+* NEW: Wishlist header item with a live count badge for TI WooCommerce Wishlist and YITH WooCommerce Wishlist, extensible through the `customify/wishlist/providers` filter.
+
 = 0.4.26 =
 * NEW: Footer row text and link color controls.
 * NEW: Off-canvas Primary Menu styling.
