@@ -181,6 +181,44 @@ Note: the result is cached on first call. Register the filter as early as possib
 | `customify/wc-product/after-media` | action | — | same |
 | `customify_after_loop_product_media` | action | — | same `:442` |
 | `customify/wc_cart/render_dropdown` | filter | `(bool $render_dropdown, Customify_Builder_Item_WC_Cart $item)` — print the header cart item's inline mini-cart dropdown? Default `true`. Customify Pro's Cart Drawer returns `false` to suppress the inline dropdown when it takes the item over with an off-canvas drawer. | [`inc/compatibility/woocommerce/config/header/cart.php`](../inc/compatibility/woocommerce/config/header/cart.php) `render()` |
+| `customify/wishlist/providers` | filter | `array $providers` keyed by id — wishlist plugins the header **Wishlist** item (`wc_wishlist_counter`) can use; the first active one wins. Built-ins: `ti` (TI WooCommerce Wishlist), `yith` (YITH WooCommerce Wishlist). Provider shape below. | [`inc/compatibility/woocommerce/inc/wishlist.php`](../inc/compatibility/woocommerce/inc/wishlist.php) `get_providers()` |
+| `customify/wishlist/provider` | filter | `(string\|null $chosen, array $providers)` — id of the provider to use (default: first active). Return `''` for none; an unknown or inactive id renders nothing. | same, `get_active_provider()` |
+
+#### Wishlist provider shape (`customify/wishlist/providers`)
+
+Every key but `id` is optional (normalised with defaults):
+
+| Key | Type | Meaning |
+|---|---|---|
+| `id` | `string` | Unique slug; printed as `data-wishlist-provider` on the item. |
+| `label` | `string` | Human-readable plugin name. |
+| `active` | `bool\|callable` | Whether the plugin is available on this request. |
+| `url` | `string\|callable` | Wishlist page URL (the item's link). |
+| `count` | `callable\|null` | Returns the **current visitor's** item count. When set, the theme's read-only endpoint `?wc-ajax=customify_wishlist_count` serves it and the front-end fetches it. Leave `null` when the plugin's own JS writes the number into the badge (TI does). |
+| `badge_class` | `string` | Extra classes on the count `<span>` — e.g. the classes a plugin's JS already writes counts into (TI: `wishlist_products_counter_number theme-item-count wishlist-item-count`). |
+| `scripts` | `string[]` | Registered script handles to enqueue when the item renders (TI: `tinvwl`). |
+| `events` | `array{body: string[], document: string[]}` | jQuery events meaning "the list changed"; the front-end re-fetches the count on each (used only with `count`). YITH: body `added_to_wishlist`, `removed_from_wishlist`; document `yith_wcwl_reload_fragments`, `yith_wcwl_fragments_loaded`. |
+
+```php
+add_filter( 'customify/wishlist/providers', function ( $providers ) {
+	$providers['my_wishlist'] = array(
+		'id'     => 'my_wishlist',
+		'label'  => 'My Wishlist',
+		'active' => function_exists( 'my_wishlist_count' ),
+		'url'    => 'my_wishlist_page_url',
+		'count'  => 'my_wishlist_count', // current visitor's count, read-only
+		'events' => array( 'body' => array( 'my_wishlist_changed' ) ),
+	);
+	return $providers;
+} );
+```
+
+Cache-safety contract: the item prints the badge **empty** and never a count, so full-page caches can serve one HTML copy to everyone. `wishlist-counter.js` (front-end, `Customify_JS.wishlist`) fills it:
+
+- plugin-driven (`count` null): watches the badge text the plugin writes; mirrors it into the item's `has-items` class and the link's `aria-label` (`"<Label>, N items"`).
+- endpoint-driven (`count` set): `GET ?wc-ajax=customify_wishlist_count` → `{ success: true, data: { provider, count } }` (404 + `success: false` without an endpoint-capable provider). Sent with `nocache_headers()`. Public and nonce-free by design — read-only, reads no input, answers only about the requester's own list (cookies), and a nonce would go stale inside cached HTML. Fetched on load only for logged-in visitors, or guests whose browser previously saw a count > 0 (`localStorage` key `customify_wishlist_count_<provider>`; the plugins' own session cookies are HttpOnly), and again on every provider event.
+
+Template tag: `customify_wc_wishlist()` returns the `Customify_WC_Wishlist` singleton (`get_active_provider()`, `get_providers()`, `get_url()`).
 
 ---
 

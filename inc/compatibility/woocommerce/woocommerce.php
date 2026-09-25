@@ -65,6 +65,10 @@ class Customify_WC {
 
 			// Shopping Cart.
 			require_once get_template_directory() . '/inc/compatibility/woocommerce/config/header/cart.php';
+
+			// Wishlist: provider layer (TI / YITH / filter) + header item.
+			require_once get_template_directory() . '/inc/compatibility/woocommerce/inc/wishlist.php';
+			require_once get_template_directory() . '/inc/compatibility/woocommerce/config/header/wishlist.php';
 			add_filter( 'woocommerce_add_to_cart_fragments', array( $this, 'cart_fragments' ) );
 			add_filter( 'Customify_JS', array( $this, 'Customify_JS' ) );
 
