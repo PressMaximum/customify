@@ -105,15 +105,16 @@
 	cursor: pointer;
 	appearance: none;
 
-	// The surrounding box shows focus through `:focus-within` (theme default
-	// or "Input Focus Styling"); keyboard focus still gets its own cue.
-	&:focus {
+	// No focus cue on the select itself: Chrome matches `:focus-visible` on a
+	// mouse click for a <select> (it takes keyboard input), so any cue here
+	// would also show on click. Focus - mouse or keyboard - is shown by the
+	// surrounding box through `:focus-within` instead (theme default below
+	// and in _search.scss, or "Input Focus Styling").
+	&:focus,
+	&:focus-visible {
 		outline: none;
 		box-shadow: none;
-	}
-
-	&:focus-visible {
-		text-decoration: underline;
+		text-decoration: none;
 	}
 }
 
@@ -138,6 +139,15 @@
 	flex: 1 1 auto;
 	width: auto;
 	min-width: 0;
+}
+
+// The Booster draws the box on the form and gives it no focus state, so the
+// dropdown (whose own focus cue is removed above) would lose any visible
+// keyboard focus. Same default as `.search-form-fields:focus-within` in
+// _search.scss; "Input Focus Styling" prints the same specificity later and
+// still wins.
+.woo_bootster_search .header-search_box-item .cfy-search-box:focus-within {
+	border-color: color-mix(in srgb, currentcolor 50%, transparent);
 }
 
 /**
