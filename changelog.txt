@@ -1,12 +1,13 @@
 = 0.4.26 =
-* NEW: Opt-in category dropdown for the header Search Box - pick the taxonomy and the terms to list. New Search Box settings: Input Focus Styling, plus dropdown text color, typography and divider.
-* NEW: The header Search Box placeholder can rotate several phrases - separate them with | (e.g. Search sofas|Search rugs); shared leading words stay in place while the rest slides.
-* FIXED: Search results tabs, result counts and the refine form now keep a category filter carried in the URL.
-* FIXED: The Search Box "Input Styling" hover values now apply on hover only, instead of overriding the normal state.
-* FIXED: Header Shopping Cart icon sat higher than the other header icons on mobile (v2 header item style), and the Search Icon carried extra space after its glyph.
+* NEW: Footer row text and link color controls.
+* NEW: Off-canvas Primary Menu styling.
+* NEW: Search Box category filter, rotating placeholders and styling controls.
+* IMPROVED: Shared mini-cart hooks for dropdown and drawer.
+* IMPROVED: Clear names for Legacy and Blocks Editor mega menus.
+* FIXED: Page Header visibility on Product Brand archives.
+* FIXED: Header cart and search icon alignment.
 
 = 0.4.25 =
-* IMPROVED: The Pro modules list now names the two mega menu modules "Mega menu (Legacy)" and "Mega menu (Blocks Editor)".
 * NEW: Header builder icon controls now support built-in and custom inline SVG icons, including dedicated menu and cart presets with optional labels.
 * NEW: Brand-coloured payment method icons with an optional monochrome mode.
 * NEW: Expanded Footer Builder column layouts, including mixed multi-row presets, responsive column gaps and row padding controls.
