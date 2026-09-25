@@ -1,5 +1,5 @@
 /**
- * Header Search Box - opt-in category dropdown.
+ * Header Search Box - opt-in category dropdown and rotating placeholder.
  *
  * Every selector below requires a class the Search Box item only prints when
  * the dropdown is on (inc/search/functions-search-box.php):
@@ -8,6 +8,9 @@
  *   .cfy-search-box--has-cat         - the dropdown rendered
  *   .cfy-search-box--cat-hide-mobile - "Hide the dropdown on tablet and mobile"
  *   .cfy-search-box--cat-no-divider  - "Show a divider" unticked
+ *   .cfy-search-box--ph-rotate       - placeholder holds `|` (rotating phrases)
+ *   .cfy-search-box--ph-ready        - added by the inline script once the
+ *                                      rotating overlay is positioned
  *
  * A site on the default settings therefore matches none of these rules.
  *
@@ -135,4 +138,86 @@
 	flex: 1 1 auto;
 	width: auto;
 	min-width: 0;
+}
+
+/**
+ * Rotating placeholder (placeholder setting with `|`).
+ *
+ * The overlay is aria-hidden and stays hidden until the inline script has
+ * positioned it over the input's content box and copied the placeholder's
+ * colour, opacity and font onto it; without JavaScript the native
+ * placeholder (the first phrase) shows. Once ready, the native placeholder is
+ * hidden through `opacity` (its colour stays readable for the script).
+ */
+.cfy-search-box--ph-rotate .search-form-fields {
+	position: relative;
+}
+
+.cfy-search-box__ph {
+	display: none;
+}
+
+.cfy-search-box--ph-ready {
+
+	.search-form-fields .search-field::placeholder {
+		opacity: 0;
+	}
+
+	.cfy-search-box__ph {
+		position: absolute;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		overflow: hidden;
+		line-height: 1.5;
+		white-space: pre;
+		pointer-events: none;
+		opacity: var(--cfy-ph-opacity, 1);
+		transition: opacity 0.15s ease;
+
+		// Input focused or holding a value.
+		&.is-hidden {
+			opacity: 0;
+		}
+	}
+}
+
+.cfy-search-box__ph-line {
+	overflow: hidden;
+	max-width: 100%;
+}
+
+// Clips the sliding phrases to one line; top-aligned at the line height so
+// the phrases share the static words' baseline.
+.cfy-search-box__ph-words {
+	display: inline-grid;
+	height: 1.5em;
+	overflow: hidden;
+	vertical-align: top;
+}
+
+.cfy-search-box__ph-word {
+	grid-area: 1 / 1;
+	opacity: 0;
+	transform: translateY(110%);
+	transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+	&.is-active {
+		opacity: 1;
+		transform: none;
+	}
+
+	&.is-leaving {
+		opacity: 0;
+		transform: translateY(-110%);
+	}
+}
+
+// The script keeps the first phrase in place; no motion either way.
+@media (prefers-reduced-motion: reduce) {
+
+	.cfy-search-box__ph,
+	.cfy-search-box__ph-word {
+		transition: none;
+	}
 }

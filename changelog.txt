@@ -1,5 +1,6 @@
 = 0.4.26 =
 * NEW: Opt-in category dropdown for the header Search Box - pick the taxonomy and the terms to list. New Search Box settings: Input Focus Styling, plus dropdown text color, typography and divider.
+* NEW: The header Search Box placeholder can rotate several phrases - separate them with | (e.g. Search sofas|Search rugs); shared leading words stay in place while the rest slides.
 * FIXED: Search results tabs, result counts and the refine form now keep a category filter carried in the URL.
 
 = 0.4.25 =

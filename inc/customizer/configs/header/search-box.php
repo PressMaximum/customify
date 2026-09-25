@@ -60,6 +60,7 @@ class Customify_Builder_Item_Search_Box {
 				'selector'        => "$selector",
 				'render_callback' => $fn,
 				'label'           => __( 'Placeholder', 'customify' ),
+				'description'     => __( 'Separate several phrases with | to rotate them, e.g. Search sofas|Search rugs|Search chairs. Leading words shared by every phrase stay in place and the rest rotates.', 'customify' ),
 				'default'         => __( 'Search ...', 'customify' ),
 				'priority'        => 10,
 			),
@@ -488,6 +489,11 @@ class Customify_Builder_Item_Search_Box {
 		$placeholder = Customify()->get_setting( $this->section . '_placeholder' );
 		$placeholder = sanitize_text_field( $placeholder );
 
+		// `|` in the placeholder: rotating phrases (first one is the real
+		// placeholder). Without `|` this hands the value back untouched.
+		$placeholder_parsed = function_exists( 'customify_search_box_parse_placeholder' ) ? customify_search_box_parse_placeholder( $placeholder ) : array( 'placeholder' => $placeholder );
+		$placeholder        = $placeholder_parsed['placeholder'];
+
 		// User-picked submit icon. Empty falls back to the shipped
 		// magnifier; opt-in only, so existing sites don't change bytes.
 		$icon      = Customify()->get_setting( $this->section . '_icon' );
@@ -528,6 +534,11 @@ class Customify_Builder_Item_Search_Box {
 				<input type="search" class="search-field" placeholder="<?php echo esc_attr( $placeholder ); ?>" value="<?php echo get_search_query(); ?>" name="s" title="<?php echo esc_attr_x( 'Search for:', 'label', 'customify' ); ?>" />
 
 				<?php
+				// Rotating placeholder overlay; prints nothing without `|`.
+				if ( function_exists( 'customify_search_box_rotating_placeholder' ) ) {
+					customify_search_box_rotating_placeholder( $placeholder_parsed );
+				}
+
 				/**
 				 * Hook: customify/builder_item/search-box/html_content/after_input
 				 *
