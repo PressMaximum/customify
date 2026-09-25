@@ -60,16 +60,17 @@
 	margin: 0;
 	padding-inline-start: 0.9em;
 
-	// Divider between the dropdown and the input: the text colour at low
-	// strength, so it reads on light and dark rows alike.
+	// Divider between the dropdown and the input: 40% of the field height,
+	// the text colour at low strength, so it reads on light and dark rows
+	// alike without competing with the text.
 	&::after {
 		content: "";
 		position: absolute;
-		inset-block: 25%;
+		inset-block: 30%;
 		inset-inline-end: 0;
 		width: 1px;
-		background-color: rgba(127, 127, 127, 0.3);
-		background-color: color-mix(in srgb, currentcolor 25%, transparent);
+		background-color: rgba(127, 127, 127, 0.2);
+		background-color: color-mix(in srgb, currentcolor 14%, transparent);
 	}
 }
 
