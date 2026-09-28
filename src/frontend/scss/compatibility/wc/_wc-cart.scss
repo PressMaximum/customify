@@ -394,3 +394,19 @@
 	}
 }
 
+// Header cart dropdown — item remove control. Same look + placement as the
+// cart drawer's (shared mixin in _woocommerce-mixins.scss), scoped to the
+// dropdown so the global `a.remove` elsewhere is unchanged. It out-specifies
+// `.widget .cart_list li a.remove` above (absolute, right 0, top 15px). The
+// info column reserves 46px on the right (34px button + 12px gap) so the
+// name / price never run underneath.
+.cart-dropdown-box .woocommerce-mini-cart {
+	.mini_cart_item .mini_cart_item__info {
+		padding-right: 46px;
+	}
+
+	.woocommerce-mini-cart-item a.remove.remove_from_cart_button {
+		@include customify-mini-cart-remove();
+	}
+}
+

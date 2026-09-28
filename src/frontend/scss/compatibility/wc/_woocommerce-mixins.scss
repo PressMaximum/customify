@@ -267,3 +267,78 @@
 		color: rgba(#000, 0.75);
 	}
 }
+
+//
+// Mini-cart item remove control — shared by the header cart's two layouts
+// (off-canvas drawer + hover dropdown) so they stay in sync. Only ever
+// included under `.customify-cart-drawer` / `.cart-dropdown-box`; the global
+// `a.remove` (Cart page table, other WC screens) is left untouched.
+//
+// CSS-only: WooCommerce prints `a.remove.remove_from_cart_button` with an
+// `&times;` glyph and its AJAX remove binds to that class + data-*, so the
+// markup stays as is. The glyph is hidden (font-size 0 — the global rule sets
+// font-size / line-height with !important, hence !important here) and a
+// 24px-grid stroke trash icon is painted with a mask in currentColor.
+//
+// Look: 34px round hit area, muted at rest; hover fills a soft circle and
+// darkens the icon. Keyboard focus shows a ring via :focus-visible only, so a
+// mouse click never leaves one behind.
+//
+// Placement: absolutely positioned against the row (the <li> must be
+// `position: relative`), vertically centred for 1- and 2-line names alike and
+// flush with the row's right edge, so the hover circle stays inside the row
+// (ends where the row divider ends). The row must reserve >= 46px of right
+// padding (34px box + 12px gap) so the name / price never touch it. Hover only
+// changes colours, never geometry, so nothing shifts.
+//
+$customify-mini-cart-remove-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 7h15M9.5 7V5.2a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1V7M6.5 7l.8 11.6a1.6 1.6 0 0 0 1.6 1.4h6.2a1.6 1.6 0 0 0 1.6-1.4L17.5 7M10.2 10.8v5.4M13.8 10.8v5.4'/%3E%3C/svg%3E");
+
+@mixin customify-mini-cart-remove() {
+	position: absolute;
+	top: 50%;
+	right: 0;
+	transform: translateY(-50%);
+	display: grid;
+	place-items: center;
+	width: 34px;
+	height: 34px;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	box-shadow: none;
+	opacity: 1;
+	color: $color_meta;
+	font-size: 0 !important;
+	line-height: 0 !important;
+	text-decoration: none;
+	transition: background-color 0.2s, color 0.2s;
+
+	&::before {
+		content: "";
+		display: block;
+		width: 19px;
+		height: 19px;
+		background-color: currentColor;
+		-webkit-mask: $customify-mini-cart-remove-icon center / contain no-repeat;
+		mask: $customify-mini-cart-remove-icon center / contain no-repeat;
+	}
+
+	&:hover {
+		color: $color_heading;
+		background-color: rgba(0, 0, 0, 0.06); // fallback: no color-mix()
+		background-color: color-mix(in srgb, currentColor 7%, transparent);
+		box-shadow: none;
+		opacity: 1;
+	}
+
+	&:focus {
+		outline: 0;
+	}
+
+	&:focus-visible {
+		outline: 2px solid $color_primary;
+		outline-offset: 2px;
+	}
+}

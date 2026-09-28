@@ -69,11 +69,12 @@
 		overlay.classList.add( 'is-open' );
 		lockScroll();
 
+		// Focus the panel itself (tabindex="-1"), not the close button: a
+		// programmatic focus on the button painted a focus ring on every mouse
+		// open. Tab from here walks into the drawer, starting at the close
+		// button, which shows its ring via :focus-visible.
 		if ( ! focusDisabled ) {
-			var closeBtn = drawer.querySelector( '.customify-cart-drawer__close' );
-			if ( closeBtn ) {
-				closeBtn.focus();
-			}
+			drawer.focus( { preventScroll: true } );
 		}
 	}
 
@@ -115,7 +116,8 @@
 		var first = f[ 0 ];
 		var last = f[ f.length - 1 ];
 
-		if ( e.shiftKey && document.activeElement === first ) {
+		// Shift+Tab from the panel itself (focused on open) wraps to the end too.
+		if ( e.shiftKey && ( document.activeElement === first || document.activeElement === drawer ) ) {
 			e.preventDefault();
 			last.focus();
 		} else if ( ! e.shiftKey && document.activeElement === last ) {
@@ -205,7 +207,7 @@
 		var closeBtn = drawer.querySelector( '.customify-cart-drawer__close' );
 		if ( closeBtn ) {
 			closeBtn.addEventListener( 'click', function ( e ) {
-				e.preventDefault(); // it's an <a href="#"> (matches Quick View's close)
+				e.preventDefault(); // harmless on the <button>; guards legacy <a href="#"> overrides
 				close();
 			} );
 		}

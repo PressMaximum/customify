@@ -739,11 +739,16 @@ class Customify_Builder_Item_WC_Cart {
 		?>
 		<div class="customify-cart-drawer-overlay" hidden></div>
 		<aside id="customify-cart-drawer" class="customify-cart-drawer" data-position="<?php echo esc_attr( $position ); ?>"
-			role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Shopping cart', 'customify' ); ?>" hidden>
+			role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Shopping cart', 'customify' ); ?>" tabindex="-1" hidden>
 			<div class="customify-cart-drawer__head">
 				<span class="customify-cart-drawer__title"><?php esc_html_e( 'Shopping Cart', 'customify' ); ?></span>
-				<?php // Same markup/class as the Quick View close (theme's a.remove2x) so it looks identical. ?>
-				<a href="#" class="remove2x customify-cart-drawer__close" role="button" aria-label="<?php esc_attr_e( 'Close', 'customify' ); ?>">&times;</a>
+				<?php
+				// A real <button> with an inline stroke icon: the stroke uses
+				// currentColor, so it follows the drawer's Heading Color control.
+				?>
+				<button type="button" class="customify-cart-drawer__close" aria-label="<?php esc_attr_e( 'Close', 'customify' ); ?>">
+					<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="m6.5 6.5 11 11m0-11-11 11" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+				</button>
 			</div>
 			<div class="customify-cart-drawer__body">
 				<?php
