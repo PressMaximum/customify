@@ -282,9 +282,11 @@
 // with a mask in currentColor. It is drawn in a 16px box (vs the close
 // button's 22px), so it reads smaller and lighter: a secondary action.
 //
-// Look: 34px round hit area, muted at rest; hover fills a soft circle and
-// darkens the icon. Keyboard focus shows a ring via :focus-visible only, so a
-// mouse click never leaves one behind.
+// Look: 34px hit area around a 26px visible circle, muted at rest; hover and
+// keyboard focus fade the circle in, darken the x and give it a quarter turn
+// (as the drawer's close button does). Keyboard focus also shows a ring
+// around the circle via :focus-visible only, so a mouse click never leaves one
+// behind. prefers-reduced-motion drops the transitions.
 //
 // Placement: absolutely positioned against the row (the <li> must be
 // `position: relative`), vertically centred for 1- and 2-line names alike and
@@ -299,6 +301,7 @@ $customify-mini-cart-remove-icon: url("data:image/svg+xml,%3Csvg xmlns='http://w
 	position: absolute;
 	top: 50%;
 	right: 0;
+	z-index: 0; // own stacking context: the ::after circle sits under the icon
 	transform: translateY(-50%);
 	display: block;
 	width: 34px;
@@ -314,12 +317,14 @@ $customify-mini-cart-remove-icon: url("data:image/svg+xml,%3Csvg xmlns='http://w
 	font-size: 0 !important;
 	line-height: 0 !important;
 	text-decoration: none;
-	transition: background-color 0.2s, color 0.2s;
+	transition: color 0.2s;
 
-	// Centred absolutely, NOT via grid/flex: the hidden `&times;` text node
-	// still forms its own anonymous grid/flex item, which split a grid into
-	// two rows and pushed the icon ~3.75px above the button's centre.
-	&::before {
+	// Icon and circle are both centred absolutely, NOT via grid/flex: the
+	// hidden `&times;` text node still forms its own anonymous grid/flex
+	// item, which split a grid into two rows and pushed the icon ~3.75px
+	// above the button's centre.
+	&::before,
+	&::after {
 		content: "";
 		position: absolute;
 		top: 0;
@@ -327,28 +332,64 @@ $customify-mini-cart-remove-icon: url("data:image/svg+xml,%3Csvg xmlns='http://w
 		bottom: 0;
 		left: 0;
 		display: block;
+		margin: auto;
+	}
+
+	// The x. Quarter turn on hover / keyboard focus, like the drawer's close.
+	&::before {
 		width: 16px;
 		height: 16px;
-		margin: auto;
 		background-color: currentColor;
 		-webkit-mask: $customify-mini-cart-remove-icon center / contain no-repeat;
 		mask: $customify-mini-cart-remove-icon center / contain no-repeat;
+		transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
 	}
 
-	&:hover {
+	// The visible circle: 26px, in proportion to the small x, while the
+	// element keeps its 34px hit area. It also carries the focus ring, so the
+	// ring hugs the circle (26 + 2 offset + 2 ring = 34px, inside the box).
+	&::after {
+		z-index: -1;
+		width: 26px;
+		height: 26px;
+		border-radius: 50%;
+		background-color: transparent;
+		transition: background-color 0.2s;
+	}
+
+	&:hover,
+	&:focus-visible {
 		color: $color_heading;
-		background-color: rgba(0, 0, 0, 0.06); // fallback: no color-mix()
-		background-color: color-mix(in srgb, currentColor 7%, transparent);
+		background-color: transparent;
 		box-shadow: none;
 		opacity: 1;
+
+		&::before {
+			transform: rotate(90deg);
+		}
+
+		&::after {
+			background-color: rgba(0, 0, 0, 0.06); // fallback: no color-mix()
+			background-color: color-mix(in srgb, currentColor 7%, transparent);
+		}
 	}
 
-	&:focus {
+	&:focus,
+	&:focus-visible {
 		outline: 0;
 	}
 
-	&:focus-visible {
+	&:focus-visible::after {
 		outline: 2px solid $color_primary;
 		outline-offset: 2px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+
+		&::before,
+		&::after {
+			transition: none;
+		}
 	}
 }
