@@ -298,8 +298,7 @@ $customify-mini-cart-remove-icon: url("data:image/svg+xml,%3Csvg xmlns='http://w
 	top: 50%;
 	right: 0;
 	transform: translateY(-50%);
-	display: grid;
-	place-items: center;
+	display: block;
 	width: 34px;
 	height: 34px;
 	margin: 0;
@@ -315,11 +314,20 @@ $customify-mini-cart-remove-icon: url("data:image/svg+xml,%3Csvg xmlns='http://w
 	text-decoration: none;
 	transition: background-color 0.2s, color 0.2s;
 
+	// Centred absolutely, NOT via grid/flex: the hidden `&times;` text node
+	// still forms its own anonymous grid/flex item, which split a grid into
+	// two rows and pushed the icon ~3.75px above the button's centre.
 	&::before {
 		content: "";
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
 		display: block;
 		width: 19px;
 		height: 19px;
+		margin: auto;
 		background-color: currentColor;
 		-webkit-mask: $customify-mini-cart-remove-icon center / contain no-repeat;
 		mask: $customify-mini-cart-remove-icon center / contain no-repeat;

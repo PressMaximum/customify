@@ -323,6 +323,10 @@ class Customify_WC {
 		$suffix = Customify()->get_asset_suffix();
 		$enqueue_styles['woocommerce-general']['src']  = esc_url( get_template_directory_uri() ) . '/build/css/frontend/woocommerce' . $suffix . '.css';
 		$enqueue_styles['woocommerce-general']['deps'] = '';
+		// The file is the theme's, so version it with the theme: WooCommerce
+		// seeds `version` with WC_VERSION, which left browsers on a cached
+		// stylesheet after a theme update until WooCommerce itself updated.
+		$enqueue_styles['woocommerce-general']['version'] = Customify::$version;
 
 		if ( isset( $enqueue_styles['woocommerce-layout'] ) ) {
 			unset( $enqueue_styles['woocommerce-layout'] );
