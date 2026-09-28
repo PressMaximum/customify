@@ -532,17 +532,30 @@ No JS change, no selector change, nothing to fetch mid-flip. The close glyph is 
 
 ## 9.4 Header icon row — optical size parity (0.4.28+)
 
-One 20px box does not give one visual size: the Lucide artwork's built-in padding differs per glyph. Under `.customify-header-icons-v3` each default glyph is scaled around its box centre to **17.5px of ink**, with the stroke divided by the same factor so every glyph draws a 1.67px line. Layout is untouched (box, 16px item gaps, badge anchors). Mixin: `customify-icon-optical( $scale, $shift )` in `src/frontend/scss/utils/_mixins.scss`, `$scale = 19 / artwork height` (getBBox, 24-grid units).
+Under `.customify-header-icons-v3` (§5.5) the header row uses **a 22px icon box with 19px of visible glyph and a 1.8px line**. The box is the shared token (`--customify-header-icon-size: 22px` on the v3 scope, read by Search, Cart, Wishlist and Pro's User icon). One box size still does not give one visual size, because the artwork's built-in padding differs per glyph, so each default glyph is scaled around its box centre to the same glyph height, with the stroke set so every outline draws the same line. Layout is untouched (box, 16px item gaps, badge anchors).
 
-| Glyph | Artwork H (units) | Scale | Ink W x H at 20px | Where |
-|---|---|---|---|---|
-| Heart (`heart`) | 17.02 | 1.1163, shift -2.3% | 20.27 x 17.5 | `woocommerce-wishlist.scss` (ungated — size fix for a new item) |
-| Bag (`bag`) | 20 | 0.95 | 15.92 x 17.5 | `_icon_label_items.scss` (v3) |
-| User (Pro, `user`) | 18 | — (Pro) | 15 x 16.67 | Pro should apply 1.0556 under the same body class |
+The target is two unitless ratios on the v3 scope, shared with Pro:
 
-Also in scope: the Search glyph's `span.ic-search` / `span.ic-close` get `line-height: 0` under v2 (they carried a text line box that drew the magnifier ~1.7px above the row centre), and the Wishlist count badge uses the cart badge's `top: -4px` under v2 (both icon boxes are 20px there; legacy keeps -6px, which matches the 23px Font Awesome cart box).
+```scss
+--customify-icon-optical-k: 18.7636;      // (19 - 1.8) / (22 / 24)
+--customify-icon-optical-stroke: 1.9636;  // 1.8 / (22 / 24)
+```
 
-Measured at 1440px and 375px: every glyph centre on the row centre within 0.01px, badges at the same height and within 0.2px of the same offset from their glyph's top-right.
+`customify-icon-optical( $artwork, $offset )` (`src/frontend/scss/utils/_mixins.scss`) turns them into `scale(k / artwork)` and `stroke-width: stroke * artwork / k`, where `$artwork` is the glyph's height in 24-grid units (getBBox) and `$offset` its centre's distance below the box centre. Both ratios are relative to the box, so they hold at any Icon Size slider value. Without the v3 scope the fallbacks (19 / 2) apply: 17.5px of glyph and a 1.67px line in a 20px box.
+
+| Glyph | Artwork | Scale at v3 | Ink W x H at 22px | Line | Where |
+|---|---|---|---|---|---|
+| Search (default filled SVG, 20x21 viewBox) | 20.5 units tall | 0.8846 (`(k + stroke) / 24 * 21 / 20.503`), +0.95% down | 17.93 x 19 | filled (ring ~1.85px, handle ~2.2px) | `_icon_label_items.scss` (v3) |
+| Search open state (default 612 cross) | full box | 0.8636 (`(k + stroke) / 24`) | 19 x 19 | filled | `_icon_label_items.scss` (v3) |
+| User (Pro, `user`) | 18 | 1.0424 | 17.09 x 19 | 1.8px | Pro `header-footer-items/sass/style.scss`, reads the same ratios |
+| Heart (`heart`) | 17.02, centre 0.49 low | 1.1024 | 22.01 x 19 | 1.8px | `woocommerce-wishlist.scss` (ungated; legacy/v2 get the 19 / 2 fallbacks) |
+| Bag (`bag`) | 20 | 0.9382 | 17.28 x 19 | 1.8px | `_icon_label_items.scss` (v3) |
+
+Only the default Search SVGs are scaled (`.ic-search > svg:not(.customify-svg-icon)`); a picked icon is rendered inside a `.customify-icon` wrapper and keeps its own size. The Search markup itself is the original filled magnifier and cross on every site.
+
+Also in scope: the Search glyph's `span.ic-search` / `span.ic-close` get `line-height: 0` under v2 (they carried a text line box that drew the magnifier ~1.7px above the row centre), and the Wishlist count badge uses the cart badge's `top: -4px` under v2 (both icon boxes are the same size there; legacy keeps -6px, which matches the 23px Font Awesome cart box).
+
+Measured at 1440px and 375px: every glyph 19px tall with its centre on the row centre (within 0.01px); badges at the same height and 5.5px above their glyph's top, horizontally within 0.4px of the same offset from its right edge.
 
 ## 10. Font Awesome loading
 

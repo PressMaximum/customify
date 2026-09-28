@@ -217,24 +217,42 @@ Gated on `.customify-header-icons-v3` (inc/element-classes.php, install
 marker >= 0.4.28), like the v2 scope above: it changes how an existing header
 looks, so sites that installed earlier keep rendering exactly what they did.
 
-At one 20px box the preset glyphs still read at different sizes because the
-artwork's built-in padding differs. Each glyph is scaled around its box
-centre to one optical height (17.5px of ink) with the stroke compensated, so
-the boxes, gaps and badge anchors do not move. The Wishlist heart gets the
-same correction ungated (compatibility/woocommerce-wishlist.scss). Pro's
-User icon (15x17px) already sits inside the tolerance and is left alone.
-Full table: docs/SPEC-icons.md §9.4.
+One row size: a 22px icon box with 19px of visible glyph and a 1.8px line.
+The box is the shared token (every item, Pro's User icon included, reads it).
+At one box size the glyphs still read at different sizes because the
+artwork's built-in padding differs, so each one is scaled around its box
+centre to the same glyph height, with the stroke set so every outline draws
+the same line; boxes, gaps and badge anchors do not move. The two ratios
+below drive the `customify-icon-optical()` mixin (utils/_mixins.scss) and
+Pro's User icon. Full table: docs/SPEC-icons.md §9.4.
 */
 .customify-header-icons-v3 {
-	// Outline magnifier (the 0.4.28+ default, config/header/search-icon.php):
-	// artwork 18 units tall (getBBox), 16.7px of ink in a 20px box.
-	.item--search_icon .search-icon svg.customify-svg-icon--search {
-		@include customify-icon-optical( 1.0556 );
+	--customify-header-icon-size: 22px;
+	// (19 - 1.8) / (22 / 24) and 1.8 / (22 / 24): 19px of glyph and a 1.8px
+	// line, as ratios of the box so they hold at any Icon Size slider value.
+	--customify-icon-optical-k: 18.7636;
+	--customify-icon-optical-stroke: 1.9636;
+
+	// The default filled magnifier (config/header/search-icon.php, printed
+	// byte for byte on every site) in a 20x21 viewBox: 20.5 units tall, so
+	// 21.5px of ink in the 22px box, with its centre 0.23 units high. Scale
+	// it to the row's glyph height ((k + stroke) / 24 of the box) and centre
+	// it. Filled, so there is no line to compensate. `> svg` without the
+	// preset class matches only that default: a picked icon is rendered
+	// inside a `.customify-icon` wrapper and keeps its own size.
+	.item--search_icon .search-icon .ic-search > svg:not(.customify-svg-icon) {
+		transform: translateY(0.95%) scale(calc((var(--customify-icon-optical-k) + var(--customify-icon-optical-stroke)) / 24 * 21 / 20.503));
 	}
 
-	// Bag: artwork 20 units tall, 18.3px of ink, the tallest of the row.
+	// Its open state: the default cross (612x612 viewBox, drawn edge to edge)
+	// would fill the whole 22px box. Same glyph height as the rest.
+	.item--search_icon .search-icon .ic-close > svg:not(.customify-svg-icon) {
+		transform: scale(calc((var(--customify-icon-optical-k) + var(--customify-icon-optical-stroke)) / 24));
+	}
+
+	// Bag: artwork 20 units tall, the tallest outline of the row.
 	.item--wc_cart .cart-icon svg.customify-svg-icon--bag {
-		@include customify-icon-optical( 0.95 );
+		@include customify-icon-optical( 20 );
 	}
 
 	// The v2 scope sets the cart link to font-weight 500, which the count

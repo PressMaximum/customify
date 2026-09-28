@@ -86,19 +86,35 @@
 // (24-grid artwork, root `stroke-width="2"`, see inc/icons-svg.php).
 //
 // Lucide artwork carries different built-in padding per glyph, so at one box
-// size the drawn glyphs differ by up to ~2.5px (heart 16px tall vs bag 18.5px
+// size the drawn glyphs differ by up to ~2.5px (heart 16px tall vs bag 18.3px
 // in a 20px box). This scales the glyph around the box centre to a common
 // optical height WITHOUT touching layout (the box, the gaps and any badge
-// anchored to the box stay put) and divides the stroke by the same factor so
-// the line weight on screen is unchanged.
+// anchored to the box stay put) and sets the stroke so the line weight on
+// screen is the same for every glyph.
 //
-// $scale = (target - stroke) / (artwork height x px-per-unit), with the
-// artwork height from the glyph's getBBox() in 24-grid units: target ink
-// height 17.5px, stroke 2 x 20/24 = 1.667px, 20/24 px/unit — so
-// $scale = 19 / artwork height.
-// $shift nudges a glyph whose ink centre sits off the box centre (percent of
-// the box, so it tracks the Icon Size sliders).
-@mixin customify-icon-optical( $scale, $shift: 0% ) {
-	transform: translateY( $shift ) scale( $scale );
-	stroke-width: calc( 2 / #{$scale} );
+// The target is two unitless ratios, read from custom properties so the
+// theme's header scopes (and Customify Pro's User icon) share one source:
+//   --customify-icon-optical-k      = (glyph px - line px) / (box px / 24)
+//   --customify-icon-optical-stroke = line px / (box px / 24)
+// Both are ratios to the box, so they hold at any Icon Size slider value.
+// Fallbacks (19 / 2) = 17.5px of glyph and a 1.67px line in a 20px box, the
+// size the 0.4.27 Wishlist heart was corrected to; the v3 scope
+// (header/builder_items/_icon_label_items.scss) raises them.
+//
+// $artwork: the glyph's height in 24-grid units (getBBox, stroke excluded).
+// $offset:  the glyph centre's distance below the box centre, in grid units;
+//           it is scaled with the glyph and cancelled.
+@mixin customify-icon-optical( $artwork, $offset: 0 ) {
+	$k: var(--customify-icon-optical-k, 19);
+	$stroke: var(--customify-icon-optical-stroke, 2);
+	$scale: calc(#{$k} / #{$artwork});
+
+	@if $offset != 0 {
+		// Percent of the (square) box: offset / 24 * 100, times the scale.
+		$shift: -$offset * 4.16667 * 1%; // -offset / 24 * 100, as a percent of the box
+		transform: translateY(calc(#{$shift} * #{$k} / #{$artwork})) scale($scale);
+	} @else {
+		transform: scale($scale);
+	}
+	stroke-width: calc(#{$stroke} * #{$artwork} / #{$k});
 }

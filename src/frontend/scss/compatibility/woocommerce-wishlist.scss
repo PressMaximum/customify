@@ -57,11 +57,13 @@
 		// The Lucide heart has the most built-in padding in the row: its
 		// artwork is 17.02 units tall (getBBox) against the bag's 20, so it
 		// drew ~16px of ink in a 20px box, and its centre sits 0.49 units
-		// below the box centre. Bring it to the row's optical height (17.5px)
+		// below the box centre. Bring it to the row's optical glyph height
+		// (17.5px in a 20px box by default; 19px of 22px under the 0.4.28+
+		// `.customify-header-icons-v3` scope, which sets the mixin's ratios)
 		// and centre it. Not install-gated: the item is new and this corrects
 		// its size, it does not restyle an established look.
 		svg.customify-svg-icon--heart {
-			@include customify-icon-optical( 1.1163, -2.3% );
+			@include customify-icon-optical( 17.02, 0.49 );
 		}
 
 		i {
