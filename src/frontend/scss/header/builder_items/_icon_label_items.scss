@@ -189,6 +189,18 @@ every declaration inside is written to stand on its own.
 		align-items: center;
 	}
 
+	// The Search glyph sits inside `span.ic-search` / `span.ic-close`
+	// (config/header/search-icon.php), not directly in `.search-icon`, so the
+	// `> svg { line-height: 0 }` rule above never reached it. The span took
+	// the link's `line-height: 1.2`, the SVG rested on its text baseline with
+	// descender space underneath (a 23.3px box for a 20px glyph), and the
+	// magnifier drew ~1.7px above the row centre — the filled default and
+	// any picked icon alike. Collapse the spans' line box like the others.
+	.item--search_icon .search-icon .ic-search,
+	.item--search_icon .search-icon .ic-close {
+		line-height: 0;
+	}
+
 	// The Search Icon prints an empty `<span class="arrow-down">` after the
 	// glyph (config/header/search-icon.php; nothing styles or scripts it).
 	// Inside the `inline-flex` link above it is a flex item, so the 8px
@@ -196,5 +208,38 @@ every declaration inside is written to stand on its own.
 	// glyph pushed to the left edge, doubling the space on its right.
 	.search-icon .arrow-down {
 		display: none;
+	}
+}
+
+/* Header icon row — optical normalisation (0.4.28+)
+--------------------------------------------------------------
+Gated on `.customify-header-icons-v3` (inc/element-classes.php, install
+marker >= 0.4.28), like the v2 scope above: it changes how an existing header
+looks, so sites that installed earlier keep rendering exactly what they did.
+
+At one 20px box the preset glyphs still read at different sizes because the
+artwork's built-in padding differs. Each glyph is scaled around its box
+centre to one optical height (17.5px of ink) with the stroke compensated, so
+the boxes, gaps and badge anchors do not move. The Wishlist heart gets the
+same correction ungated (compatibility/woocommerce-wishlist.scss). Pro's
+User icon (15x17px) already sits inside the tolerance and is left alone.
+Full table: docs/SPEC-icons.md §9.4.
+*/
+.customify-header-icons-v3 {
+	// Outline magnifier (the 0.4.28+ default, config/header/search-icon.php):
+	// artwork 18 units tall (getBBox), 16.7px of ink in a 20px box.
+	.item--search_icon .search-icon svg.customify-svg-icon--search {
+		@include customify-icon-optical( 1.0556 );
+	}
+
+	// Bag: artwork 20 units tall, 18.3px of ink, the tallest of the row.
+	.item--wc_cart .cart-icon svg.customify-svg-icon--bag {
+		@include customify-icon-optical( 0.95 );
+	}
+
+	// The v2 scope sets the cart link to font-weight 500, which the count
+	// badge inherits; the Wishlist badge is 600. Match them.
+	.item--wc_cart .cart-qty {
+		font-weight: 600;
 	}
 }

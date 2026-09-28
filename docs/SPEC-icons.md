@@ -211,6 +211,11 @@ Two consumers today, both gated on `0.4.25`:
 1. **The cart's icon default** — [`config/header/cart.php`](../inc/compatibility/woocommerce/config/header/cart.php) registers `{type:'svg', icon:'bag'}` on a fresh install and the Font Awesome basket otherwise. Config arrays are built at runtime, so the branch is evaluated per request.
 2. **The `customify-header-items-v2` body class** — [`inc/element-classes.php`](../inc/element-classes.php), which scopes §9.2's shared header-item style.
 
+Gated on `0.4.28`:
+
+3. **The Search Icon's default glyphs** — [`config/header/search-icon.php`](../inc/customizer/configs/header/search-icon.php) `render()` prints the `search` / `close` presets for the trigger, its open state and the modal submit button; older sites keep the literal filled SVGs byte for byte. A picked `search_icon_icon` / `search_icon_close_icon` still wins.
+4. **The `customify-header-icons-v3` body class** — [`inc/element-classes.php`](../inc/element-classes.php), which scopes §9.4's optical size correction.
+
 A site that **saved** a value is unaffected either way: the saved value always beats the default. The gate only decides what a site that never touched the field sees.
 
 > **Known ambiguity, deliberately fail-safe.** A site that installed the theme years ago and never customised anything is indistinguishable from a fresh install, and will be stamped as fresh. By construction such a site has only ever rendered defaults, so the exposure is one cosmetic icon on a header nobody configured. Every site that has *any* saved setting is correctly stamped legacy.
@@ -525,6 +530,21 @@ This section is **not** install-gated: no existing site can have an icon saved, 
 No JS change, no selector change, nothing to fetch mid-flip. The close glyph is always the theme's `close` preset rather than a counterpart from the chosen icon's own set: Font Awesome has no version-stable "times" class (`fa-times` vs `fa-xmark`) and a pasted custom SVG has no close counterpart at all, so one theme-authored glyph on the same 24-grid is the only answer that covers all three value types.
 
 ---
+
+## 9.4 Header icon row — optical size parity (0.4.28+)
+
+One 20px box does not give one visual size: the Lucide artwork's built-in padding differs per glyph. Under `.customify-header-icons-v3` each default glyph is scaled around its box centre to **17.5px of ink**, with the stroke divided by the same factor so every glyph draws a 1.67px line. Layout is untouched (box, 16px item gaps, badge anchors). Mixin: `customify-icon-optical( $scale, $shift )` in `src/frontend/scss/utils/_mixins.scss`, `$scale = 19 / artwork height` (getBBox, 24-grid units).
+
+| Glyph | Artwork H (units) | Scale | Ink W x H at 20px | Where |
+|---|---|---|---|---|
+| Search (`search`) | 18 | 1.0556 | 17.5 x 17.5 | `_icon_label_items.scss` (v3) |
+| Heart (`heart`) | 17.02 | 1.1163, shift -2.3% | 20.27 x 17.5 | `woocommerce-wishlist.scss` (ungated — size fix for a new item) |
+| Bag (`bag`) | 20 | 0.95 | 15.92 x 17.5 | `_icon_label_items.scss` (v3) |
+| User (Pro, `user`) | 18 | — (Pro) | 15 x 16.67 | Pro should apply 1.0556 under the same body class |
+
+Also in scope: the Search glyph's `span.ic-search` / `span.ic-close` get `line-height: 0` under v2 (they carried a text line box that drew the magnifier ~1.7px above the row centre), and the Wishlist count badge uses the cart badge's `top: -4px` under v2 (both icon boxes are 20px there; legacy keeps -6px, which matches the 23px Font Awesome cart box).
+
+Measured at 1440px and 375px: every glyph centre on the row centre within 0.01px, badges at the same height and within 0.2px of the same offset from their glyph's top-right.
 
 ## 10. Font Awesome loading
 

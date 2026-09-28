@@ -81,3 +81,24 @@
     }
 }
 
+
+// Optical size correction for a preset STROKE glyph in a header icon slot
+// (24-grid artwork, root `stroke-width="2"`, see inc/icons-svg.php).
+//
+// Lucide artwork carries different built-in padding per glyph, so at one box
+// size the drawn glyphs differ by up to ~2.5px (heart 16px tall vs bag 18.5px
+// in a 20px box). This scales the glyph around the box centre to a common
+// optical height WITHOUT touching layout (the box, the gaps and any badge
+// anchored to the box stay put) and divides the stroke by the same factor so
+// the line weight on screen is unchanged.
+//
+// $scale = (target - stroke) / (artwork height x px-per-unit), with the
+// artwork height from the glyph's getBBox() in 24-grid units: target ink
+// height 17.5px, stroke 2 x 20/24 = 1.667px, 20/24 px/unit — so
+// $scale = 19 / artwork height.
+// $shift nudges a glyph whose ink centre sits off the box centre (percent of
+// the box, so it tracks the Icon Size sliders).
+@mixin customify-icon-optical( $scale, $shift: 0% ) {
+	transform: translateY( $shift ) scale( $scale );
+	stroke-width: calc( 2 / #{$scale} );
+}
