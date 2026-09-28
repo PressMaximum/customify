@@ -213,8 +213,7 @@ Two consumers today, both gated on `0.4.25`:
 
 Gated on `0.4.28`:
 
-3. **The Search Icon's default glyphs** — [`config/header/search-icon.php`](../inc/customizer/configs/header/search-icon.php) `render()` prints the `search` / `close` presets for the trigger, its open state and the modal submit button; older sites keep the literal filled SVGs byte for byte. A picked `search_icon_icon` / `search_icon_close_icon` still wins.
-4. **The `customify-header-icons-v3` body class** — [`inc/element-classes.php`](../inc/element-classes.php), which scopes §9.4's optical size correction.
+3. **The `customify-header-icons-v3` body class** — [`inc/element-classes.php`](../inc/element-classes.php), which scopes §9.4's optical size correction.
 
 A site that **saved** a value is unaffected either way: the saved value always beats the default. The gate only decides what a site that never touched the field sees.
 
@@ -537,7 +536,6 @@ One 20px box does not give one visual size: the Lucide artwork's built-in paddin
 
 | Glyph | Artwork H (units) | Scale | Ink W x H at 20px | Where |
 |---|---|---|---|---|
-| Search (`search`) | 18 | 1.0556 | 17.5 x 17.5 | `_icon_label_items.scss` (v3) |
 | Heart (`heart`) | 17.02 | 1.1163, shift -2.3% | 20.27 x 17.5 | `woocommerce-wishlist.scss` (ungated — size fix for a new item) |
 | Bag (`bag`) | 20 | 0.95 | 15.92 x 17.5 | `_icon_label_items.scss` (v3) |
 | User (Pro, `user`) | 18 | — (Pro) | 15 x 16.67 | Pro should apply 1.0556 under the same body class |

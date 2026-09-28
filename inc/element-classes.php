@@ -84,11 +84,12 @@ if ( ! function_exists( 'customify_body_classes' ) ) {
 			$classes[] = 'customify-header-items-v2';
 		}
 
-		// Opts a site into the optically normalised header icon row (outline
-		// Search default + per-glyph size correction so Search, Wishlist,
-		// Cart and Pro's User read at one size). Changes how an existing
-		// header looks, so it is gated exactly like the class above, on the
-		// release that ships it. See docs/SPEC-icons.md §9.4.
+		// Opts a site into the optically normalised header icon row (one
+		// icon size, every glyph corrected to the same visible height and
+		// line weight across Search, Wishlist, Cart and Pro's User item).
+		// Changes how an existing header looks, so it is gated exactly like
+		// the class above, on the release that ships it. See
+		// docs/SPEC-icons.md §9.4.
 		if ( function_exists( 'customify_is_fresh_install_since' )
 			&& customify_is_fresh_install_since( '0.4.28' ) ) {
 			$classes[] = 'customify-header-icons-v3';
