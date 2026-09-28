@@ -278,7 +278,9 @@
 // `&times;` glyph and its AJAX remove binds to that class + data-*, so the
 // markup stays as is. The glyph is hidden (font-size 0 — the global rule sets
 // font-size / line-height with !important, hence !important here) and a
-// 24px-grid stroke trash icon is painted with a mask in currentColor.
+// 24px-grid stroke x (same path as the cart drawer's close button) is painted
+// with a mask in currentColor. It is drawn in a 16px box (vs the close
+// button's 22px), so it reads smaller and lighter: a secondary action.
 //
 // Look: 34px round hit area, muted at rest; hover fills a soft circle and
 // darkens the icon. Keyboard focus shows a ring via :focus-visible only, so a
@@ -291,7 +293,7 @@
 // padding (34px box + 12px gap) so the name / price never touch it. Hover only
 // changes colours, never geometry, so nothing shifts.
 //
-$customify-mini-cart-remove-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 7h15M9.5 7V5.2a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1V7M6.5 7l.8 11.6a1.6 1.6 0 0 0 1.6 1.4h6.2a1.6 1.6 0 0 0 1.6-1.4L17.5 7M10.2 10.8v5.4M13.8 10.8v5.4'/%3E%3C/svg%3E");
+$customify-mini-cart-remove-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6.5 6.5 11 11m0-11-11 11'/%3E%3C/svg%3E");
 
 @mixin customify-mini-cart-remove() {
 	position: absolute;
@@ -325,8 +327,8 @@ $customify-mini-cart-remove-icon: url("data:image/svg+xml,%3Csvg xmlns='http://w
 		bottom: 0;
 		left: 0;
 		display: block;
-		width: 19px;
-		height: 19px;
+		width: 16px;
+		height: 16px;
 		margin: auto;
 		background-color: currentColor;
 		-webkit-mask: $customify-mini-cart-remove-icon center / contain no-repeat;
