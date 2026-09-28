@@ -1,3 +1,13 @@
+= 0.4.27 =
+* NEW: Wishlist header item with live counts and improved styling for TI and YITH Wishlist.
+* NEW: Footer row text and link color controls.
+* NEW: Off-canvas Primary Menu styling.
+* NEW: Search Box category filter, rotating placeholders and styling controls.
+* IMPROVED: Shared mini-cart hooks for dropdown and drawer.
+* IMPROVED: Clear names for Legacy and Blocks Editor mega menus.
+* FIXED: Page Header visibility on Product Brand archives.
+* FIXED: Header cart and search icon alignment.
+
 = 0.4.25 =
 * NEW: Header builder icon controls now support built-in and custom inline SVG icons, including dedicated menu and cart presets with optional labels.
 * NEW: Brand-coloured payment method icons with an optional monochrome mode.

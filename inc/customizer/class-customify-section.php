@@ -3,6 +3,7 @@
 class Customify_WP_Customize_Section extends WP_Customize_Section {
 
 	public $section;
+	public $customify_placement;
 	public $type = 'customify_section';
 
 	public function json() {
@@ -17,6 +18,7 @@ class Customify_WP_Customize_Section extends WP_Customize_Section {
 				'type',
 				'description_hidden',
 				'section',
+				'customify_placement',
 			)
 		);
 		$array['title']          = html_entity_decode( $this->title, ENT_QUOTES, get_bloginfo( 'charset' ) );

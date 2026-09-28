@@ -65,6 +65,10 @@ class Customify_WC {
 
 			// Shopping Cart.
 			require_once get_template_directory() . '/inc/compatibility/woocommerce/config/header/cart.php';
+
+			// Wishlist: provider layer (TI / YITH / filter) + header item.
+			require_once get_template_directory() . '/inc/compatibility/woocommerce/inc/wishlist.php';
+			require_once get_template_directory() . '/inc/compatibility/woocommerce/config/header/wishlist.php';
 			add_filter( 'woocommerce_add_to_cart_fragments', array( $this, 'cart_fragments' ) );
 			add_filter( 'Customify_JS', array( $this, 'Customify_JS' ) );
 
@@ -491,12 +495,15 @@ class Customify_WC {
 
 	function show_shop_title( $show = true ) {
 
-		if ( $this->is_shop_pages()  || is_product_category()) {
+		if ( $this->is_shop_pages() || is_product_taxonomy() ) {
 			$disable = get_theme_mod( '_customify_wc_show_page_title' );
-			if ( !$disable ) {
+			if ( ! $disable ) {
 				$show = false;
 			} else {
-				$show = true;
+				// The WooCommerce title is the inline page title. Respect the
+				// resolved Page Header mode so Cover, Titlebar, and Hide do not
+				// leave a duplicate or unexpected heading on product archives.
+				$show = customify_is_post_title_display();
 			}
 		}
 

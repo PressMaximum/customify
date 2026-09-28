@@ -15,6 +15,20 @@ $builder_active_color: #0073aa;
 	transform: translateX(-100%);
 }
 
+#customize-theme-controls .customize-pane-child.customify-section-returning {
+	-webkit-transform: none;
+	-ms-transform: none;
+	transform: none;
+}
+
+// Customify sections are transparent by default. Give moving panes the same
+// background as the Customizer sidebar so builder controls cannot show through
+// while nested sections transition in either direction.
+#customize-theme-controls
+	.customize-pane-child.control-section-customify_section.busy {
+	background-color: #f0f0f1;
+}
+
 @mixin clearfix {
 	&:before,
 	&:after {
@@ -598,6 +612,62 @@ $builder_active_color: #0073aa;
 #customize-controls .accordion-section-title button.accordion-trigger:focus:not(:focus-visible) {
 	box-shadow: none;
 	outline: none;
+}
+
+// Bottom-placed nested sections use a lightweight proxy control. Keeping the
+// real section heading in WordPress' normal section container avoids core
+// accordion rules leaking into the parent controls after navigating back.
+#customize-theme-controls .customify-section-placement-source {
+	display: none !important;
+}
+
+#customize-theme-controls
+	.customize-pane-child
+	> .customify-section-link-control {
+	clear: both;
+	float: none;
+	box-sizing: border-box;
+	width: calc(100% - 24px);
+	margin: 0 12px 15px;
+	padding: 0;
+}
+
+#customize-theme-controls .customify-section-link {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 36px;
+	padding: 7px 9px 7px 10px;
+	color: #2c3338;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 20px;
+	text-align: left;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+#customize-theme-controls .customify-section-link::after {
+	content: "\f345";
+	color: #646970;
+	font: 18px/1 dashicons;
+	-webkit-font-smoothing: antialiased;
+}
+
+#customize-theme-controls .customify-section-link:hover,
+#customize-theme-controls .customify-section-link:focus {
+	color: #2c3338;
+	background: #fff;
+	border-color: var(--wp-admin-theme-color, #2271b1);
+}
+
+#customize-theme-controls .customify-section-link:focus {
+	box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #2271b1);
+	outline: 2px solid transparent;
 }
 
 // ── Panel group divider ──────────────────────────────────────────────────────

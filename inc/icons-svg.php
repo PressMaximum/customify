@@ -352,7 +352,8 @@ if ( ! function_exists( 'customify_get_svg_icons' ) ) {
 					'body'    => '<path d="M13 19a4 4 0 00-8 0"/><path d="M16 10h2"/><path d="M16 14h2"/><circle cx="9" cy="12" r="3"/><rect x="2" y="5" width="20" height="14" rx="2"/>',
 				),
 				// ------------------------------------------ Wishlist / saved
-				// Pro's Wishlist item reuses the heart pair.
+				// Pro's Wishlist item reuses the heart pair; the theme's own
+				// Wishlist header item (wc_wishlist_counter) defaults to `heart`.
 				'heart'              => array(
 					'label'   => __( 'Heart', 'customify' ),
 					'source'  => 'lucide/heart',

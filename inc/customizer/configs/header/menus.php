@@ -183,6 +183,16 @@ class Customify_Builder_Item_Primary_Menu {
 						'bg_position'   => false,
 					),
 				),
+				'offcanvas'   => array(
+					'group'       => 'top_menu',
+					'group_title' => __( 'Top Menu', 'customify' ),
+					'title'       => __( 'Menu Items Styling', 'customify' ),
+					'selector'    => array(
+						'normal'        => "{$mobile_selector} > li > a",
+						'normal_margin' => "{$mobile_selector} > li",
+						'hover'         => "{$mobile_selector} > li > a:hover, {$mobile_selector} > li.current-menu-item > a, {$mobile_selector} > li.current-menu-ancestor > a, {$mobile_selector} > li.current-menu-parent > a",
+					),
+				),
 			),
 
 			array(
@@ -193,6 +203,12 @@ class Customify_Builder_Item_Primary_Menu {
 				'description' => __( 'Typography for menu', 'customify' ),
 				'selector'    => "{$this->selector} > li > a,.builder-item-sidebar .primary-menu-sidebar .primary-menu-ul > li > a",
 				'css_format'  => 'typography',
+				'offcanvas'   => array(
+					'group'       => 'top_menu',
+					'group_title' => __( 'Top Menu', 'customify' ),
+					'title'       => __( 'Menu Items Typography', 'customify' ),
+					'selector'    => "{$mobile_selector} > li > a",
+				),
 			),
 
 		);
@@ -215,8 +231,47 @@ class Customify_Builder_Item_Primary_Menu {
 
 		$config = apply_filters( 'customify/customize-menu-config-more', $config, $section, $this );
 
+		if ( class_exists( 'Customify_Pro_Module_Header_Footer_Items' ) ) {
+			$offcanvas_submenu_selectors = array(
+				$this->prefix . '_sub_styling'         => array(
+					'normal' => "{$mobile_selector} .sub-menu",
+				),
+				$this->prefix . '_sub_item_styling'    => array(
+					'normal' => "{$mobile_selector} .sub-menu li a",
+					'hover'  => "{$mobile_selector} .sub-menu li a:hover, {$mobile_selector} .sub-menu li a:focus",
+				),
+				$this->prefix . '_typography_submenu'  => "{$mobile_selector} .sub-menu li a",
+			);
+
+			foreach ( $config as $index => $field ) {
+				if ( empty( $field['name'] ) || ! isset( $offcanvas_submenu_selectors[ $field['name'] ] ) ) {
+					continue;
+				}
+
+				$config[ $index ]['offcanvas'] = array(
+					'group'       => 'submenu',
+					'group_title' => __( 'Submenu', 'customify' ),
+					'selector'    => $offcanvas_submenu_selectors[ $field['name'] ],
+				);
+			}
+		}
+
 		// Item Layout.
-		return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
+		$config = array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
+
+		// Keep the first iteration scoped to Primary Menu. Customify Pro reuses
+		// this class for Secondary Menu, but that item has not opted in yet.
+		if ( 'primary-menu' !== $this->id ) {
+			foreach ( $config as $index => $field ) {
+				if ( is_array( $field ) ) {
+					unset( $config[ $index ]['offcanvas'] );
+				}
+			}
+
+			return $config;
+		}
+
+		return customify_header_add_offcanvas_item_settings( $config, $this->id, $section );
 	}
 
 	function menu_fallback_cb() {

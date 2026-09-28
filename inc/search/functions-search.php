@@ -148,6 +148,110 @@ if ( ! function_exists( 'customify_search_get_scope_choices' ) ) {
 	}
 }
 
+if ( ! function_exists( 'customify_search_get_request_tax_filters' ) ) {
+	/**
+	 * Taxonomy filters the current search request carries.
+	 *
+	 * A header search form with a category dropdown submits the term through
+	 * the taxonomy's public query var (`?s=term&product_cat=jackets`). The
+	 * results page has to keep that filter everywhere it builds a new URL or
+	 * count - tabs, the refine form, the default scope redirect - or the
+	 * visitor silently loses it one click later.
+	 *
+	 * Read straight from the request (not from the main query's tax query)
+	 * so only filters the visitor asked for are carried, never the ones a
+	 * plugin adds on its own, like WooCommerce's catalog visibility clause.
+	 *
+	 * @since 0.4.26
+	 *
+	 * @return array Query var => raw value (a slug, or a comma / plus
+	 *               separated slug list), sorted by query var. Empty when the
+	 *               request carries no taxonomy filter.
+	 */
+	function customify_search_get_request_tax_filters() {
+		static $cache = null;
+
+		if ( null !== $cache ) {
+			return $cache;
+		}
+
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read only query vars on a public search request.
+		if ( empty( $_GET ) ) {
+			$cache = array();
+
+			return $cache;
+		}
+
+		$vars = array( 'cat' );
+
+		foreach ( get_taxonomies( array( 'public' => true ), 'objects' ) as $taxonomy ) {
+			if ( ! empty( $taxonomy->query_var ) && is_string( $taxonomy->query_var ) ) {
+				$vars[] = $taxonomy->query_var;
+			}
+		}
+
+		$filters = array();
+
+		foreach ( array_unique( $vars ) as $var ) {
+			if ( ! isset( $_GET[ $var ] ) || ! is_string( $_GET[ $var ] ) ) {
+				continue;
+			}
+
+			$value = trim( sanitize_text_field( wp_unslash( $_GET[ $var ] ) ) );
+
+			if ( '' !== $value ) {
+				$filters[ $var ] = $value;
+			}
+		}
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		if ( empty( $filters ) ) {
+			$cache = array();
+
+			return $cache;
+		}
+
+		ksort( $filters );
+
+		/**
+		 * Filter the taxonomy filters carried across the search results page.
+		 *
+		 * @since 0.4.26
+		 *
+		 * @param array $filters Query var => value.
+		 */
+		$filters = apply_filters( 'customify/search/tax_filters', $filters );
+		$cache   = is_array( $filters ) ? $filters : array();
+
+		return $cache;
+	}
+}
+
+if ( ! function_exists( 'customify_search_request_has_product_tax_filter' ) ) {
+	/**
+	 * Whether the request includes a public product-taxonomy query var.
+	 *
+	 * @since 0.4.26
+	 *
+	 * @return bool
+	 */
+	function customify_search_request_has_product_tax_filter() {
+		$filters = customify_search_get_request_tax_filters();
+
+		if ( empty( $filters ) ) {
+			return false;
+		}
+
+		foreach ( get_object_taxonomies( 'product', 'objects' ) as $taxonomy ) {
+			if ( ! empty( $taxonomy->public ) && ! empty( $taxonomy->query_var ) && is_string( $taxonomy->query_var ) && isset( $filters[ $taxonomy->query_var ] ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+}
+
 if ( ! function_exists( 'customify_search_get_type_counts' ) ) {
 	/**
 	 * Count search matches per content type.
@@ -156,20 +260,29 @@ if ( ! function_exists( 'customify_search_get_type_counts' ) ) {
 	 * result for the rest of the request.
 	 *
 	 * @param string $search_query Raw search term.
+	 * @param array  $tax_filters  Optional. Taxonomy query var => value pairs
+	 *                             every count must respect, as returned by
+	 *                             customify_search_get_request_tax_filters().
+	 *                             Since 0.4.26.
 	 *
 	 * @return array Post type slug => count, plus `all` => sum. Empty when the
 	 *               search term is empty.
 	 */
-	function customify_search_get_type_counts( $search_query ) {
+	function customify_search_get_type_counts( $search_query, $tax_filters = array() ) {
 		static $cache = array();
 
 		$search_query = is_string( $search_query ) ? $search_query : '';
+		$tax_filters  = is_array( $tax_filters ) ? $tax_filters : array();
 
 		if ( '' === trim( $search_query ) ) {
 			return array();
 		}
 
 		$cache_key = md5( $search_query );
+
+		if ( $tax_filters ) {
+			$cache_key .= md5( wp_json_encode( $tax_filters ) );
+		}
 
 		if ( isset( $cache[ $cache_key ] ) ) {
 			return $cache[ $cache_key ];
@@ -188,6 +301,15 @@ if ( ! function_exists( 'customify_search_get_type_counts' ) ) {
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
 			);
+
+			// Same query vars the main query parsed, so a count and the
+			// listing it labels agree term for term. The query vars never
+			// collide with the keys above: they are taxonomy query vars.
+			foreach ( $tax_filters as $query_var => $value ) {
+				if ( is_string( $query_var ) && ! isset( $args[ $query_var ] ) ) {
+					$args[ $query_var ] = $value;
+				}
+			}
 
 			// WooCommerce hides `exclude-from-search` products from the main
 			// search query, but only on the MAIN query - mirror it here so the
@@ -349,7 +471,7 @@ if ( ! function_exists( 'customify_search_maybe_redirect_to_scope' ) ) {
 			return;
 		}
 
-		$counts = customify_search_get_type_counts( $term );
+		$counts = customify_search_get_type_counts( $term, customify_search_get_request_tax_filters() );
 
 		if ( empty( $counts[ $scope ] ) || (int) $counts[ $scope ] < 1 ) {
 			return;
@@ -395,7 +517,14 @@ if ( ! function_exists( 'customify_search_results_form' ) ) {
 			</label>
 			<?php if ( '' !== $scope ) : ?>
 				<input type="hidden" name="post_type" value="<?php echo esc_attr( $scope ); ?>" />
-			<?php endif; ?>
+			<?php
+			endif;
+			// Same PHP block as the `endif` so a request without taxonomy
+			// filters prints exactly the bytes it always did.
+			foreach ( customify_search_get_request_tax_filters() as $filter_var => $filter_value ) {
+				printf( '<input type="hidden" name="%1$s" value="%2$s" />', esc_attr( $filter_var ), esc_attr( $filter_value ) );
+			}
+			?>
 			<button type="submit" class="cfy-search-form-submit">
 				<svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21">
 					<path fill="currentColor" fill-rule="evenodd" d="M12.514 14.906a8.264 8.264 0 0 1-4.322 1.21C3.668 16.116 0 12.513 0 8.07 0 3.626 3.668.023 8.192.023c4.525 0 8.193 3.603 8.193 8.047 0 2.033-.769 3.89-2.035 5.307l4.999 5.552-1.775 1.597-5.06-5.62zm-4.322-.843c3.37 0 6.102-2.684 6.102-5.993 0-3.31-2.732-5.994-6.102-5.994S2.09 4.76 2.09 8.07c0 3.31 2.732 5.993 6.102 5.993z"></path>
@@ -593,13 +722,17 @@ if ( ! function_exists( 'customify_search_tabs' ) ) {
 		}
 
 		$term        = get_search_query( false );
-		$counts      = customify_search_get_type_counts( $term );
+		$filters     = customify_search_get_request_tax_filters();
+		$counts      = customify_search_get_type_counts( $term, $filters );
 		$show_counts = Customify()->get_setting( 'search_results_show_counts' );
 		$current     = customify_search_get_current_scope();
 
 		$all_count = isset( $counts['all'] ) ? (int) $counts['all'] : 0;
 
 		$all_args = array( 's' => urlencode( $term ) );
+
+		// Every tab keeps the taxonomy filter the visitor searched with.
+		$all_args = array_merge( $all_args, $filters );
 
 		// With a default scope armed, a bare `?s=term` would be redirected back
 		// into that scope the moment the All tab is clicked - the bypass marker
@@ -636,9 +769,12 @@ if ( ! function_exists( 'customify_search_tabs' ) ) {
 				'label'  => $type->labels->name,
 				'count'  => (int) $counts[ $slug ],
 				'url'    => add_query_arg(
-					array(
-						's'         => urlencode( $term ),
-						'post_type' => $slug,
+					array_merge(
+						array(
+							's'         => urlencode( $term ),
+							'post_type' => $slug,
+						),
+						$filters
 					),
 					home_url( '/' )
 				),
@@ -1333,8 +1469,18 @@ if ( ! function_exists( 'customify_search_is_wc_scoped' ) ) {
 			return false;
 		}
 
-		if ( ! is_search() || ! is_post_type_archive( 'product' ) ) {
+		if ( ! is_search() ) {
 			return false;
+		}
+
+		if ( ! is_post_type_archive( 'product' ) ) {
+			// A search filtered by a product taxonomy (`?s=term&product_cat=x`,
+			// no post_type) is routed to woocommerce.php as a taxonomy archive.
+			// Require the public query var in the request as well: a plugin-added
+			// tax query must not change an otherwise unfiltered search page.
+			if ( ! function_exists( 'is_product_taxonomy' ) || ! is_product_taxonomy() || ! customify_search_request_has_product_tax_filter() ) {
+				return false;
+			}
 		}
 
 		// search.php renders its own heading and tabs; only the WooCommerce
@@ -1342,6 +1488,46 @@ if ( ! function_exists( 'customify_search_is_wc_scoped' ) ) {
 		return 'search.php' !== basename( customify_search_current_template() );
 	}
 }
+
+if ( ! function_exists( 'customify_search_maybe_redirect_single_wc_tax_result' ) ) {
+	/**
+	 * Preserve WooCommerce's single-result redirect on product-taxonomy searches.
+	 *
+	 * WooCommerce only performs its redirect when `is_post_type_archive()` is
+	 * true. A search carrying `product_cat` but no explicit `post_type` is a
+	 * product taxonomy archive instead, even though the taxonomy limits every
+	 * result to products.
+	 *
+	 * @since 0.4.26
+	 */
+	function customify_search_maybe_redirect_single_wc_tax_result() {
+		if ( ! Customify()->is_woocommerce_active() || ! is_search() || is_post_type_archive( 'product' ) ) {
+			return;
+		}
+
+		if ( ! function_exists( 'is_product_taxonomy' ) || ! is_product_taxonomy() || ! customify_search_request_has_product_tax_filter() ) {
+			return;
+		}
+
+		global $wp_query;
+
+		if ( ! is_a( $wp_query, 'WP_Query' ) || 1 !== absint( $wp_query->found_posts ) ) {
+			return;
+		}
+
+		if ( ! apply_filters( 'woocommerce_redirect_single_search_result', true ) ) {
+			return;
+		}
+
+		$product = function_exists( 'wc_get_product' ) ? wc_get_product( $wp_query->post ) : false;
+
+		if ( $product && $product->is_visible() ) {
+			wp_safe_redirect( get_permalink( $product->get_id() ), 302 );
+			exit;
+		}
+	}
+}
+add_action( 'template_redirect', 'customify_search_maybe_redirect_single_wc_tax_result', 11 );
 
 if ( ! function_exists( 'customify_search_template_region_swap' ) ) {
 	/**

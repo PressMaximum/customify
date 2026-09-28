@@ -1,0 +1,241 @@
+/**
+ * Header Search Box - opt-in category dropdown and rotating placeholder.
+ *
+ * Every selector below requires a class the Search Box item only prints when
+ * the dropdown is on (inc/search/functions-search-box.php):
+ *
+ *   .cfy-search-box                  - the dropdown rendered
+ *   .cfy-search-box--has-cat         - the dropdown rendered
+ *   .cfy-search-box--cat-hide-mobile - "Hide the dropdown on tablet and mobile"
+ *   .cfy-search-box--cat-no-divider  - "Show a divider" unticked
+ *   .cfy-search-box--ph-rotate       - placeholder holds `|` (rotating phrases)
+ *   .cfy-search-box--ph-ready        - added by the inline script once the
+ *                                      rotating overlay is positioned
+ *
+ * A site on the default settings therefore matches none of these rules.
+ *
+ * Structure only
+ * --------------
+ * The dropdown sits inside `.search-form-fields`, i.e. inside the box the
+ * item's own Customizer fields already draw (Input Height, Input Styling,
+ * Input Focus Styling, Search Form Width). Nothing here paints that box: the
+ * rules only lay the select and the input out side by side, reset the native
+ * select and draw the chevron and the divider. Colours come from `inherit` /
+ * `currentcolor`, so the dropdown follows the field's text colour (header row
+ * skin, Input Styling colour) until "Dropdown Text Color", "Dropdown
+ * Typography" or "Divider Color" set their own.
+ *
+ * Specificity budget: (0,2,0), so these beat the bare element rules in
+ * base/_forms.scss and the `.header-search-form label` rule in _search.scss,
+ * and still lose to the item's generated CSS, which is (0,3,0) and printed
+ * after this stylesheet.
+ *
+ * Customify Pro's WooCommerce Booster adds `body.woo_bootster_search` on
+ * every page and moves the search box chrome from `.search-form-fields` to
+ * the form (see the `.woo_bootster_search` block in _search.scss); the rule
+ * at the end keeps the input sharing that row with the dropdown.
+ */
+
+.cfy-search-box--has-cat {
+
+	.search-form-fields {
+		display: flex;
+		align-items: center;
+	}
+
+	.search-field {
+		flex: 1 1 auto;
+		width: auto;
+		min-width: 0;
+	}
+}
+
+// Beats `.header-search-form label { flex-basis: 100% }` and the global
+// `label` text colour, so the dropdown follows the field's colour.
+.cfy-search-box .cfy-search-box__cat {
+	position: relative;
+	color: inherit;
+	display: flex;
+	flex: 0 1 auto;
+	align-items: center;
+	align-self: stretch;
+	max-width: 45%;
+	margin: 0;
+	padding-inline-start: 0.9em;
+
+	// Divider between the dropdown and the input: 40% of the field height,
+	// the text colour at low strength, so it reads on light and dark rows
+	// alike without competing with the text.
+	&::after {
+		content: "";
+		position: absolute;
+		inset-block: 30%;
+		inset-inline-end: 0;
+		width: 1px;
+		background-color: rgba(127, 127, 127, 0.2);
+		background-color: color-mix(in srgb, currentcolor 14%, transparent);
+	}
+}
+
+.cfy-search-box--cat-no-divider .cfy-search-box__cat::after {
+	display: none;
+}
+
+// Native select reset: beats the bare `select` rules in base/_forms.scss
+// (border, inset shadow, background arrow, fixed height).
+.cfy-search-box .cfy-search-box__cat-select {
+	flex: 0 1 auto;
+	width: auto;
+	max-width: 100%;
+	height: auto;
+	min-height: 0;
+	margin: 0;
+	padding-block: 0;
+	padding-inline: 0 2.1em;
+	overflow: hidden;
+	border: 0;
+	border-radius: 0;
+	background: none;
+	box-shadow: none;
+	color: inherit;
+	font: inherit;
+	line-height: 1.3;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	cursor: pointer;
+	appearance: none;
+
+	// No focus cue on the select itself: Chrome matches `:focus-visible` on a
+	// mouse click for a <select> (it takes keyboard input), so any cue here
+	// would also show on click. Focus - mouse or keyboard - is shown by the
+	// surrounding box through `:focus-within` instead (theme default below
+	// and in _search.scss, or "Input Focus Styling").
+	&:focus,
+	&:focus-visible {
+		outline: none;
+		box-shadow: none;
+		text-decoration: none;
+	}
+}
+
+.cfy-search-box__cat-icon {
+	position: absolute;
+	inset-inline-end: 0.7em;
+	width: 14px;
+	height: 14px;
+	pointer-events: none;
+}
+
+@media screen and (max-width: 1024px) {
+
+	.cfy-search-box--cat-hide-mobile .cfy-search-box__cat {
+		display: none;
+	}
+}
+
+// Customify Pro (WooCommerce Booster): its `.search-field { flex: 0 0 auto }`
+// is (0,4,0); the input still has to take the row's remaining width.
+.woo_bootster_search .header-search_box-item .cfy-search-box--has-cat .search-field {
+	flex: 1 1 auto;
+	width: auto;
+	min-width: 0;
+}
+
+// The Booster draws the box on the form and gives it no focus state, so the
+// dropdown (whose own focus cue is removed above) would lose any visible
+// keyboard focus. Same default as `.search-form-fields:focus-within` in
+// _search.scss; "Input Focus Styling" prints the same specificity later and
+// still wins.
+.woo_bootster_search .header-search_box-item .cfy-search-box:focus-within {
+	border-color: color-mix(in srgb, currentcolor 50%, transparent);
+}
+
+/**
+ * Rotating placeholder (placeholder setting with `|`).
+ *
+ * The overlay is aria-hidden and stays hidden until the inline script has
+ * positioned it over the input's content box and copied the placeholder's
+ * colour, opacity and font onto it; without JavaScript the native
+ * placeholder (the first phrase) shows. Once ready, the native placeholder is
+ * hidden through `opacity` (its colour stays readable for the script).
+ */
+.cfy-search-box--ph-rotate .search-form-fields {
+	position: relative;
+}
+
+// The positioned fields box above would otherwise paint over the submit
+// button, which "Icon Position" pulls back over the box with a negative
+// margin: the input then takes the clicks and hover meant for the button.
+.cfy-search-box--ph-rotate .search-submit {
+	position: relative;
+	z-index: 2;
+}
+
+.cfy-search-box__ph {
+	display: none;
+}
+
+.cfy-search-box--ph-ready {
+
+	.search-form-fields .search-field::placeholder {
+		opacity: 0;
+	}
+
+	.cfy-search-box__ph {
+		position: absolute;
+		z-index: 1;
+		display: flex;
+		align-items: center;
+		overflow: hidden;
+		line-height: 1.5;
+		white-space: pre;
+		pointer-events: none;
+		opacity: var(--cfy-ph-opacity, 1);
+		transition: opacity 0.15s ease;
+
+		// Input focused or holding a value.
+		&.is-hidden {
+			opacity: 0;
+		}
+	}
+}
+
+.cfy-search-box__ph-line {
+	overflow: hidden;
+	max-width: 100%;
+}
+
+// Clips the sliding phrases to one line; top-aligned at the line height so
+// the phrases share the static words' baseline.
+.cfy-search-box__ph-words {
+	display: inline-grid;
+	height: 1.5em;
+	overflow: hidden;
+	vertical-align: top;
+}
+
+.cfy-search-box__ph-word {
+	grid-area: 1 / 1;
+	opacity: 0;
+	transform: translateY(110%);
+	transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+	&.is-active {
+		opacity: 1;
+		transform: none;
+	}
+
+	&.is-leaving {
+		opacity: 0;
+		transform: translateY(-110%);
+	}
+}
+
+// The script keeps the first phrase in place; no motion either way.
+@media (prefers-reduced-motion: reduce) {
+
+	.cfy-search-box__ph,
+	.cfy-search-box__ph-word {
+		transition: none;
+	}
+}

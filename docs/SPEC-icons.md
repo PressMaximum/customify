@@ -164,7 +164,7 @@ Every entry — including anything filtered in — must honour it, or the set st
 | General UI (19) | `search` `menu` `menu-lines` `menu-narrow` `menu-minimal` `menu-deep` `menu-left` `menu-right` `close` `chevron-down` `arrow-right` `external-link` `home` `phone` `mail` `map-pin` `globe` `clock` `calendar` |
 | Payment (14) | `pay-visa` `pay-mastercard` `pay-maestro` `pay-amex` `pay-discover` `pay-diners` `pay-jcb` `pay-unionpay` `pay-paypal` `pay-apple-pay` `pay-google-pay` `pay-stripe` `pay-klarna` `pay-amazon-pay` |
 
-The General UI family is deliberately lean and header-oriented. This is not a replacement icon font — every extra key is one more cell a shop scrolls past to reach the icon it actually wants. Pro's User Icon item reuses `contact` and `id-card`; its Wishlist item reuses the heart pair.
+The General UI family is deliberately lean and header-oriented. This is not a replacement icon font — every extra key is one more cell a shop scrolls past to reach the icon it actually wants. Pro's User Icon item reuses `contact` and `id-card`; its Wishlist item reuses the heart pair, and the theme's own Wishlist header item (`wc_wishlist_counter`, default `heart`) offers the whole Wishlist family as its presets.
 
 `-outline` marks an alternate, softer silhouette of the same subject (`bag` is Lucide's squared-shoulder bag, `bag-outline` Tabler's rounded one); `-alt` a second distinct one, `-soft` a rounder one, and `-filled` the solid counterpart.
 
@@ -401,6 +401,7 @@ Every icon+label item reads it with the pre-token value as the fallback, so a le
 |---|---|---|---|
 | Search | `.search-icon svg { width: var(--customify-header-icon-size, 18px) }` | 18px | 20px |
 | Cart | `.cart-icon { --customify-cart-icon-size: var(--customify-header-icon-size, 18px) }` | 18px | 20px |
+| Wishlist | `.wishlist-counter-icon { --customify-wishlist-icon-size: var(--customify-header-icon-size, 18px) }` (slider writes it at `.builder-header-wc_wishlist_counter-item .wishlist-counter-icon`) | 18px | 20px |
 
 **The sliders must keep outranking the token, so both use sites stay at their ORIGINAL selector specificity.** This is the trap to avoid: scoping a copy of the size under `.customify-header-items-v2 .item--search_icon .search-icon > svg` would be `(0,3,1)` and would silently beat the Search Icon Size slider's generated `body .search-icon svg` `(0,1,2)`. The token sets the default; it must never become the override.
 
