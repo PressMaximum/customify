@@ -361,12 +361,15 @@ $cd-border:     rgba(0, 0, 0, 0.08);
             background-color: transparent;
             color: inherit;
 
-            // The base button hover sets the on-primary text colour (white),
-            // which would vanish on a transparent fill. Keep the text colour;
-            // the base state layer still tints the background.
+            // The base button hover (base/_forms.scss) sets the on-primary
+            // text colour (white), which would vanish on a transparent fill,
+            // and paints a 13% currentColor state layer, which on a
+            // transparent button reads as a grey box. Outline hover = the
+            // border darkening only.
             &:hover,
             &:focus {
                 border-color: currentColor;
+                background-image: none;
                 color: inherit;
             }
         }
