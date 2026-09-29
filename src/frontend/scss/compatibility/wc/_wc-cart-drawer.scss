@@ -467,3 +467,11 @@ html.is-cart-drawer body {
         }
     }
 }
+
+// Drawer shell hooks (customify/cart/drawer/header|body/*, cart.php) print
+// straight into the panel's flex column: keep their content at its natural
+// height so only the body (the cart) flexes and scrolls. No padding here —
+// a full-bleed banner is a valid use; content sets its own inset.
+.customify-cart-drawer > :not(.customify-cart-drawer__head, .customify-cart-drawer__body, .customify-cart-drawer__continue) {
+    flex: 0 0 auto;
+}

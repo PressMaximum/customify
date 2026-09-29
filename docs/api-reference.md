@@ -184,6 +184,38 @@ Note: the result is cached on first call. Register the filter as early as possib
 | `customify/wishlist/providers` | filter | `array $providers` keyed by id — wishlist plugins the header **Wishlist** item (`wc_wishlist_counter`) can use; the first active one wins. Built-ins: `ti` (TI WooCommerce Wishlist), `yith` (YITH WooCommerce Wishlist). Provider shape below. | [`inc/compatibility/woocommerce/inc/wishlist.php`](../inc/compatibility/woocommerce/inc/wishlist.php) `get_providers()` |
 | `customify/wishlist/provider` | filter | `(string\|null $chosen, array $providers)` — id of the provider to use (default: first active). Return `''` for none; an unknown or inactive id renders nothing. | same, `get_active_provider()` |
 
+#### Cart hooks (header Shopping Cart item)
+
+Named by layout. The cart item renders as a hover **dropdown** or an off-canvas **drawer** (Cart Behavior setting).
+
+- `customify/cart/*` — the cart **content** ([`woocommerce/cart/mini-cart.php`](../woocommerce/cart/mini-cart.php)), shared by both layouts and the Cart widget, and re-rendered by WooCommerce's cart fragments on add / remove. Put anything that depends on the cart here. Since 0.4.26 (`item/*`, `footer/*` since 0.4.28).
+- `customify/cart/drawer/*` and `customify/cart/dropdown/*` — the layout **shells** ([`inc/compatibility/woocommerce/config/header/cart.php`](../inc/compatibility/woocommerce/config/header/cart.php)), printed once with the page and not refreshed. Static content only. Since 0.4.28.
+
+All are actions with no arguments unless noted. In page order:
+
+| Hook | Where |
+|---|---|
+| `customify/cart/drawer/header/before` | Drawer: top of the panel, above the "Your Cart" header |
+| `customify/cart/drawer/header/after` | Drawer: below the header |
+| `customify/cart/drawer/body/before` | Drawer: above the cart content |
+| `customify/cart/dropdown/body/before` | Dropdown: top of the box, above the cart content |
+| `customify/cart/content/before` | Start of the cart content |
+| `customify/cart/items/before` | Cart with items: above the item list |
+| `customify/cart/item/before` | Inside each item, before its name — `(array $cart_item, string $cart_item_key)` |
+| `customify/cart/item/after` | Inside each item, after its quantity × price — `(array $cart_item, string $cart_item_key)` |
+| `customify/cart/items/after` | Below the item list |
+| `customify/cart/footer/before` | Above the subtotal + buttons block |
+| `customify/cart/subtotal/before` / `…/after` | Around the Subtotal row |
+| `customify/cart/buttons/before` / `…/after` | Around the View cart / Checkout buttons |
+| `customify/cart/footer/after` | Below the subtotal + buttons block |
+| `customify/cart/empty/before` / `…/after` | Empty cart: around the "No products in the cart." heading |
+| `customify/cart/content/after` | End of the cart content |
+| `customify/cart/dropdown/body/after` | Dropdown: bottom of the box |
+| `customify/cart/drawer/body/after` | Drawer: below the cart content |
+| `customify/cart/drawer/continue/before` / `…/after` | Drawer, empty cart only: around the Continue Shopping button |
+
+Customify Pro's Hooks module lists all of them (three groups: shared, drawer only, dropdown only).
+
 #### Wishlist provider shape (`customify/wishlist/providers`)
 
 Every key but `id` is optional (normalised with defaults):

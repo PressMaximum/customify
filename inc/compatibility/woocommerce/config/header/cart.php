@@ -663,12 +663,17 @@ class Customify_Builder_Item_WC_Cart {
 			add_filter( 'woocommerce_widget_cart_is_hidden', '__return_false', 999 );
 
 			echo '<div class="cart-dropdown-box widget-area">';
+			// Dropdown-only, printed once with the page (not refreshed by the
+			// cart fragments). Content that follows the cart belongs on the
+			// shared customify/cart/* hooks in woocommerce/cart/mini-cart.php.
+			do_action( 'customify/cart/dropdown/body/before' );
 			the_widget(
 				'WC_Widget_Cart',
 				array(
 					'hide_if_empty' => 0,
 				)
 			);
+			do_action( 'customify/cart/dropdown/body/after' );
 			echo '</div>';
 
 			remove_filter( 'woocommerce_widget_cart_is_hidden', '__return_false', 999 );
@@ -774,6 +779,13 @@ class Customify_Builder_Item_WC_Cart {
 		<div class="customify-cart-drawer-overlay" hidden></div>
 		<aside id="customify-cart-drawer" class="customify-cart-drawer" data-position="<?php echo esc_attr( $position ); ?>"
 			role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Shopping cart', 'customify' ); ?>" tabindex="-1" hidden>
+			<?php
+			// Drawer-only hooks (customify/cart/drawer/*) are printed once with
+			// the page, not refreshed by the cart fragments: use them for static
+			// content. Content that follows the cart belongs on the shared
+			// customify/cart/* hooks in woocommerce/cart/mini-cart.php.
+			do_action( 'customify/cart/drawer/header/before' );
+			?>
 			<div class="customify-cart-drawer__head">
 				<?php // h2 in the theme's h4 type scale (Typography → Headings). ?>
 				<h2 class="customify-cart-drawer__title h4"><?php esc_html_e( 'Your Cart', 'customify' ); ?> <?php echo $this->drawer_count_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in drawer_count_html(). ?></h2>
@@ -785,6 +797,10 @@ class Customify_Builder_Item_WC_Cart {
 					<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="m6.5 6.5 11 11m0-11-11 11" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
 				</button>
 			</div>
+			<?php
+			do_action( 'customify/cart/drawer/header/after' );
+			do_action( 'customify/cart/drawer/body/before' );
+			?>
 			<div class="customify-cart-drawer__body">
 				<?php
 				// Match WooCommerce core's own fragment exactly (see
@@ -795,9 +811,12 @@ class Customify_Builder_Item_WC_Cart {
 				?>
 				<div class="widget_shopping_cart_content"><?php woocommerce_mini_cart(); ?></div>
 			</div>
+			<?php do_action( 'customify/cart/drawer/body/after' ); ?>
 			<?php // Shown only when the cart is empty (JS toggles .is-cart-empty). ?>
 			<div class="customify-cart-drawer__continue">
+				<?php do_action( 'customify/cart/drawer/continue/before' ); ?>
 				<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="button"><?php esc_html_e( 'Continue Shopping', 'customify' ); ?></a>
+				<?php do_action( 'customify/cart/drawer/continue/after' ); ?>
 			</div>
 		</aside>
 		<?php
