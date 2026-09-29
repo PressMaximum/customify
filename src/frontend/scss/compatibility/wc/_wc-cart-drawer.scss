@@ -1,23 +1,18 @@
-//
 // WooCommerce Cart Drawer (off-canvas).
-//
 // Position is PHYSICAL (left / right) and kept physical in RTL — so we do NOT
 // ship a cart-drawer-rtl.css: rtlcss would flip `right`/`left` and the
 // translate sign, sliding the panel in from the wrong edge. Internal content
 // is mirrored by WooCommerce / the theme's own RTL rules.
-//
 // Body reuses WooCommerce core's own fragment shape:
 //   .widget_shopping_cart_content > woocommerce_mini_cart()
 // so add/remove auto-syncs via WC AJAX fragments and there is no duplicate
 // widget title.
-//
 // width / background-color / border-radius / offset / backdrop are NOT set
 // here: they come from the Shopping Cart item's Customizer controls, which
 // emit their defaults as dynamic CSS on first paint (so a fresh install still
 // renders correctly) and override on save. Hardcoding them here too would make
 // this stylesheet the only source when a value is empty, or fight the dynamic
 // CSS at equal specificity — so we leave them to the controls.
-//
 
 $cd-z:          100000;
 $cd-transition: 0.3s cubic-bezier(0.79, 0.14, 0.15, 0.86);
@@ -28,444 +23,444 @@ $cd-border:     rgba(0, 0, 0, 0.08);
 $cd-button-height: 3em;
 
 .customify-cart-drawer-overlay {
-    position: fixed;
-    inset: 0;
-    // background-color comes from the Customizer (Backdrop Color) default.
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    z-index: $cd-z - 1;
-    cursor: pointer;
+	position: fixed;
+	inset: 0;
+	// background-color comes from the Customizer (Backdrop Color) default.
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+	z-index: $cd-z - 1;
+	cursor: pointer;
 
-    &.is-open {
-        opacity: 1;
-        visibility: visible;
-    }
+	&.is-open {
+		opacity: 1;
+		visibility: visible;
+	}
 }
 
 .customify-cart-drawer {
-    position: fixed;
-    top: 0;
-    bottom: 0;              // top + bottom drive the height, so a top/bottom
-    right: 0;               // Offset margin can inset the panel from the edges.
-    max-width: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;       // clip to the (optional) Corner Radius.
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.18);
-    // width + background-color come from the Customizer (Drawer Width / Panel
-    // Background), which always emits its defaults. Not hardcoded here so those
-    // controls win — the theme's dynamic CSS loads before this stylesheet.
-    z-index: $cd-z;
-    font-size: 15px;
-    color: $color_text;
-    transition: transform $cd-transition;
+	position: fixed;
+	top: 0;
+	bottom: 0;              // top + bottom drive the height, so a top/bottom
+	right: 0;               // Offset margin can inset the panel from the edges.
+	max-width: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;       // clip to the (optional) Corner Radius.
+	box-shadow: 0 0 40px rgba(0, 0, 0, 0.18);
+	// width + background-color come from the Customizer (Drawer Width / Panel
+	// Background), which always emits its defaults. Not hardcoded here so those
+	// controls win — the theme's dynamic CSS loads before this stylesheet.
+	z-index: $cd-z;
+	font-size: 15px;
+	color: $color_text;
+	transition: transform $cd-transition;
 
-    // Parked off-screen until `.is-open`; translate3d keeps it on the GPU. Use
-    // a plain 120% (not calc) — Chrome won't animate a transition between a
-    // calc() transform and a plain one, and 120% clears any Offset margin so no
-    // sliver peeks while parked.
-    &[data-position="right"] {
-        right: 0;
-        left: auto;
-        transform: translate3d(120%, 0, 0);
-    }
+	// Parked off-screen until `.is-open`; translate3d keeps it on the GPU. Use
+	// a plain 120% (not calc) — Chrome won't animate a transition between a
+	// calc() transform and a plain one, and 120% clears any Offset margin so no
+	// sliver peeks while parked.
+	&[data-position="right"] {
+		right: 0;
+		left: auto;
+		transform: translate3d(120%, 0, 0);
+	}
 
-    &[data-position="left"] {
-        left: 0;
-        right: auto;
-        transform: translate3d(-120%, 0, 0);
-    }
+	&[data-position="left"] {
+		left: 0;
+		right: auto;
+		transform: translate3d(-120%, 0, 0);
+	}
 
-    // will-change only while open, so a closed drawer doesn't hold a
-    // compositor layer for the life of every page.
-    &.is-open {
-        transform: translate3d(0, 0, 0);
-        will-change: transform;
-    }
+	// will-change only while open, so a closed drawer doesn't hold a
+	// compositor layer for the life of every page.
+	&.is-open {
+		transform: translate3d(0, 0, 0);
+		will-change: transform;
+	}
 
-    // ---------------------------------------------------------------- header
-    &__head {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        flex: 0 0 auto;
-        padding: 1.15em 1.5em;
-        border-bottom: 1px solid $cd-border;
-    }
+	// ---------------------------------------------------------------- header
+	&__head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex: 0 0 auto;
+		padding: 1.15em 1.5em;
+		border-bottom: 1px solid $cd-border;
+	}
 
-    // h2.h4: size, line-height, family and colour come from the theme's
-    // heading typography (.h4); the weight is pinned to 500. One class up so
-    // it beats the heading margin / weight regardless of stylesheet order.
-    &__head &__title {
-        margin: 0;
-        font-weight: 500;
-    }
+	// h2.h4: size, line-height, family and colour come from the theme's
+	// heading typography (.h4); the weight is pinned to 500. One class up so
+	// it beats the heading margin / weight regardless of stylesheet order.
+	&__head &__title {
+		margin: 0;
+		font-weight: 500;
+	}
 
-    // ------------------------------------------------------------------ body
-    &__body {
-        flex: 1 1 auto;
-        display: flex;
-        min-height: 0;
-        padding: 0;
-    }
+	// ------------------------------------------------------------------ body
+	&__body {
+		flex: 1 1 auto;
+		display: flex;
+		min-height: 0;
+		padding: 0;
+	}
 
-    // "Continue Shopping" — shown only when the cart is empty (JS toggles
-    // .is-cart-empty on the panel); pinned at the bottom like the cart footer.
-    &__continue {
-        flex: 0 0 auto;
-        display: none;
-        padding: 1.15em 1.5em 1.5em;
-        border-top: 1px solid $cd-border;
+	// "Continue Shopping" — shown only when the cart is empty (JS toggles
+	// .is-cart-empty on the panel); pinned at the bottom like the cart footer.
+	&__continue {
+		flex: 0 0 auto;
+		display: none;
+		padding: 1.15em 1.5em 1.5em;
+		border-top: 1px solid $cd-border;
 
-        .button {
-            display: flex;
-            width: 100%;
-            margin: 0;
-            text-align: center;
-        }
-    }
+		.button {
+			display: flex;
+			width: 100%;
+			margin: 0;
+			text-align: center;
+		}
+	}
 
-    &.is-cart-empty &__continue {
-        display: block;
-    }
+	&.is-cart-empty &__continue {
+		display: block;
+	}
 }
 
-//
 // Close button — a classed `<button type="button">` (outside the theme's
 // button skin scope, see base/_forms.scss) with an inline 24px-grid stroke ×.
 // 42px round hit area, transparent at rest; hover / keyboard focus fill a soft
 // circle and give the icon a quarter turn. Colours derive from currentColor so
 // the Heading Color control (on .customify-cart-drawer__head) drives it.
-//
 // Focus: on open the JS focuses the panel itself (tabindex="-1"), not this
 // button, so a mouse open shows no ring. Keyboard users get a ring through
 // :focus-visible only.
-//
 // The negative block margin keeps the 42px hit area from growing the header
 // row; the inline-end margin pulls it to 14px from the panel edge so the
 // icon sits where the head padding would otherwise push it.
-//
 .customify-cart-drawer .customify-cart-drawer__close {
-    flex: 0 0 auto;
-    display: inline-grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    margin: -10px calc(14px - 1.5em) -10px 0;
-    padding: 0;
-    border: 0;
-    border-radius: 50%;
-    background: transparent;
-    box-shadow: none;
-    color: inherit;
-    line-height: 1;
-    cursor: pointer;
-    transition: background-color 0.2s, color 0.2s;
-    -webkit-appearance: none;
-    appearance: none;
+	flex: 0 0 auto;
+	display: inline-grid;
+	place-items: center;
+	width: 42px;
+	height: 42px;
+	margin: -10px calc(14px - 1.5em) -10px 0;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	box-shadow: none;
+	color: inherit;
+	line-height: 1;
+	cursor: pointer;
+	transition: background-color 0.2s, color 0.2s;
+	-webkit-appearance: none;
+	appearance: none;
 
-    svg {
-        display: block;
-        width: 22px;
-        height: 22px;
-        transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
-        pointer-events: none;
-    }
+	svg {
+		display: block;
+		width: 22px;
+		height: 22px;
+		transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+		pointer-events: none;
+	}
 
-    &:hover,
-    &:focus-visible {
-        background-color: rgba(0, 0, 0, 0.06); // fallback: no color-mix()
-        background-color: color-mix(in srgb, currentColor 7%, transparent);
-        color: inherit;
+	&:hover,
+	&:focus-visible {
+		background-color: rgba(0, 0, 0, 0.06); // fallback: no color-mix()
+		background-color: color-mix(in srgb, currentcolor 7%, transparent);
+		color: inherit;
 
-        svg {
-            transform: rotate(90deg);
-        }
-    }
+		svg {
+			transform: rotate(90deg);
+		}
+	}
 
-    &:focus {
-        outline: 0;
-    }
+	&:focus {
+		outline: 0;
+	}
 
-    &:focus-visible {
-        outline: 2px solid $color_primary;
-        outline-offset: 2px;
-    }
+	&:focus-visible {
+		outline: 2px solid $color_primary;
+		outline-offset: 2px;
+	}
 }
 
 // The panel takes focus on open (so the close button doesn't) — no ring on it.
 .customify-cart-drawer:focus {
-    outline: 0;
+	outline: 0;
 }
 
-//
 // Mini-cart body. Descendant selectors (scoped under .customify-cart-drawer)
 // so we out-specify the theme's widget styling. The product list scrolls; the
 // subtotal + action buttons stay pinned at the bottom.
-//
+// Separate section on purpose.
+// stylelint-disable-next-line no-duplicate-selectors
 .customify-cart-drawer {
-    .widget_shopping_cart_content {
-        display: flex;
-        flex-direction: column;
-        flex: 1 1 auto;
-        min-height: 0;
-        width: 100%;
-        // Scrolls as a whole only when hook content (e.g. an empty-cart product
-        // grid) outgrows the panel; the item list below scrolls on its own.
-        overflow-y: auto;
-    }
 
-    .woocommerce-mini-cart {
-        flex: 1 1 auto;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        margin: 0;
-        padding: 0 1.5em;
-        list-style: none;
-    }
+	.widget_shopping_cart_content {
+		display: flex;
+		flex-direction: column;
+		flex: 1 1 auto;
+		min-height: 0;
+		width: 100%;
+		// Scrolls as a whole only when hook content (e.g. an empty-cart product
+		// grid) outgrows the panel; the item list below scrolls on its own.
+		overflow-y: auto;
+	}
 
-    .woocommerce-mini-cart-item {
-        position: relative;
-        display: block;
-        // left = thumbnail (48px) + gap; right = remove button (34px hit
-        // area) + 12px gap.
-        padding: 1.1em 46px 1.1em 4em;
-        margin: 0;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+	.woocommerce-mini-cart {
+		flex: 1 1 auto;
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
+		margin: 0;
+		padding: 0 1.5em;
+		list-style: none;
+	}
 
-        // Product name link. The theme's mini-cart.php puts it inside
-        // .mini_cart_item__info; the thumbnail is a SEPARATE
-        // a.mini_cart_item__thumb, so scope here to avoid styling that too.
-        .mini_cart_item__info a:not(.remove) {
-            display: block;
-            font-weight: 500;
-            line-height: 1.35;
-            text-decoration: none;
-        }
+	.woocommerce-mini-cart-item {
+		position: relative;
+		display: block;
+		// left = thumbnail (48px) + gap; right = remove button (34px hit
+		// area) + 12px gap.
+		padding: 1.1em 46px 1.1em 4em;
+		margin: 0;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.07);
 
-        img {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 48px;
-            height: 48px;
-            margin: 0;
-            object-fit: cover;
-            border-radius: 4px;
-        }
+		// Product name link. The theme's mini-cart.php puts it inside
+		// .mini_cart_item__info; the thumbnail is a SEPARATE
+		// a.mini_cart_item__thumb, so scope here to avoid styling that too.
+		.mini_cart_item__info a:not(.remove) {
+			display: block;
+			font-weight: 500;
+			line-height: 1.35;
+			text-decoration: none;
+		}
 
-        .quantity {
-            display: block;
-            margin-top: 0.3em;
-            font-size: 0.88em;
-            color: $color_meta;
-        }
+		img {
+			position: absolute;
+			left: 0;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 48px;
+			height: 48px;
+			margin: 0;
+			object-fit: cover;
+			border-radius: 4px;
+		}
 
-        // Variable-product attributes (Size / Color …). Strip the theme's
-        // floated + left-bordered widget styling so they read as a compact
-        // inline list under the product name.
-        dl.variation {
-            margin: 0.35em 0 0;
-            padding: 0;
-            border: 0;
-            font-size: 0.85em;
-            color: $color_meta;
+		.quantity {
+			display: block;
+			margin-top: 0.3em;
+			font-size: 0.88em;
+			color: $color_meta;
+		}
 
-            dt,
-            dd {
-                display: inline;
-                float: none;
-                margin: 0;
-                padding: 0;
-                font-weight: 400;
-            }
+		// Variable-product attributes (Size / Color …). Strip the theme's
+		// floated + left-bordered widget styling so they read as a compact
+		// inline list under the product name.
+		dl.variation {
+			margin: 0.35em 0 0;
+			padding: 0;
+			border: 0;
+			font-size: 0.85em;
+			color: $color_meta;
 
-            dd {
-                margin-right: 0.6em;
+			dt,
+			dd {
+				display: inline;
+				float: none;
+				margin: 0;
+				padding: 0;
+				font-weight: 400;
+			}
 
-                p {
-                    display: inline;
-                    margin: 0;
-                }
-            }
-        }
+			dd {
+				margin-right: 0.6em;
 
-        // Remove: shared look + placement with the header dropdown (mixin in
-        // _woocommerce-mixins.scss) — vertically centred on the row's right.
-        a.remove.remove_from_cart_button {
-            @include customify-mini-cart-remove();
-        }
-    }
+				p {
+					display: inline;
+					margin: 0;
+				}
+			}
+		}
 
-    .woocommerce-mini-cart__empty-message {
-        // Sole child of the flex column when the cart is empty — `margin:auto`
-        // vertically centres it instead of pinning it to the top.
-        // An h3.h4: size, family and heading colour come from the theme's
-        // heading typography; the weight is pinned like the drawer title.
-        margin: auto 0;
-        padding: 2.5em 1.5em;
-        text-align: center;
-        font-weight: 600;
+		// Remove: shared look + placement with the header dropdown (mixin in
+		// _woocommerce-mixins.scss) — vertically centred on the row's right.
+		a.remove.remove_from_cart_button {
 
-        // Hook content follows it (customify/cart/empty/after, e.g. a
-        // Customify Pro Hook): stack from the top instead of centring.
-        &:not(:only-child) {
-            margin: 0;
-            padding-bottom: 0.5em;
-        }
-    }
+			@include customify-mini-cart-remove();
+		}
+	}
 
-    // Footer wrapper (theme template wraps total + buttons in
-    // div.wc-mini-cart-footer, which already carries a divider border-top).
-    // Own the single border here and give it the drawer's shared 1.5em inset
-    // so Subtotal/buttons line up with the header title and the item column.
-    .wc-mini-cart-footer {
-        flex: 0 0 auto;
-        margin: 0;
-        padding: 1.15em 1.5em 1.5em;
-        border-top: 1px solid $cd-border;
-    }
+	.woocommerce-mini-cart__empty-message {
+		// Sole child of the flex column when the cart is empty — `margin:auto`
+		// vertically centres it instead of pinning it to the top.
+		// An h3.h4: size, family and heading colour come from the theme's
+		// heading typography; the weight is pinned like the drawer title.
+		margin: auto 0;
+		padding: 2.5em 1.5em;
+		text-align: center;
+		font-weight: 600;
 
-    .woocommerce-mini-cart__total {
-        display: flex;
-        align-items: baseline;
-        justify-content: space-between;
-        margin: 0 0 1em;
-        padding: 0;
-        border: 0;              // no second border — the footer wrapper owns it
-        font-size: 1em;
+		// Hook content follows it (customify/cart/empty/after, e.g. a
+		// Customify Pro Hook): stack from the top instead of centring.
+		&:not(:only-child) {
+			margin: 0;
+			padding-bottom: 0.5em;
+		}
+	}
 
-        strong {
-            font-weight: 600;
-        }
+	// Footer wrapper (theme template wraps total + buttons in
+	// div.wc-mini-cart-footer, which already carries a divider border-top).
+	// Own the single border here and give it the drawer's shared 1.5em inset
+	// so Subtotal/buttons line up with the header title and the item column.
+	.wc-mini-cart-footer {
+		flex: 0 0 auto;
+		margin: 0;
+		padding: 1.15em 1.5em 1.5em;
+		border-top: 1px solid $cd-border;
+	}
 
-        .amount {
-            font-weight: 700;
-            font-size: 1.1em;
-        }
-    }
+	.woocommerce-mini-cart__total {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		margin: 0 0 1em;
+		padding: 0;
+		border: 0;              // no second border — the footer wrapper owns it
+		font-size: 1em;
 
-    // View cart + Checkout side by side; auto-fit drops them to one column
-    // when the drawer is too narrow for two readable buttons (a small Drawer
-    // Width, or a phone). Both keep the theme's own button (Button Styling
-    // in the Customizer: radius, typography, padding): Checkout stays the
-    // filled `.button.checkout`, View cart is an outline button: transparent
-    // with the theme's palette-aware medium border token, darkening to the
-    // text colour on hover. Not the Ghost block style's 2px currentColor,
-    // which read as a heavy black frame against the near-black drawer text.
-    // Checkout gets the same 1px border in transparent so both are the same
-    // height.
-    .woocommerce-mini-cart__buttons {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(8.5em, 1fr));
-        gap: 0.6em;
-        margin: 0;
-        padding: 0;
+		strong {
+			font-weight: 600;
+		}
 
-        .button {
-            display: flex;
-            width: 100%;
-            margin: 0;
-            border: 1px solid transparent;
-            text-align: center;
-        }
+		.amount {
+			font-weight: 700;
+			font-size: 1.1em;
+		}
+	}
 
-        .button:not(.checkout) {
-            border-color: $color_border_medium;
-            background-color: transparent;
-            color: inherit;
+	// View cart + Checkout side by side; auto-fit drops them to one column
+	// when the drawer is too narrow for two readable buttons (a small Drawer
+	// Width, or a phone). Both keep the theme's own button (Button Styling
+	// in the Customizer: radius, typography, padding): Checkout stays the
+	// filled `.button.checkout`, View cart is an outline button: transparent
+	// with the theme's palette-aware medium border token, darkening to the
+	// text colour on hover. Not the Ghost block style's 2px currentColor,
+	// which read as a heavy black frame against the near-black drawer text.
+	// Checkout gets the same 1px border in transparent so both are the same
+	// height.
+	.woocommerce-mini-cart__buttons {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(8.5em, 1fr));
+		gap: 0.6em;
+		margin: 0;
+		padding: 0;
 
-            // The base button hover (base/_forms.scss) sets the on-primary
-            // text colour (white), which would vanish on a transparent fill,
-            // and paints a 13% currentColor state layer, which on a
-            // transparent button reads as a grey box. Outline hover = the
-            // border darkening only.
-            &:hover,
-            &:focus {
-                border-color: currentColor;
-                background-image: none;
-                color: inherit;
-            }
-        }
-    }
+		.button {
+			display: flex;
+			width: 100%;
+			margin: 0;
+			border: 1px solid transparent;
+			text-align: center;
+		}
+
+		.button:not(.checkout) {
+			border-color: $color_border_medium;
+			background-color: transparent;
+			color: inherit;
+
+			// The base button hover (base/_forms.scss) sets the on-primary
+			// text colour (white), which would vanish on a transparent fill,
+			// and paints a 13% currentColor state layer, which on a
+			// transparent button reads as a grey box. Outline hover = the
+			// border darkening only.
+			&:hover,
+			&:focus {
+				border-color: currentcolor;
+				background-image: none;
+				color: inherit;
+			}
+		}
+	}
 }
 
 // Push the panel below the admin bar for logged-in users.
 .admin-bar .customify-cart-drawer {
-    top: 32px;
+	top: 32px;
 
-    @media screen and (max-width: 782px) {
-        top: 46px;
-    }
+	@media screen and (max-width: 782px) {
+		top: 46px;
+	}
 }
 
 // Scroll-lock: freeze the page behind the drawer and pad for the removed
 // scrollbar so the layout doesn't shift.
 html.is-cart-drawer,
 html.is-cart-drawer body {
-    overflow: hidden;
+	overflow: hidden;
 }
 
 html.is-cart-drawer body {
-    // Logical property so the pad lands on the scrollbar's side in both LTR
-    // and RTL (RTL puts the viewport scrollbar on the left).
-    padding-inline-end: var(--customify-scrollbar-width, 0);
+	// Logical property so the pad lands on the scrollbar's side in both LTR
+	// and RTL (RTL puts the viewport scrollbar on the left).
+	padding-inline-end: var(--customify-scrollbar-width, 0);
 }
 
 // Respect users who ask for less motion — skip the slide/fade entirely.
 @media (prefers-reduced-motion: reduce) {
-    .customify-cart-drawer,
-    .customify-cart-drawer-overlay {
-        transition: none;
-    }
 
-    .customify-cart-drawer .customify-cart-drawer__close svg {
-        transition: none;
-    }
+	.customify-cart-drawer,
+	.customify-cart-drawer-overlay {
+		transition: none;
+	}
+
+	.customify-cart-drawer .customify-cart-drawer__close svg {
+		transition: none;
+	}
 }
 
 // Drawer button height. The theme's button scope sits at (0,3,0), so these
 // go one element up to win regardless of stylesheet order.
 .customify-cart-drawer .woocommerce-mini-cart__buttons a.button,
 .customify-cart-drawer .customify-cart-drawer__continue a.button {
-    min-height: $cd-button-height;
+	min-height: $cd-button-height;
 }
 
-//
 // Hook content inside the mini-cart (the theme's customify/cart/* hooks, e.g.
 // a Customify Pro Hook with a product grid on customify/cart/empty/after).
 // Give it the drawer's 1.5em inset, and lay a WooCommerce product loop out
 // as two columns: the loop's own grid classes follow the shop's column
 // setting (4), which is far too many for a ~360px panel.
-//
+// Separate section on purpose.
+// stylelint-disable-next-line no-duplicate-selectors
 .customify-cart-drawer .widget_shopping_cart_content {
-    > :not(.woocommerce-mini-cart, .wc-mini-cart-footer, .woocommerce-mini-cart__empty-message) {
-        flex: 0 0 auto;
-        padding: 0 1.5em 1.5em;
-    }
 
-    ul.products {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 1.25em 1em;
-        margin: 0;
-        padding: 0;
+	> :not(.woocommerce-mini-cart, .wc-mini-cart-footer, .woocommerce-mini-cart__empty-message) {
+		flex: 0 0 auto;
+		padding: 0 1.5em 1.5em;
+	}
 
-        &::before,
-        &::after {
-            content: none;
-        }
+	ul.products {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1.25em 1em;
+		margin: 0;
+		padding: 0;
 
-        > li.product {
-            width: auto;
-            max-width: none;
-            flex: none;
-            margin: 0;
-            padding: 0;
-        }
-    }
+		&::before,
+		&::after {
+			content: none;
+		}
+
+		> li.product {
+			width: auto;
+			max-width: none;
+			flex: none;
+			margin: 0;
+			padding: 0;
+		}
+	}
 }
 
 // Drawer shell hooks (customify/cart/drawer/header|body/*, cart.php) print
@@ -473,5 +468,5 @@ html.is-cart-drawer body {
 // height so only the body (the cart) flexes and scrolls. No padding here —
 // a full-bleed banner is a valid use; content sets its own inset.
 .customify-cart-drawer > :not(.customify-cart-drawer__head, .customify-cart-drawer__body, .customify-cart-drawer__continue) {
-    flex: 0 0 auto;
+	flex: 0 0 auto;
 }

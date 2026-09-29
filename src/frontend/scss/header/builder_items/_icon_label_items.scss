@@ -252,6 +252,7 @@ Pro's User icon. Full table: docs/SPEC-icons.md §9.4.
 
 	// Bag: artwork 20 units tall, the tallest outline of the row.
 	.item--wc_cart .cart-icon svg.customify-svg-icon--bag {
+
 		@include customify-icon-optical( 20 );
 	}
 
