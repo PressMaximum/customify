@@ -12,7 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 do_action( 'woocommerce_before_mini_cart' );
 
-// Shared by the header dropdown, drawer, and refreshed mini-cart fragments.
+// Shared by the header dropdown, drawer, and refreshed mini-cart fragments:
+// every customify/cart/* hook here fires in both cart layouts and follows the
+// cart (re-rendered on add / remove). Layout-only, static hooks live on the
+// shells: customify/cart/drawer/* and customify/cart/dropdown/* (cart.php).
 do_action( 'customify/cart/content/before' ); ?>
 
 <?php if ( WC()->cart && ! WC()->cart->is_empty() ) : ?>
@@ -54,6 +57,8 @@ do_action( 'customify/cart/content/before' ); ?>
 					?>
 					<span class="mini_cart_item__info">
 					<?php
+					do_action( 'customify/cart/item/before', $cart_item, $cart_item_key );
+
 					if ( empty( $product_permalink ) ) :
 						?>
 						<?php
@@ -66,6 +71,7 @@ do_action( 'customify/cart/content/before' ); ?>
 					<?php endif; ?>
 						<?php echo wc_get_formatted_cart_item_data( $cart_item ); ?>
 						<?php echo apply_filters( 'woocommerce_widget_cart_item_quantity', '<span class="quantity text-xsmall">' . sprintf( '%s &times; %s', $cart_item['quantity'], $product_price ) . '</span>', $cart_item, $cart_item_key ); ?>
+						<?php do_action( 'customify/cart/item/after', $cart_item, $cart_item_key ); ?>
 					</span>
 					<?php
 
@@ -95,6 +101,8 @@ do_action( 'customify/cart/content/before' ); ?>
 
 	<?php do_action( 'woocommerce_widget_shopping_cart_before_buttons' ); ?>
 
+	<?php do_action( 'customify/cart/footer/before' ); ?>
+
 	<div class="wc-mini-cart-footer">
 		<?php do_action( 'customify/cart/subtotal/before' ); ?>
 		<p class="woocommerce-mini-cart__total total"><?php _e( 'Subtotal', 'customify' ); ?>: <?php echo WC()->cart->get_cart_subtotal(); ?></p>
@@ -106,10 +114,17 @@ do_action( 'customify/cart/content/before' ); ?>
 		<?php do_action( 'customify/cart/buttons/after' ); ?>
 	</div>
 
+	<?php do_action( 'customify/cart/footer/after' ); ?>
+
 <?php else : ?>
 
 	<?php do_action( 'customify/cart/empty/before' ); ?>
-	<p class="woocommerce-mini-cart__empty-message"><?php _e( 'No products in the cart.', 'customify' ); ?></p>
+	<?php
+	// A heading (h3 in the h4 type scale): the cart drawer shows it as the
+	// empty state's title. The header dropdown and the Cart widget reset it
+	// to their old paragraph look (compatibility/wc/_wc-cart.scss).
+	?>
+	<h3 class="woocommerce-mini-cart__empty-message h4"><?php esc_html_e( 'No products in the cart.', 'customify' ); ?></h3>
 	<?php do_action( 'customify/cart/empty/after' ); ?>
 
 <?php endif; ?>

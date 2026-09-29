@@ -9,27 +9,42 @@
  * header cart item prints it only when Cart Behavior = Drawer, so in Dropdown
  * mode this file binds nothing and the native hover dropdown is untouched.
  */
-(function ($) {
+/* global jQuery */
+/**
+ * @param {Function} $ jQuery.
+ */
+( function ( $ ) {
 	'use strict';
 
 	// Auto-open reads the theme's localized Customify_JS object (same one the
 	// sibling woocommerce.js reads for wc_open_cart). Guarded so a missing
 	// object doesn't break the drawer.
-	var CJS = ( window.Customify_JS && typeof window.Customify_JS === 'object' ) ? window.Customify_JS : {};
-	var autoOpen = !! CJS.wc_cart_drawer_auto_open;
+	const CJS =
+		window.Customify_JS && typeof window.Customify_JS === 'object'
+			? window.Customify_JS
+			: {};
+	const autoOpen = !! CJS.wc_cart_drawer_auto_open;
 
-	var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+	const FOCUSABLE =
+		'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-	var drawer, overlay, lastFocused, autoOpenArmed = false, autoOpenTimer = null;
+	let drawer,
+		overlay,
+		lastFocused,
+		autoOpenArmed = false,
+		autoOpenTimer = null;
 
 	function getScrollbarWidth() {
 		return window.innerWidth - document.documentElement.clientWidth;
 	}
 
 	function lockScroll() {
-		var sw = getScrollbarWidth();
+		const sw = getScrollbarWidth();
 		if ( sw > 0 ) {
-			document.documentElement.style.setProperty( '--customify-scrollbar-width', sw + 'px' );
+			document.documentElement.style.setProperty(
+				'--customify-scrollbar-width',
+				sw + 'px'
+			);
 		}
 		document.documentElement.classList.add( 'is-cart-drawer' );
 		document.body.classList.add( 'is-cart-drawer' );
@@ -38,7 +53,9 @@
 	function unlockScroll() {
 		document.documentElement.classList.remove( 'is-cart-drawer' );
 		document.body.classList.remove( 'is-cart-drawer' );
-		document.documentElement.style.removeProperty( '--customify-scrollbar-width' );
+		document.documentElement.style.removeProperty(
+			'--customify-scrollbar-width'
+		);
 	}
 
 	function isOpen() {
@@ -54,7 +71,7 @@
 			return;
 		}
 
-		lastFocused = document.activeElement;
+		lastFocused = drawer.ownerDocument.activeElement;
 
 		drawer.hidden = false;
 		overlay.hidden = false;
@@ -69,11 +86,12 @@
 		overlay.classList.add( 'is-open' );
 		lockScroll();
 
+		// Focus the panel itself (tabindex="-1"), not the close button: a
+		// programmatic focus on the button painted a focus ring on every mouse
+		// open. Tab from here walks into the drawer, starting at the close
+		// button, which shows its ring via :focus-visible.
 		if ( ! focusDisabled ) {
-			var closeBtn = drawer.querySelector( '.customify-cart-drawer__close' );
-			if ( closeBtn ) {
-				closeBtn.focus();
-			}
+			drawer.focus( { preventScroll: true } );
 		}
 	}
 
@@ -107,18 +125,24 @@
 			return;
 		}
 
-		var f = drawer.querySelectorAll( FOCUSABLE );
+		// Rendered controls only: e.g. Continue Shopping is display:none while
+		// the cart has items, and focusing it would silently do nothing.
+		const f = Array.from( drawer.querySelectorAll( FOCUSABLE ) ).filter(
+			( el ) => el.getClientRects().length > 0
+		);
 		if ( ! f.length ) {
 			return;
 		}
 
-		var first = f[ 0 ];
-		var last = f[ f.length - 1 ];
+		const first = f[ 0 ];
+		const last = f[ f.length - 1 ];
 
-		if ( e.shiftKey && document.activeElement === first ) {
+		// Shift+Tab from the panel itself (focused on open) wraps to the end too.
+		const active = drawer.ownerDocument.activeElement;
+		if ( e.shiftKey && ( active === first || active === drawer ) ) {
 			e.preventDefault();
 			last.focus();
-		} else if ( ! e.shiftKey && document.activeElement === last ) {
+		} else if ( ! e.shiftKey && active === last ) {
 			e.preventDefault();
 			first.focus();
 		}
@@ -195,17 +219,23 @@
 		drawer.setAttribute( 'inert', '' );
 
 		// Open from the header cart item; keep the href as a no-JS fallback.
-		$( document ).on( 'click', '.builder-header-wc_cart-item .cart-item-link', function ( e ) {
-			e.preventDefault();
-			open( false );
-		} );
+		$( document ).on(
+			'click',
+			'.builder-header-wc_cart-item .cart-item-link',
+			function ( e ) {
+				e.preventDefault();
+				open( false );
+			}
+		);
 
 		overlay.addEventListener( 'click', close );
 
-		var closeBtn = drawer.querySelector( '.customify-cart-drawer__close' );
+		const closeBtn = drawer.querySelector(
+			'.customify-cart-drawer__close'
+		);
 		if ( closeBtn ) {
 			closeBtn.addEventListener( 'click', function ( e ) {
-				e.preventDefault(); // it's an <a href="#"> (matches Quick View's close)
+				e.preventDefault(); // harmless on the <button>; guards legacy <a href="#"> overrides
 				close();
 			} );
 		}
@@ -213,7 +243,10 @@
 		// Show "Continue Shopping" only while the cart is empty — re-check on
 		// load and on every WC cart change.
 		updateEmptyState();
-		$( document.body ).on( 'wc_fragments_refreshed wc_fragments_loaded added_to_cart removed_from_cart', updateEmptyState );
+		$( document.body ).on(
+			'wc_fragments_refreshed wc_fragments_loaded added_to_cart removed_from_cart',
+			updateEmptyState
+		);
 
 		// Capture phase so ESC wins over other handlers.
 		document.addEventListener( 'keydown', onKeydown, true );
@@ -235,14 +268,17 @@
 		// markup, so ask WooCommerce fragments to refresh it before opening. The
 		// preserveCartData flag distinguishes a real Store API completion from
 		// Woo Blocks' jQuery-to-native bridge for classic added_to_cart events.
-		document.body.addEventListener( 'wc-blocks_added_to_cart', function ( e ) {
-			if ( ! e.detail || e.detail.preserveCartData !== true ) {
-				return;
-			}
+		document.body.addEventListener(
+			'wc-blocks_added_to_cart',
+			function ( e ) {
+				if ( ! e.detail || e.detail.preserveCartData !== true ) {
+					return;
+				}
 
-			armAutoOpen( 2000 );
-			$( document.body ).trigger( 'wc_fragment_refresh' );
-		} );
+				armAutoOpen( 2000 );
+				$( document.body ).trigger( 'wc_fragment_refresh' );
+			}
+		);
 
 		// Tear down a stuck-open drawer restored from the bfcache (back button).
 		window.addEventListener( 'pageshow', function ( e ) {
@@ -262,5 +298,4 @@
 	} else {
 		document.addEventListener( 'DOMContentLoaded', bind );
 	}
-
-})( jQuery );
+} )( jQuery );

@@ -45,6 +45,9 @@ class Customify_Builder_Item_WC_Cart {
 		// mode and in the Customizer preview so switching behavior previews live.
 		add_filter( 'customify/customizer/auto_css', array( $this, 'gate_drawer_auto_css' ), 10, 2 );
 
+		// Drawer title "(n)" count, refreshed with the mini-cart on add / remove.
+		add_filter( 'woocommerce_add_to_cart_fragments', array( $this, 'drawer_count_fragment' ) );
+
 		if ( ! is_admin() ) {
 			add_action( 'wp_footer', array( $this, 'render_cart_drawer' ) );
 		}
@@ -518,7 +521,9 @@ class Customify_Builder_Item_WC_Cart {
 				'type'       => 'color',
 				'section'    => $this->section,
 				'title'      => __( 'Heading Color', 'customify' ),
-				'selector'   => '.customify-cart-drawer__head',
+				// The title is an h2, which takes the theme heading colour, so
+				// it is targeted explicitly as well as the head (close icon).
+				'selector'   => '.customify-cart-drawer__head, .customify-cart-drawer__head .customify-cart-drawer__title',
 				'css_format' => 'color: {{value}};',
 				'required'   => array( "{$this->name}_behavior", '=', 'drawer' ),
 			),
@@ -658,12 +663,17 @@ class Customify_Builder_Item_WC_Cart {
 			add_filter( 'woocommerce_widget_cart_is_hidden', '__return_false', 999 );
 
 			echo '<div class="cart-dropdown-box widget-area">';
+			// Dropdown-only, printed once with the page (not refreshed by the
+			// cart fragments). Content that follows the cart belongs on the
+			// shared customify/cart/* hooks in woocommerce/cart/mini-cart.php.
+			do_action( 'customify/cart/dropdown/body/before' );
 			the_widget(
 				'WC_Widget_Cart',
 				array(
 					'hide_if_empty' => 0,
 				)
 			);
+			do_action( 'customify/cart/dropdown/body/after' );
 			echo '</div>';
 
 			remove_filter( 'woocommerce_widget_cart_is_hidden', '__return_false', 999 );
@@ -719,6 +729,35 @@ class Customify_Builder_Item_WC_Cart {
 	}
 
 	/**
+	 * The "(n)" item count after the drawer title. Empty (no parentheses)
+	 * when the cart is empty. Printed in the title and replayed as a
+	 * WooCommerce fragment, so the markup is identical in both places.
+	 *
+	 * @return string
+	 */
+	public function drawer_count_html() {
+		$count = ( function_exists( 'WC' ) && WC()->cart ) ? (int) WC()->cart->get_cart_contents_count() : 0;
+		$text  = $count > 0 ? '(' . number_format_i18n( $count ) . ')' : '';
+
+		return '<span class="customify-cart-drawer__count">' . esc_html( $text ) . '</span>';
+	}
+
+	/**
+	 * Keep the drawer title's item count in sync on add / remove. Only in
+	 * drawer mode, so dropdown sites' fragment payload is unchanged.
+	 *
+	 * @param array $fragments WooCommerce cart fragments.
+	 * @return array
+	 */
+	public function drawer_count_fragment( $fragments ) {
+		if ( 'drawer' === Customify()->get_setting( "{$this->name}_behavior" ) ) {
+			$fragments['.customify-cart-drawer__count'] = $this->drawer_count_html();
+		}
+
+		return $fragments;
+	}
+
+	/**
 	 * Print the off-canvas drawer panel + overlay once, near </body>, when the
 	 * Cart Behavior is Drawer. Skipped when the cart is unavailable and on
 	 * Cart/Checkout (nothing to preview there — the cart link just follows its
@@ -739,12 +778,29 @@ class Customify_Builder_Item_WC_Cart {
 		?>
 		<div class="customify-cart-drawer-overlay" hidden></div>
 		<aside id="customify-cart-drawer" class="customify-cart-drawer" data-position="<?php echo esc_attr( $position ); ?>"
-			role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Shopping cart', 'customify' ); ?>" hidden>
+			role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Shopping cart', 'customify' ); ?>" tabindex="-1" hidden>
+			<?php
+			// Drawer-only hooks (customify/cart/drawer/*) are printed once with
+			// the page, not refreshed by the cart fragments: use them for static
+			// content. Content that follows the cart belongs on the shared
+			// customify/cart/* hooks in woocommerce/cart/mini-cart.php.
+			do_action( 'customify/cart/drawer/header/before' );
+			?>
 			<div class="customify-cart-drawer__head">
-				<span class="customify-cart-drawer__title"><?php esc_html_e( 'Shopping Cart', 'customify' ); ?></span>
-				<?php // Same markup/class as the Quick View close (theme's a.remove2x) so it looks identical. ?>
-				<a href="#" class="remove2x customify-cart-drawer__close" role="button" aria-label="<?php esc_attr_e( 'Close', 'customify' ); ?>">&times;</a>
+				<?php // h2 in the theme's h4 type scale (Typography → Headings). ?>
+				<h2 class="customify-cart-drawer__title h4"><?php esc_html_e( 'Your Cart', 'customify' ); ?> <?php echo $this->drawer_count_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in drawer_count_html(). ?></h2>
+				<?php
+				// A real <button> with an inline stroke icon: the stroke uses
+				// currentColor, so it follows the drawer's Heading Color control.
+				?>
+				<button type="button" class="customify-cart-drawer__close" aria-label="<?php esc_attr_e( 'Close', 'customify' ); ?>">
+					<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="m6.5 6.5 11 11m0-11-11 11" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+				</button>
 			</div>
+			<?php
+			do_action( 'customify/cart/drawer/header/after' );
+			do_action( 'customify/cart/drawer/body/before' );
+			?>
 			<div class="customify-cart-drawer__body">
 				<?php
 				// Match WooCommerce core's own fragment exactly (see
@@ -755,9 +811,12 @@ class Customify_Builder_Item_WC_Cart {
 				?>
 				<div class="widget_shopping_cart_content"><?php woocommerce_mini_cart(); ?></div>
 			</div>
+			<?php do_action( 'customify/cart/drawer/body/after' ); ?>
 			<?php // Shown only when the cart is empty (JS toggles .is-cart-empty). ?>
 			<div class="customify-cart-drawer__continue">
+				<?php do_action( 'customify/cart/drawer/continue/before' ); ?>
 				<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="button"><?php esc_html_e( 'Continue Shopping', 'customify' ); ?></a>
+				<?php do_action( 'customify/cart/drawer/continue/after' ); ?>
 			</div>
 		</aside>
 		<?php

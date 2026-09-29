@@ -54,6 +54,19 @@
 			height: var(--customify-wishlist-icon-size);
 		}
 
+		// The Lucide heart has the most built-in padding in the row: its
+		// artwork is 17.02 units tall (getBBox) against the bag's 20, so it
+		// drew ~16px of ink in a 20px box, and its centre sits 0.49 units
+		// below the box centre. Bring it to the row's optical glyph height
+		// (17.5px in a 20px box by default; 19px of 22px under the 0.4.28+
+		// `.customify-header-icons-v3` scope, which sets the mixin's ratios)
+		// and centre it. Not install-gated: the item is new and this corrects
+		// its size, it does not restyle an established look.
+		svg.customify-svg-icon--heart {
+
+			@include customify-icon-optical( 17.02, 0.49 );
+		}
+
 		i {
 			width: 1.3em;
 			height: 1.3em;
@@ -95,6 +108,16 @@
 		&:empty {
 			display: none;
 		}
+	}
+
+	// Badge height parity with the Cart count on 0.4.25+ installs. There both icon
+	// boxes are the same 20px (the shared --customify-header-icon-size token), so
+	// the badge must use the cart `.cart-qty` offset (-4px, compatibility/wc/
+	// _wc-cart.scss) to sit at the same height; -6px put it 2px higher. Legacy
+	// sites keep -6px: their cart is the 23px Font Awesome box, against which -6px
+	// on the 18px heart box already lines the two badges up (within 0.5px).
+	.customify-header-items-v2 & .wishlist-counter-count {
+		top: -4px;
 	}
 
 	// "Hide Counter When Empty": the JS adds `has-items` only for a count > 0.

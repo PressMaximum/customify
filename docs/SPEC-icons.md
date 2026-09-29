@@ -211,6 +211,10 @@ Two consumers today, both gated on `0.4.25`:
 1. **The cart's icon default** — [`config/header/cart.php`](../inc/compatibility/woocommerce/config/header/cart.php) registers `{type:'svg', icon:'bag'}` on a fresh install and the Font Awesome basket otherwise. Config arrays are built at runtime, so the branch is evaluated per request.
 2. **The `customify-header-items-v2` body class** — [`inc/element-classes.php`](../inc/element-classes.php), which scopes §9.2's shared header-item style.
 
+Gated on `0.4.28`:
+
+3. **The `customify-header-icons-v3` body class** — [`inc/element-classes.php`](../inc/element-classes.php), which scopes §9.4's optical size correction.
+
 A site that **saved** a value is unaffected either way: the saved value always beats the default. The gate only decides what a site that never touched the field sees.
 
 > **Known ambiguity, deliberately fail-safe.** A site that installed the theme years ago and never customised anything is indistinguishable from a fresh install, and will be stamped as fresh. By construction such a site has only ever rendered defaults, so the exposure is one cosmetic icon on a header nobody configured. Every site that has *any* saved setting is correctly stamped legacy.
@@ -525,6 +529,33 @@ This section is **not** install-gated: no existing site can have an icon saved, 
 No JS change, no selector change, nothing to fetch mid-flip. The close glyph is always the theme's `close` preset rather than a counterpart from the chosen icon's own set: Font Awesome has no version-stable "times" class (`fa-times` vs `fa-xmark`) and a pasted custom SVG has no close counterpart at all, so one theme-authored glyph on the same 24-grid is the only answer that covers all three value types.
 
 ---
+
+## 9.4 Header icon row — optical size parity (0.4.28+)
+
+Under `.customify-header-icons-v3` (§5.5) the header row uses **a 22px icon box with 19px of visible glyph and a 1.8px line**. The box is the shared token (`--customify-header-icon-size: 22px` on the v3 scope, read by Search, Cart, Wishlist and Pro's User icon). One box size still does not give one visual size, because the artwork's built-in padding differs per glyph, so each default glyph is scaled around its box centre to the same glyph height, with the stroke set so every outline draws the same line. Layout is untouched (box, 16px item gaps, badge anchors).
+
+The target is two unitless ratios on the v3 scope, shared with Pro:
+
+```scss
+--customify-icon-optical-k: 18.7636;      // (19 - 1.8) / (22 / 24)
+--customify-icon-optical-stroke: 1.9636;  // 1.8 / (22 / 24)
+```
+
+`customify-icon-optical( $artwork, $offset )` (`src/frontend/scss/utils/_mixins.scss`) turns them into `scale(k / artwork)` and `stroke-width: stroke * artwork / k`, where `$artwork` is the glyph's height in 24-grid units (getBBox) and `$offset` its centre's distance below the box centre. Both ratios are relative to the box, so they hold at any Icon Size slider value. Without the v3 scope the fallbacks (19 / 2) apply: 17.5px of glyph and a 1.67px line in a 20px box.
+
+| Glyph | Artwork | Scale at v3 | Ink W x H at 22px | Line | Where |
+|---|---|---|---|---|---|
+| Search (default filled SVG, 20x21 viewBox) | 20.5 units tall | 0.8846 (`(k + stroke) / 24 * 21 / 20.503`), +0.95% down | 17.93 x 19 | filled (ring ~1.85px, handle ~2.2px) | `_icon_label_items.scss` (v3) |
+| Search open state (default 612 cross) | full box | 0.8636 (`(k + stroke) / 24`) | 19 x 19 | filled | `_icon_label_items.scss` (v3) |
+| User (Pro, `user`) | 18 | 1.0424 | 17.09 x 19 | 1.8px | Pro `header-footer-items/sass/style.scss`, reads the same ratios |
+| Heart (`heart`) | 17.02, centre 0.49 low | 1.1024 | 22.01 x 19 | 1.8px | `woocommerce-wishlist.scss` (ungated; legacy/v2 get the 19 / 2 fallbacks) |
+| Bag (`bag`) | 20 | 0.9382 | 17.28 x 19 | 1.8px | `_icon_label_items.scss` (v3) |
+
+Only the default Search SVGs are scaled (`.ic-search > svg:not(.customify-svg-icon)`); a picked icon is rendered inside a `.customify-icon` wrapper and keeps its own size. The Search markup itself is the original filled magnifier and cross on every site.
+
+Also in scope: the Search glyph's `span.ic-search` / `span.ic-close` get `line-height: 0` under v2 (they carried a text line box that drew the magnifier ~1.7px above the row centre), and the Wishlist count badge uses the cart badge's `top: -4px` under v2 (both icon boxes are the same size there; legacy keeps -6px, which matches the 23px Font Awesome cart box).
+
+Measured at 1440px and 375px: every glyph 19px tall with its centre on the row centre (within 0.01px); badges at the same height and 5.5px above their glyph's top, horizontally within 0.4px of the same offset from its right edge.
 
 ## 10. Font Awesome loading
 

@@ -22,6 +22,8 @@ legacy_js_baseline=(
 legacy_style_baseline=(
 	"src/backend/customizer/scss/_control.scss"
 	"src/backend/customizer/scss/customizer.scss"
+	"src/frontend/scss/compatibility/wc/_wc-cart.scss"
+	"src/frontend/scss/compatibility/wc/_woocommerce-mixins.scss"
 	"src/frontend/scss/base/_base.scss"
 	"src/frontend/scss/base/_skins.scss"
 	"src/frontend/scss/footer/_footer-common.scss"
