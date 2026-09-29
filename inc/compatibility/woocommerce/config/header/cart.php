@@ -776,7 +776,7 @@ class Customify_Builder_Item_WC_Cart {
 			role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Shopping cart', 'customify' ); ?>" tabindex="-1" hidden>
 			<div class="customify-cart-drawer__head">
 				<?php // h2 in the theme's h4 type scale (Typography → Headings). ?>
-				<h2 class="customify-cart-drawer__title h4"><?php esc_html_e( 'Shopping Cart', 'customify' ); ?> <?php echo $this->drawer_count_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in drawer_count_html(). ?></h2>
+				<h2 class="customify-cart-drawer__title h4"><?php esc_html_e( 'Your Cart', 'customify' ); ?> <?php echo $this->drawer_count_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped in drawer_count_html(). ?></h2>
 				<?php
 				// A real <button> with an inline stroke icon: the stroke uses
 				// currentColor, so it follows the drawer's Heading Color control.

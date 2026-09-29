@@ -90,12 +90,12 @@ $cd-border:     rgba(0, 0, 0, 0.08);
         border-bottom: 1px solid $cd-border;
     }
 
-    // h2.h4: size, line-height, family, weight and colour come from the
-    // theme's heading typography (.h4). Only the flow is set here, one class
-    // up so it beats the heading margin at equal specificity regardless of
-    // stylesheet order.
+    // h2.h4: size, line-height, family and colour come from the theme's
+    // heading typography (.h4); the weight is pinned to 500. One class up so
+    // it beats the heading margin / weight regardless of stylesheet order.
     &__head &__title {
         margin: 0;
+        font-weight: 500;
     }
 
     // ------------------------------------------------------------------ body
