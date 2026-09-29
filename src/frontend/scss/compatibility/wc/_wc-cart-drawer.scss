@@ -331,18 +331,41 @@ $cd-border:     rgba(0, 0, 0, 0.08);
         }
     }
 
+    // View cart + Checkout side by side; auto-fit drops them to one column
+    // when the drawer is too narrow for two readable buttons (a small Drawer
+    // Width, or a phone). Both keep the theme's own button (Button Styling
+    // in the Customizer: radius, typography, padding): Checkout stays the
+    // filled `.button.checkout`, View cart takes the theme's Ghost look (the
+    // core/button `is-style-ghost` block style, base/_blocks.scss) —
+    // transparent with a 2px currentColor border. Checkout gets the same
+    // border in transparent so both are the same height.
     .woocommerce-mini-cart__buttons {
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(8.5em, 1fr));
         gap: 0.6em;
         margin: 0;
         padding: 0;
 
         .button {
-            display: block;
+            display: flex;
             width: 100%;
             margin: 0;
+            border: 2px solid transparent;
             text-align: center;
+        }
+
+        .button:not(.checkout) {
+            border-color: currentColor;
+            background-color: transparent;
+            color: inherit;
+
+            // The base button hover sets the on-primary text colour (white),
+            // which would vanish on a transparent fill. Keep the text colour;
+            // the base state layer still tints the background.
+            &:hover,
+            &:focus {
+                color: inherit;
+            }
         }
     }
 }
