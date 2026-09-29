@@ -410,3 +410,19 @@
 	}
 }
 
+//
+// The mini-cart empty message is an h3.h4 (woocommerce/cart/mini-cart.php) so
+// the cart drawer can show it as a heading. The header dropdown and the Cart
+// widget keep the paragraph look they always had.
+//
+.cart-dropdown-box,
+.widget_shopping_cart {
+	.woocommerce-mini-cart__empty-message {
+		margin: 0 0 ms(1);
+		font: inherit;
+		color: inherit;
+		letter-spacing: inherit;
+		text-transform: inherit;
+		clear: none;
+	}
+}

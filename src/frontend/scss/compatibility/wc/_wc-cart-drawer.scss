@@ -22,6 +22,10 @@
 $cd-z:          100000;
 $cd-transition: 0.3s cubic-bezier(0.79, 0.14, 0.15, 0.86);
 $cd-border:     rgba(0, 0, 0, 0.08);
+// Drawer action buttons (View cart, Checkout, Continue Shopping). The theme
+// button is 2.6em (~39px at the drawer's 15px), which reads short as a
+// full-width primary action; 3em is ~45px.
+$cd-button-height: 3em;
 
 .customify-cart-drawer-overlay {
     position: fixed;
@@ -115,7 +119,7 @@ $cd-border:     rgba(0, 0, 0, 0.08);
         border-top: 1px solid $cd-border;
 
         .button {
-            display: block;
+            display: flex;
             width: 100%;
             margin: 0;
             text-align: center;
@@ -207,6 +211,9 @@ $cd-border:     rgba(0, 0, 0, 0.08);
         flex: 1 1 auto;
         min-height: 0;
         width: 100%;
+        // Scrolls as a whole only when hook content (e.g. an empty-cart product
+        // grid) outgrows the panel; the item list below scrolls on its own.
+        overflow-y: auto;
     }
 
     .woocommerce-mini-cart {
@@ -295,10 +302,19 @@ $cd-border:     rgba(0, 0, 0, 0.08);
     .woocommerce-mini-cart__empty-message {
         // Sole child of the flex column when the cart is empty — `margin:auto`
         // vertically centres it instead of pinning it to the top.
+        // An h3.h4: size, family and heading colour come from the theme's
+        // heading typography; the weight is pinned like the drawer title.
         margin: auto 0;
         padding: 2.5em 1.5em;
         text-align: center;
-        color: $color_meta;
+        font-weight: 600;
+
+        // Hook content follows it (customify/cart/empty/after, e.g. a
+        // Customify Pro Hook): stack from the top instead of centring.
+        &:not(:only-child) {
+            margin: 0;
+            padding-bottom: 0.5em;
+        }
     }
 
     // Footer wrapper (theme template wraps total + buttons in
@@ -407,5 +423,47 @@ html.is-cart-drawer body {
 
     .customify-cart-drawer .customify-cart-drawer__close svg {
         transition: none;
+    }
+}
+
+// Drawer button height. The theme's button scope sits at (0,3,0), so these
+// go one element up to win regardless of stylesheet order.
+.customify-cart-drawer .woocommerce-mini-cart__buttons a.button,
+.customify-cart-drawer .customify-cart-drawer__continue a.button {
+    min-height: $cd-button-height;
+}
+
+//
+// Hook content inside the mini-cart (the theme's customify/cart/* hooks, e.g.
+// a Customify Pro Hook with a product grid on customify/cart/empty/after).
+// Give it the drawer's 1.5em inset, and lay a WooCommerce product loop out
+// as two columns: the loop's own grid classes follow the shop's column
+// setting (4), which is far too many for a ~360px panel.
+//
+.customify-cart-drawer .widget_shopping_cart_content {
+    > :not(.woocommerce-mini-cart, .wc-mini-cart-footer, .woocommerce-mini-cart__empty-message) {
+        flex: 0 0 auto;
+        padding: 0 1.5em 1.5em;
+    }
+
+    ul.products {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.25em 1em;
+        margin: 0;
+        padding: 0;
+
+        &::before,
+        &::after {
+            content: none;
+        }
+
+        > li.product {
+            width: auto;
+            max-width: none;
+            flex: none;
+            margin: 0;
+            padding: 0;
+        }
     }
 }

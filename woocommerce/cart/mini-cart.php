@@ -109,7 +109,12 @@ do_action( 'customify/cart/content/before' ); ?>
 <?php else : ?>
 
 	<?php do_action( 'customify/cart/empty/before' ); ?>
-	<p class="woocommerce-mini-cart__empty-message"><?php _e( 'No products in the cart.', 'customify' ); ?></p>
+	<?php
+	// A heading (h3 in the h4 type scale): the cart drawer shows it as the
+	// empty state's title. The header dropdown and the Cart widget reset it
+	// to their old paragraph look (compatibility/wc/_wc-cart.scss).
+	?>
+	<h3 class="woocommerce-mini-cart__empty-message h4"><?php esc_html_e( 'No products in the cart.', 'customify' ); ?></h3>
 	<?php do_action( 'customify/cart/empty/after' ); ?>
 
 <?php endif; ?>
