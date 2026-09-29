@@ -335,10 +335,12 @@ $cd-border:     rgba(0, 0, 0, 0.08);
     // when the drawer is too narrow for two readable buttons (a small Drawer
     // Width, or a phone). Both keep the theme's own button (Button Styling
     // in the Customizer: radius, typography, padding): Checkout stays the
-    // filled `.button.checkout`, View cart takes the theme's Ghost look (the
-    // core/button `is-style-ghost` block style, base/_blocks.scss) —
-    // transparent with a 2px currentColor border. Checkout gets the same
-    // border in transparent so both are the same height.
+    // filled `.button.checkout`, View cart is an outline button: transparent
+    // with the theme's palette-aware medium border token, darkening to the
+    // text colour on hover. Not the Ghost block style's 2px currentColor,
+    // which read as a heavy black frame against the near-black drawer text.
+    // Checkout gets the same 1px border in transparent so both are the same
+    // height.
     .woocommerce-mini-cart__buttons {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(8.5em, 1fr));
@@ -350,12 +352,12 @@ $cd-border:     rgba(0, 0, 0, 0.08);
             display: flex;
             width: 100%;
             margin: 0;
-            border: 2px solid transparent;
+            border: 1px solid transparent;
             text-align: center;
         }
 
         .button:not(.checkout) {
-            border-color: currentColor;
+            border-color: $color_border_medium;
             background-color: transparent;
             color: inherit;
 
@@ -364,6 +366,7 @@ $cd-border:     rgba(0, 0, 0, 0.08);
             // the base state layer still tints the background.
             &:hover,
             &:focus {
+                border-color: currentColor;
                 color: inherit;
             }
         }
