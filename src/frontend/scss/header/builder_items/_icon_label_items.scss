@@ -260,4 +260,43 @@ Pro's User icon. Full table: docs/SPEC-icons.md §9.4.
 	.item--wc_cart .cart-qty {
 		font-weight: 600;
 	}
+
+	// Count badges (Wishlist + Cart). At 16px, anchored inside the icon box,
+	// they covered most of the heart's right lobe and the bag's corner. Here
+	// they are 15px and centred 2px up and out from the glyph's top-right
+	// corner, so only the badge's inner quarter overlaps the ink. Both are
+	// centred on their anchor with translate(50%, -50%), so a 2-digit count
+	// grows evenly instead of into the glyph.
+	// Anchor = glyph corner + 2px. The glyph is 19px tall in the 22px box
+	// (1.5px inset top), so the centre sits 0.5px above the box. The heart
+	// ink spans the full box width (centre 2px outside it); the bag ink is
+	// 2.3px in from the box's right edge (centre ~0.3px inside it).
+	.item--wc_wishlist_counter .wishlist-counter-count,
+	.item--wc_cart .cart-icon .cart-qty {
+		top: -0.5px;
+		transform: translate(50%, -50%);
+		min-width: 15px;
+		height: 15px;
+		min-height: 15px;
+		font-size: 10px;
+		line-height: 15px;
+	}
+
+	.item--wc_wishlist_counter .wishlist-counter-count {
+		right: -2px;
+		padding: 0 4px;
+	}
+
+	.item--wc_cart .cart-icon .cart-qty {
+		right: 0;
+
+		.customify-wc-total-qty {
+			box-sizing: border-box;
+			min-width: 15px;
+			min-height: 15px;
+			padding: 0 4px;
+			font-size: 10px;
+			line-height: 15px;
+		}
+	}
 }
