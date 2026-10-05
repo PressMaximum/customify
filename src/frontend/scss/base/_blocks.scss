@@ -745,14 +745,12 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 //        var( --wp--style--gallery-gap-default,
 //        var( --gallery-block--gutter-size,
 //        var( --wp--style--block-gap, 0.5em ) ) );
-//     gap: var( --wp--style--unstable-gallery-gap );
 //   }
-// so overriding the RESULT would mean out-specifying a two-class rule and would
-// also clobber a gap the user set on an individual gallery. Instead, fill in the
-// first link of Core's own chain — `--wp--style--gallery-gap-default` is exactly
-// the extension point for "what a gallery's gap should be by default", and
-// WordPress leaves it undefined here. Core's rule then resolves cleanly, the
-// calc() becomes valid, and the tiles get their widths back.
+// Core uses that value to calculate tile widths, but its layout styles do not
+// reliably apply the same value to the flex gap. The generic flex/grid fallback
+// below would therefore create a 1em gap while Core still subtracts 0.5em from
+// each tile, pushing the last tile onto the next row. Apply the resolved value to
+// the actual gap too, keeping the width calculation and flex layout in sync.
 //
 // Declared on the block rather than `:root` because the editor stylesheet is
 // injected with every selector prefixed by `.editor-styles-wrapper`, which would
@@ -762,6 +760,13 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 // same Core rule, so it still wins.
 .wp-block-gallery {
 	--wp--style--gallery-gap-default: 0.5em;
+	gap: var(--wp--style--unstable-gallery-gap, 0.5em);
+}
+
+// Core lets tiles grow to fill an incomplete final row. When an explicit
+// column count is selected, keep every tile at that column width instead.
+.wp-block-gallery.has-nested-images:not(.columns-default) figure.wp-block-image:not(#individual-image) {
+	flex-grow: 0;
 }
 
 // Columns sit flush against each other without this.
