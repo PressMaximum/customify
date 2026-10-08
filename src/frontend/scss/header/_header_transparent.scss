@@ -23,8 +23,13 @@
 	}
 }
 
-// Make the row background transparent.
-.header--transparent {
+// Make the row background transparent at the top of the page only.
+// `#masthead:not(.sticky-active)` scopes this to the un-stuck state so
+// that once the sticky header engages, user-controlled sticky styling
+// (background, shadow) can actually render — otherwise these
+// `!important` resets would win over any sticky bg/shadow regardless of
+// specificity.
+#masthead:not(.sticky-active) .header--transparent {
 	.header--row-inner {
 		background: transparent !important;
 		box-shadow: none !important;
