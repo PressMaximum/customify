@@ -349,6 +349,8 @@ const entries = {
 	// Backend — Customizer
 	'backend/customizer/customizer':         path.resolve( __dirname, 'src/backend/customizer/customizer.js' ),
 	'backend/customizer/auto-css':           path.resolve( __dirname, 'src/backend/customizer/js/auto-css.js' ),
+	'backend/customizer/colors-preview':     path.resolve( __dirname, 'src/backend/customizer/js/colors-preview.js' ),
+	'backend/customizer/colors-controls':    path.resolve( __dirname, 'src/backend/customizer/js/colors-controls.js' ),
 	'backend/customizer/control':            path.resolve( __dirname, 'src/backend/customizer/js/control.js' ),
 	'backend/customizer/color-picker-alpha': path.resolve( __dirname, 'src/backend/customizer/js/color-picker-alpha.js' ),
 	'backend/customizer/builder':            path.resolve( __dirname, 'src/backend/customizer/js/builder.js' ),
